@@ -87,6 +87,7 @@
         let gameOver = false;
         let playerWins = 0;
         let dealerWins = 0;
+        let playerStanding = false; // Added to track when the player stands
 
         // Create and shuffle deck
         function createDeck() {
@@ -113,6 +114,7 @@
             playerCards = [drawCard(), drawCard()];
             dealerCards = [drawCard(), drawCard()];
             gameOver = false;
+            playerStanding = false;
             document.getElementById('result').textContent = '';
             updateCards();
         }
@@ -146,7 +148,7 @@
 
         // Hit action
         function hit() {
-            if (!gameOver) {
+            if (!gameOver && !playerStanding) {
                 playerCards.push(drawCard());
                 updateCards();
                 if (calculateHand(playerCards) > 21) {
@@ -160,7 +162,8 @@
 
         // Stand action
         function stand() {
-            if (!gameOver) {
+            if (!gameOver && !playerStanding) {
+                playerStanding = true;
                 while (calculateHand(dealerCards) < 17) {
                     dealerCards.push(drawCard());
                 }
@@ -182,18 +185,26 @@
                 }
                 updateStats();
                 gameOver = true;
+                updateCards(); // Call updateCards to reveal dealer's second card
             }
         }
 
         // Update cards display with images
         function updateCards() {
+            // Display player cards
             document.getElementById('player-cards').innerHTML = playerCards.map(card => 
                 `<div><img src="Playing Cards/${card.value}_of_${card.suit}.png" alt="${card.value} of ${card.suit}" style="width:100px;"></div>`
             ).join('');
-            
-            document.getElementById('dealer-cards').innerHTML = dealerCards.map(card => 
-                `<div><img src="Playing Cards/${card.value}_of_${card.suit}.png" alt="${card.value} of ${card.suit}" style="width:100px;"></div>`
-            ).join('');
+
+            // Display dealer cards
+            document.getElementById('dealer-cards').innerHTML = dealerCards.map((card, index) => {
+                // If it's the dealer's second card and the player hasn't stood, show the card back
+                if (index === 1 && !playerStanding) {
+                    return `<div><img src="Playing Cards/card_back.png" alt="Card Back" style="width:100px;"></div>`;
+                } else {
+                    return `<div><img src="Playing Cards/${card.value}_of_${card.suit}.png" alt="${card.value} of ${card.suit}" style="width:100px;"></div>`;
+                }
+            }).join('');
         }
 
         // Update stats

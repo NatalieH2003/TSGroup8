@@ -56,6 +56,10 @@
             width: 100px;
             text-align: center;
         }
+        img {
+            width: 100px;
+            height: auto;
+        }
     </style>
 </head>
 <body>
@@ -80,11 +84,11 @@
         let dealerCards = [];
         let deck = [];
         let gameOver = false;
-        
+
         // Create and shuffle deck
         function createDeck() {
-            const suits = ['Hearts', 'Clubs', 'Diamonds', 'Spades'];
-            const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+            const suits = ['hearts', 'clubs', 'diamonds', 'spades'];
+            const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'jack', 'queen', 'king', 'ace'];
             deck = [];
             
             for (let suit of suits) {
@@ -92,7 +96,7 @@
                     deck.push({suit: suit, value: value});
                 }
             }
-            
+
             // Shuffle the deck
             for (let i = deck.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -120,15 +124,16 @@
             let total = 0;
             let aceCount = 0;
             for (let card of cards) {
-                if (['K', 'Q', 'J'].includes(card.value)) {
+                if (['king', 'queen', 'jack'].includes(card.value)) {
                     total += 10;
-                } else if (card.value === 'A') {
+                } else if (card.value === 'ace') {
                     total += 11;
                     aceCount++;
                 } else {
                     total += parseInt(card.value);
                 }
             }
+            // Adjust for aces if total > 21
             while (total > 21 && aceCount > 0) {
                 total -= 10;
                 aceCount--;
@@ -171,10 +176,15 @@
             }
         }
 
-        // Update cards display
+        // Update cards display with images
         function updateCards() {
-            document.getElementById('player-cards').innerHTML = playerCards.map(card => `<div>${card.value} of ${card.suit}</div>`).join('');
-            document.getElementById('dealer-cards').innerHTML = dealerCards.map(card => `<div>${card.value} of ${card.suit}</div>`).join('');
+            document.getElementById('player-cards').innerHTML = playerCards.map(card => 
+                `<div><img src="Playing Cards/${card.value}_of_${card.suit}.png" alt="${card.value} of ${card.suit}" style="width:100px;"></div>`
+            ).join('');
+            
+            document.getElementById('dealer-cards').innerHTML = dealerCards.map(card => 
+                `<div><img src="Playing Cards/${card.value}_of_${card.suit}.png" alt="${card.value} of ${card.suit}" style="width:100px;"></div>`
+            ).join('');
         }
 
         // Reset game

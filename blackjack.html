@@ -71,6 +71,7 @@
         <div class="cards" id="dealer-cards"></div>
 
         <div class="results" id="result"></div>
+        <div class="results" id="player-stats">Player Wins: 0 | Dealer Wins: 0</div>
 
         <div class="buttons">
             <button onclick="hit()">Hit</button>
@@ -84,6 +85,8 @@
         let dealerCards = [];
         let deck = [];
         let gameOver = false;
+        let playerWins = 0;
+        let dealerWins = 0;
 
         // Create and shuffle deck
         function createDeck() {
@@ -148,6 +151,8 @@
                 updateCards();
                 if (calculateHand(playerCards) > 21) {
                     document.getElementById('result').textContent = 'You Bust! Dealer Wins!';
+                    dealerWins++;
+                    updateStats();
                     gameOver = true;
                 }
             }
@@ -165,13 +170,17 @@
                 
                 if (dealerScore > 21) {
                     document.getElementById('result').textContent = 'Dealer Busts! You Win!';
+                    playerWins++;
                 } else if (playerScore > dealerScore) {
                     document.getElementById('result').textContent = 'You Win!';
+                    playerWins++;
                 } else if (playerScore === dealerScore) {
                     document.getElementById('result').textContent = 'It\'s a Tie!';
                 } else {
                     document.getElementById('result').textContent = 'Dealer Wins!';
+                    dealerWins++;
                 }
+                updateStats();
                 gameOver = true;
             }
         }
@@ -185,6 +194,11 @@
             document.getElementById('dealer-cards').innerHTML = dealerCards.map(card => 
                 `<div><img src="Playing Cards/${card.value}_of_${card.suit}.png" alt="${card.value} of ${card.suit}" style="width:100px;"></div>`
             ).join('');
+        }
+
+        // Update stats
+        function updateStats() {
+            document.getElementById('player-stats').textContent = `Player Wins: ${playerWins} | Dealer Wins: ${dealerWins}`;
         }
 
         // Reset game

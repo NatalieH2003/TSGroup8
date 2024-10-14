@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Place your Bets</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #2e8b57;
+        color: white;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+      }
+      h1 {
+        margin-top: 20px;
+      }
+      .game-container {
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #444;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      }
+      .buttons {
+        margin-top: 20px;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        margin: 5px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      button:hover {
+        background-color: #218838;
+      }
+      .results {
+        margin-top: 40px;
+      }
+      .chips {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #db0808;
+        color: white;
+        border: none;
+        margin: 5px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      .chips div {
+        margin: 10px;
+        padding: 20px;
+        background-color: #333;
+        border-radius: 5px;
+        width: 100px;
+        text-align: center;
+      }
+      img {
+        width: 100px;
+        height: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Place your Bets</h1>
+    <div class="game-container">
+      <div class="buttons">
+        <button class="chips" onclick="updateBet(1)">1</button>
+        <button class="chips" onclick="updateBet(5)">5</button>
+        <button class="chips" onclick="updateBet(25)">25</button>
+        <button class="chips" onclick="updateBet(50)">50</button>
+        <button class="chips" onclick="updateBet(100)">100</button>
+        <button class="chips" onclick="updateBet(500)">500</button>
+        <button onclick="reset()">Reset</button>
+        <button onclick="link()">Start</button>
+      </div>
+      <div class="results" id="gBucksDisplay"></div>
+      <div class="results" id="betDisplay"></div>
+    </div>
+
+    <script>
+
+      let balance;
+      let bet = 0;
+
+      //Set balance for 500 if nothings in storage
+      if(!localStorage.getItem('shareCurrency'))
+      {
+        balance = 500;
+      }
+      else{
+        balance = parseInt(localStorage.getItem('shareCurrency'), 10);
+      }
+      
+      document.getElementById("betDisplay").textContent = `Bet: ${bet}`;
+      document.getElementById("gBucksDisplay").textContent = `GBucks: ${balance}`;
+
+      // Bet action
+      function updateBet(chipValue) {
+        //Add button value to bet
+        if(bet + chipValue <= balance)
+        {
+          bet += chipValue;
+        }
+
+        //Update with new total bet
+        document.getElementById("betDisplay").textContent = `Bet: ${bet}`;
+        document.getElementById("gBucksDisplay").textContent = `GBucks: ${balance}`;
+        saveData();
+      }
+
+      // Reset action
+      function reset() {
+        bet = 0;
+        document.getElementById("betDisplay").textContent = "Bet: 0"
+        document.getElementById("gBucksDisplay").textContent = `GBucks: ${balance}`;
+      }
+
+      //Save the data
+      function saveData(){
+        localStorage.setItem('shareBet', bet);
+        localStorage.setItem('shareCurrency', balance)
+      }
+
+      // Update chips display with images
+      function link() {
+        saveData();
+        location.href="blackjack.html";
+      }
+
+      // Initialize game on load
+      //window.onload = startGame;
+    </script>
+  </body>
+</html>

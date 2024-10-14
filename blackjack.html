@@ -230,7 +230,7 @@
           .map((card, index) => {
             if (index === 1 && !showDealerSecondCard) {
               // Hide the second card initially
-              return `<div><img src="Playing Cards/back_of_card.png" alt="Hidden Card" style="width:100px;"></div>`;
+              return `<div><img src="Playing Cards/card_back.png" alt="Hidden Card" style="width:100px;"></div>`;
             } else {
               return `<div><img src="Playing Cards/${card.value}_of_${card.suit}.png" alt="${card.value} of ${card.suit}" style="width:100px;"></div>`;
             }

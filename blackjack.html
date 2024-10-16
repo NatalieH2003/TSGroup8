@@ -165,9 +165,16 @@
           if (calculateHand(playerCards) > 21) {
             document.getElementById("result").textContent = "You Bust! Dealer Wins!";
             dealerWins++;
-            balance -= bet;
             updateStats();
-            updateCurrency();
+            if (balance > 0){
+              balance -= bet;
+              if (balance < 0){
+                balance = 0;
+                bet = 0;
+              }
+              saveData();
+              updateCurrency();
+            }
             gameOver = true;
             showPlayAgainButton(); // Show Play Again button when the game ends
           }

@@ -81,7 +81,7 @@
       <div class="buttons">
         <button onclick="hit()">Hit</button>
         <button onclick="stand()">Stand</button>
-        <button onclick="resetGame()">Play Again</button>
+        <button id="play-again-btn" style="display: none;" onclick="resetGame()">Play Again</button>
         <button onclick="resetBet()">Change Bet</button>
       </div>
     </div>
@@ -96,25 +96,13 @@
       
       let balance = parseInt(localStorage.getItem('shareCurrency'), 10);
       let bet = parseInt(localStorage.getItem('shareBet'), 10);
-      updateCurrency()
+      updateCurrency();
 
       // Create and shuffle deck
       function createDeck() {
         const suits = ["hearts", "clubs", "diamonds", "spades"];
         const values = [
-          "2",
-          "3",
-          "4",
-          "5",
-          "6",
-          "7",
-          "8",
-          "9",
-          "10",
-          "jack",
-          "queen",
-          "king",
-          "ace",
+          "2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king", "ace"
         ];
         deck = [];
 
@@ -138,6 +126,7 @@
         dealerCards = [drawCard(), drawCard()];
         gameOver = false;
         document.getElementById("result").textContent = "";
+        document.getElementById("play-again-btn").style.display = "none"; // Hide the Play Again button at the start
         updateCards(); // Initial card display with second dealer card hidden
       }
 
@@ -174,13 +163,13 @@
           playerCards.push(drawCard());
           updateCards();
           if (calculateHand(playerCards) > 21) {
-            document.getElementById("result").textContent =
-              "You Bust! Dealer Wins!";
+            document.getElementById("result").textContent = "You Bust! Dealer Wins!";
             dealerWins++;
             balance -= bet;
             updateStats();
             updateCurrency();
             gameOver = true;
+            showPlayAgainButton(); // Show Play Again button when the game ends
           }
         }
       }
@@ -214,6 +203,7 @@
           updateStats();
           updateCurrency();
           gameOver = true;
+          showPlayAgainButton(); // Show Play Again button when the game ends
         }
       }
 
@@ -238,18 +228,19 @@
           .join("");
       }
 
+      // Show Play Again button when the game is over
+      function showPlayAgainButton() {
+        document.getElementById("play-again-btn").style.display = "inline-block";
+      }
+
       // Update stats
       function updateStats() {
-        document.getElementById(
-          "player-stats"
-        ).textContent = `Player Wins: ${playerWins} | Dealer Wins: ${dealerWins}`;
+        document.getElementById("player-stats").textContent = `Player Wins: ${playerWins} | Dealer Wins: ${dealerWins}`;
       }
 
       // Update Currency
       function updateCurrency() {
-        document.getElementById(
-          "gBucks-stats"
-        ).textContent = `GBucks: ${balance} | Bet: ${bet}`;
+        document.getElementById("gBucks-stats").textContent = `GBucks: ${balance} | Bet: ${bet}`;
       }
 
       // Save Data

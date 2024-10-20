@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Dealing Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #006400;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            margin-top: 20px;
+        }
+        .game-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #444;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .results {
+            margin-top: 20px;
+        }
+        .cards {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .cards img {
+            margin: 10px;
+            width: 100px;
+            height: 150px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Card Dealing Game</h1>
+    <div class="game-container">
+        <h2>Dealt Cards</h2>
+        <div class="cards" id="dealt-cards"></div>
+
+        <div class="results" id="result"></div>
+
+        <div class="buttons">
+            <button onclick="dealCards()">Deal Cards</button>
+            <button onclick="resetGame()">Reset Cards</button>
+        </div>
+    </div>
+
+    <script>
+        let deck = [];
+        let dealtCards = [];
+
+        // Create deck
+        function createDeck() {
+            const suits = ['hearts', 'clubs', 'diamonds', 'spades'];
+            const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'jack', 'queen', 'king', 'ace'];
+            deck = [];
+            
+            for (let suit of suits) {
+                for (let value of values) {
+                    deck.push({ suit: suit, value: value });
+                }
+            }
+
+            // Shuffle the deck
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+        }
+
+        // Draw a card
+        function drawCard() {
+            return deck.pop();
+        }
+
+        // Deal cards and display them
+        function dealCards() {
+            if (deck.length === 0) {
+                document.getElementById('result').textContent = 'Deck is empty! Please reset the game.';
+                return;
+            }
+
+            const numberOfCards = 5; // Adjust how many cards to deal
+            dealtCards = [];
+
+            for (let i = 0; i < numberOfCards; i++) {
+                dealtCards.push(drawCard());
+            }
+
+            updateCardsDisplay();
+        }
+
+        // Update the dealt cards display (with images)
+        function updateCardsDisplay() {
+            const container = document.getElementById('dealt-cards');
+            container.innerHTML = dealtCards.map(card => 
+                `<img src="Playing Cards/${card.value}_of_${card.suit}.png" alt="${card.value} of ${card.suit}">`
+            ).join('');
+        }
+
+        // Reset the game
+        function resetGame() {
+            createDeck();
+            dealtCards = [];
+            document.getElementById('dealt-cards').innerHTML = '';
+            document.getElementById('result').textContent = '';
+        }
+
+        window.onload = resetGame;
+    </script>
+</body>
+</html>

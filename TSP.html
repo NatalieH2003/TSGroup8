@@ -66,6 +66,23 @@
       .blackjack-btn:hover {
         background-color: #218838;
       }
+      /* New Styles for GBucks */
+      .gbucks-container {
+        text-align: center;
+        margin-top: 20px;
+      }
+      .gbucks-total {
+        font-size: 48px;
+        font-weight: bold;
+        color: #28a745;
+        background-color: #f0f0f0;
+        padding: 20px;
+        border-radius: 10px;
+        display: inline-block;
+        width: 100%;
+        max-width: 300px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
     </style>
   </head>
   <body>
@@ -102,7 +119,7 @@
         <div>
           <h3>Task Tracker</h3>
           <p>
-            Use the built-in task tracking to figure out how many g-coins you
+            Use the built-in task tracking to figure out how many g-bucks you
             win.
           </p>
         </div>
@@ -117,8 +134,9 @@
       </div>
     </section>
 
-    <section id="currency">
-      <h2>GBucks: </h2>
+    <section class="gbucks-container">
+      <h2>GBucks:</h2>
+      <div id="gbucks-total" class="gbucks-total"></div>
     </section>
 
     <section id="blackjack">
@@ -144,7 +162,7 @@
       else{
         balance = parseFloat(localStorage.getItem('shareCurrency'), 10);
       }
-      document.getElementById("currency").textContent = `GBucks: ${balance}`;
+      document.getElementById("gbucks-total").textContent = `GBucks: ${balance}`;
     </script>
   </body>
 </html>

@@ -26,6 +26,11 @@
       }
       .buttons {
         margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+      }
+      .button-group {
+        display: inline-block;
       }
       button {
         padding: 10px 20px;
@@ -60,6 +65,9 @@
         width: 100px;
         height: auto;
       }
+      .back-button {
+        float: right;
+      }
     </style>
   </head>
   <body>
@@ -79,10 +87,14 @@
       </div>
 
       <div class="buttons">
-        <button onclick="hit()">Hit</button>
-        <button onclick="stand()">Stand</button>
-        <button id="play-again-btn" style="display: none;" onclick="resetGame()">Play Again</button>
-        <button onclick="resetBet()">Change Bet</button>
+        <div class="button-group">
+          <button onclick="hit()">Hit</button>
+          <button onclick="stand()">Stand</button>
+          <button id="play-again-btn" style="display: none;" onclick="resetGame()">Play Again</button>
+          <button onclick="resetBet()">Change Bet</button>
+        </div>
+        <!-- New button for back to the main page -->
+        <button class="back-button" onclick="goToMainPage()">Back to Main Page</button>
       </div>
     </div>
 
@@ -260,6 +272,11 @@
       function resetBet() {
         saveData();
         location.href="betting.html";
+      }
+
+      // Go back to Main Page
+      function goToMainPage() {
+        location.href = "TSP.html"; // Redirects to TSP.html
       }
 
       // Reset game

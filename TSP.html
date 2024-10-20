@@ -20,6 +20,10 @@
       h1 {
         margin: 0;
       }
+      h2 {
+        font-size: 36px;
+        margin: 10px;
+      }
       nav {
         margin-top: 10px;
         text-align: center;
@@ -129,5 +133,18 @@
     <footer>
       <p>Gamble Smart - Gamble responsibly</p>
     </footer>
+    <script>
+      let num = 0;
+      let balance = parseFloat(num.toFixed(2));
+      //Set balance for 500 if nothings in storage
+      if(!localStorage.getItem('shareCurrency'))
+      {
+        balance = 500;
+      }
+      else{
+        balance = parseFloat(localStorage.getItem('shareCurrency'), 10);
+      }
+      document.getElementById("currency").textContent = `GBucks: ${balance}`;
+    </script>
   </body>
 </html>

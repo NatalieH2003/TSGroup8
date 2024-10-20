@@ -26,6 +26,8 @@
       }
       .buttons {
         margin-top: 20px;
+        display: flex;
+        flex-direction: column;
       }
       button {
         padding: 10px 20px;
@@ -43,23 +45,45 @@
       .results {
         margin-top: 40px;
       }
+      .chips-container{
+        display:inline-block;
+        text-align: center;
+        margin: 20px auto;
+      }
       .chips {
         padding: 10px 20px;
-        font-size: 16px;
-        background-color: #db0808;
+        font-size: 20px;
         color: white;
         border: none;
         margin: 5px;
         cursor: pointer;
-        border-radius: 5px;
-      }
-      .chips div {
-        margin: 10px;
-        padding: 20px;
-        background-color: #333;
-        border-radius: 5px;
-        width: 100px;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
         text-align: center;
+        line-height: 40px;
+      }
+      .chip1{
+        background-color: white;
+        color: black;
+      }
+      .chip5{
+        background-color: red;
+      }
+      .chip25{
+        background-color: green;
+      }
+      .chip50{
+        background-color: blue;
+      }
+      .chip100{
+        background-color: black;
+      }
+      .chip500{
+        background-color: purple;
+      }
+      .chips:hover {
+        background-color: #2f2929;
       }
       img {
         width: 100px;
@@ -71,35 +95,25 @@
     <h1>Place your Bets</h1>
     <div class="game-container">
       <div class="buttons">
-        <button class="chips" onclick="updateBet(1)">1</button>
-        <button class="chips" onclick="updateBet(5)">5</button>
-        <button class="chips" onclick="updateBet(25)">25</button>
-        <button class="chips" onclick="updateBet(50)">50</button>
-        <button class="chips" onclick="updateBet(100)">100</button>
-        <button class="chips" onclick="updateBet(500)">500</button>
+        <div class="chips-container">
+        <button class="chips chip1" onclick="updateBet(1)">1</button>
+        <button class="chips chip5" onclick="updateBet(5)">5</button>
+        <button class="chips chip25" onclick="updateBet(25)">25</button>
+        <button class="chips chip50" onclick="updateBet(50)">50</button>
+        <button class="chips chip100" onclick="updateBet(100)">100</button>
+        <button class="chips chip500" onclick="updateBet(500)">500</button>
+        </div>
         <button onclick="reset()">Reset</button>
         <button onclick="link()">Start</button>
       </div>
       <div class="results" id="gBucksDisplay"></div>
-      <div class="results" id="betDisplay"></div>
     </div>
 
     <script>
-
-      let balance;
-      let bet = 0;
-
-      //Set balance for 500 if nothings in storage
-      if(!localStorage.getItem('shareCurrency'))
-      {
-        balance = 500;
-      }
-      else{
-        balance = parseInt(localStorage.getItem('shareCurrency'), 10);
-      }
-      
-      document.getElementById("betDisplay").textContent = `Bet: ${bet}`;
-      document.getElementById("gBucksDisplay").textContent = `GBucks: ${balance}`;
+      let balance = parseFloat(localStorage.getItem('shareCurrency'), 10);
+      let bet = 0;      
+      document.getElementById("gBucksDisplay").textContent = `GBucks: ${balance}   |    Bet: ${bet}`;
+     
 
       // Bet action
       function updateBet(chipValue) {
@@ -110,16 +124,14 @@
         }
 
         //Update with new total bet
-        document.getElementById("betDisplay").textContent = `Bet: ${bet}`;
-        document.getElementById("gBucksDisplay").textContent = `GBucks: ${balance}`;
+        document.getElementById("gBucksDisplay").textContent = `GBucks: ${balance}   |    Bet: ${bet}`;
         saveData();
       }
 
       // Reset action
       function reset() {
         bet = 0;
-        document.getElementById("betDisplay").textContent = "Bet: 0"
-        document.getElementById("gBucksDisplay").textContent = `GBucks: ${balance}`;
+        document.getElementById("gBucksDisplay").textContent = `GBucks: ${balance}   |    Bet: ${bet}`;
       }
 
       //Save the data

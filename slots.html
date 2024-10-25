@@ -35,6 +35,10 @@
       background-color: #333;
       border-radius: 10px;
       text-align: center;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .buttons {
       margin-top: 20px;
@@ -87,51 +91,58 @@
     let bet = parseInt(localStorage.getItem("shareBet")) || 1;
     updateCurrency();
 
-    // Spin function
     function spin() {
       if (balance < bet) {
         document.getElementById("result").textContent = "Not enough GBucks!";
         return;
       }
 
-      // Generate random symbols for the single row of 5 reels
-      const reel1 = symbols[Math.floor(Math.random() * symbols.length)];
-      const reel2 = symbols[Math.floor(Math.random() * symbols.length)];
-      const reel3 = symbols[Math.floor(Math.random() * symbols.length)];
-      const reel4 = symbols[Math.floor(Math.random() * symbols.length)];
-      const reel5 = symbols[Math.floor(Math.random() * symbols.length)];
+      // Array to store interval IDs for each reel
+      const intervals = [];
 
-      // Update reels display
-      document.getElementById("reel1").textContent = reel1;
-      document.getElementById("reel2").textContent = reel2;
-      document.getElementById("reel3").textContent = reel3;
-      document.getElementById("reel4").textContent = reel4;
-      document.getElementById("reel5").textContent = reel5;
+      // Start spinning each reel by changing symbols at a fast interval
+      document.querySelectorAll('.reel').forEach((reel, index) => {
+        const intervalId = setInterval(() => {
+          reel.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        }, 100); // Change symbol every 100ms
+        intervals.push(intervalId);
+      });
 
-      // Check results
-      checkResults([reel1, reel2, reel3, reel4, reel5]);
+      // Stop spinning after 2.5 seconds and set final symbols
+      setTimeout(() => {
+        intervals.forEach((intervalId, index) => {
+          clearInterval(intervalId);
+          // Set final random symbol for each reel
+          const reel = document.getElementById(`reel${index + 1}`);
+          reel.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        });
+        checkResults(); // Check results after final symbols are set
+      }, 2500);
     }
 
-    function checkResults(reels) {
+    function checkResults() {
+      const reels = [
+        document.getElementById("reel1").textContent,
+        document.getElementById("reel2").textContent,
+        document.getElementById("reel3").textContent,
+        document.getElementById("reel4").textContent,
+        document.getElementById("reel5").textContent
+      ];
+      
       let winAmount = 0;
-
-      // Check for winning conditions by scanning consecutive symbols
       let consecutiveCount = 1;
 
       for (let i = 0; i < reels.length - 1; i++) {
         if (reels[i] === reels[i + 1]) {
           consecutiveCount++;
         } else {
-          // Calculate win based on consecutive matches found so far
           winAmount += calculateWin(consecutiveCount);
           consecutiveCount = 1;
         }
       }
 
-      // Final check for the last sequence of consecutive symbols
       winAmount += calculateWin(consecutiveCount);
 
-      // Display results and update balance
       if (winAmount > 0) {
         balance += winAmount;
         document.getElementById("result").textContent = `${winAmount} GBucks! You win.`;
@@ -145,10 +156,10 @@
     }
 
     function calculateWin(consecutiveCount) {
-      if (consecutiveCount === 5) return bet * 10; // Five in a row
-      if (consecutiveCount === 4) return bet * 5;  // Four in a row
-      if (consecutiveCount === 3) return bet * 3.5; // Three in a row
-      if (consecutiveCount === 2) return bet * 2.5; // Two in a row
+      if (consecutiveCount === 5) return bet * 10;
+      if (consecutiveCount === 4) return bet * 5;
+      if (consecutiveCount === 3) return bet * 3.5;
+      if (consecutiveCount === 2) return bet * 2.5;
       return 0;
     }
 

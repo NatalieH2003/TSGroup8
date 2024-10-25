@@ -1,142 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Slot Machine</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #2e8b57;
-        color: white;
-        text-align: center;
-        margin: 0;
-        padding: 0;
-      }
-      .game-container {
-        max-width: 600px;
-        margin: 20px auto;
-        background-color: #444;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-      }
-      .slot-reels {
-        display: flex;
-        justify-content: center;
-        margin: 20px 0;
-      }
-      .reel {
-        font-size: 36px;
-        margin: 0 15px;
-        width: 100px;
-        height: 100px;
-        line-height: 100px;
-        background-color: #333;
-        border-radius: 10px;
-      }
-      .buttons {
-        margin-top: 20px;
-      }
-      button {
-        padding: 10px 20px;
-        font-size: 16px;
-        background-color: #28a745;
-        color: white;
-        border: none;
-        margin: 5px;
-        cursor: pointer;
-        border-radius: 5px;
-      }
-      button:hover {
-        background-color: #218838;
-      }
-      .back-button {
-        margin-top: 20px;
-      }
-      .results {
-        margin-top: 20px;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Slot Machine</h1>
-    <div class="game-container">
-      <div class="slot-reels">
-        <div id="reel1" class="reel">🍒</div>
-        <div id="reel2" class="reel">🍒</div>
-        <div id="reel3" class="reel">🍒</div>
-      </div>
-      <div class="results" id="result"></div>
-      <div class="results" id="currency-stats">
-        GBucks: 0 | Bet: 0
-      </div>
-      <div class="buttons">
-        <button onclick="spin()">Spin</button>
-        <button class="back-button" onclick="goToMainPage()">Back to Main Page</button>
-        <button class="back-button" onclick="changeBet()">Change Bet</button>
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Slot Machine</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #2e8b57;
+      color: white;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    .game-container {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #444;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    }
+    .slot-reels {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    .reel {
+      font-size: 36px;
+      margin: 0 10px;
+      width: 80px;
+      height: 80px;
+      line-height: 80px;
+      background-color: #333;
+      border-radius: 10px;
+      text-align: center;
+    }
+    .buttons {
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      margin: 5px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    .back-button {
+      margin-top: 20px;
+    }
+    .results {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Slot Machine</h1>
+  <div class="game-container">
+    <div class="slot-reels">
+      <div id="reel1" class="reel">🍒</div>
+      <div id="reel2" class="reel">🍒</div>
+      <div id="reel3" class="reel">🍒</div>
+      <div id="reel4" class="reel">🍒</div>
+      <div id="reel5" class="reel">🍒</div>
     </div>
+    <div class="results" id="result"></div>
+    <div class="results" id="currency-stats">
+      GBucks: 0 | Bet: 0
+    </div>
+    <div class="buttons">
+      <button onclick="spin()">Spin</button>
+      <button class="back-button" onclick="goToMainPage()">Back to Main Page</button>
+      <button class="back-button" onclick="changeBet()">Change Bet</button>
+    </div>
+  </div>
 
-    <script>
-      const symbols = ["🍒", "🍋", "🍊", "🍇", "🍉"];
-      let balance = parseFloat(localStorage.getItem("shareCurrency"));
-      let bet = parseInt(localStorage.getItem("shareBet"));
-      updateCurrency();
+  <script>
+    const symbols = ["🍒", "🍋", "🍊", "🍇", "🍉"];
+    let balance = parseFloat(localStorage.getItem("shareCurrency")) || 0;
+    let bet = parseInt(localStorage.getItem("shareBet")) || 1;
+    updateCurrency();
 
-      // Spin function
-      function spin() {
-        if (balance < bet) {
-          document.getElementById("result").textContent = "Not enough GBucks!";
-          return;
-        }
+    // Spin function
+    function spin() {
+      if (balance < bet) {
+        document.getElementById("result").textContent = "Not enough GBucks!";
+        return;
+      }
 
-        // Generate random symbols
-        const reel1 = symbols[Math.floor(Math.random() * symbols.length)];
-        const reel2 = symbols[Math.floor(Math.random() * symbols.length)];
-        const reel3 = symbols[Math.floor(Math.random() * symbols.length)];
+      // Generate random symbols for the single row of 5 reels
+      const reel1 = symbols[Math.floor(Math.random() * symbols.length)];
+      const reel2 = symbols[Math.floor(Math.random() * symbols.length)];
+      const reel3 = symbols[Math.floor(Math.random() * symbols.length)];
+      const reel4 = symbols[Math.floor(Math.random() * symbols.length)];
+      const reel5 = symbols[Math.floor(Math.random() * symbols.length)];
 
-        // Update reels display
-        document.getElementById("reel1").textContent = reel1;
-        document.getElementById("reel2").textContent = reel2;
-        document.getElementById("reel3").textContent = reel3;
+      // Update reels display
+      document.getElementById("reel1").textContent = reel1;
+      document.getElementById("reel2").textContent = reel2;
+      document.getElementById("reel3").textContent = reel3;
+      document.getElementById("reel4").textContent = reel4;
+      document.getElementById("reel5").textContent = reel5;
 
-        // Check results
-        if (reel1 === reel2 && reel2 === reel3) {
-          let winAmount = bet * 5;
-          balance += winAmount;
-          document.getElementById("result").textContent = `JACKPOT! You won ${winAmount} GBucks!`;
+      // Check results
+      checkResults([reel1, reel2, reel3, reel4, reel5]);
+    }
+
+    function checkResults(reels) {
+      let winAmount = 0;
+
+      // Check for winning conditions by scanning consecutive symbols
+      let consecutiveCount = 1;
+
+      for (let i = 0; i < reels.length - 1; i++) {
+        if (reels[i] === reels[i + 1]) {
+          consecutiveCount++;
         } else {
-          balance -= bet;
-          document.getElementById("result").textContent = "You lost! Try again.";
+          // Calculate win based on consecutive matches found so far
+          winAmount += calculateWin(consecutiveCount);
+          consecutiveCount = 1;
         }
-
-        saveData();
-        updateCurrency();
       }
 
-      // Update Currency
-      function updateCurrency() {
-        document.getElementById("currency-stats").textContent = `GBucks: ${balance} | Bet: ${bet}`;
+      // Final check for the last sequence of consecutive symbols
+      winAmount += calculateWin(consecutiveCount);
+
+      // Display results and update balance
+      if (winAmount > 0) {
+        balance += winAmount;
+        document.getElementById("result").textContent = `${winAmount} GBucks! You win.`;
+      } else {
+        balance -= bet;
+        document.getElementById("result").textContent = "You lost! Try again.";
       }
 
-      // Save Data
-      function saveData() {
-        localStorage.setItem("shareCurrency", balance);
-        localStorage.setItem("shareBet", bet);
-      }
+      saveData();
+      updateCurrency();
+    }
 
-      // Change bet action
-      function changeBet() {
-        location.href = "betting.html";
-      }
+    function calculateWin(consecutiveCount) {
+      if (consecutiveCount === 5) return bet * 10; // Five in a row
+      if (consecutiveCount === 4) return bet * 5;  // Four in a row
+      if (consecutiveCount === 3) return bet * 3.5; // Three in a row
+      if (consecutiveCount === 2) return bet * 2.5; // Two in a row
+      return 0;
+    }
 
-      // Go to main page
-      function goToMainPage() {
-        location.href = "TSP.html";
-      }
+    function updateCurrency() {
+      document.getElementById("currency-stats").textContent = `GBucks: ${balance} | Bet: ${bet}`;
+    }
 
-      window.onload = updateCurrency;
-    </script>
-  </body>
+    function saveData() {
+      localStorage.setItem("shareCurrency", balance);
+      localStorage.setItem("shareBet", bet);
+    }
+
+    function changeBet() {
+      location.href = "betting.html";
+    }
+
+    function goToMainPage() {
+      location.href = "TSP.html";
+    }
+
+    window.onload = updateCurrency;
+  </script>
+</body>
 </html>

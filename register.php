@@ -73,7 +73,7 @@ if(isset($_POST["register"])){
 		return;
 	}
 	else{
-		echo '<p style="color:red">An error occured</p>';
+		echo '<p style="color:red">Invalid username or password</p>';
 	}
 }
 

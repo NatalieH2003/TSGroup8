@@ -29,14 +29,23 @@ function authenticate($user, $pass){
 function register($user,$pass){
 	try{
         $dbh = connectDB();
-
-        $statement = $dbh->prepare("call create_user(:username, :pass)");
+        $statement = $dbh->prepare("SELECT count(*) FROM users ".
+        				"where name = :username ");
         $statement->bindParam(":username", $user);
-        $statement->bindParam(":pass", $pass);
-        $statement->execute();
-        $dbh = null;
-
-        return 1;
+        $result = $statement->execute();
+        $row = $statement->fetch();
+        if($row[0] != 1){
+            $statement = $dbh->prepare("call create_user(:username, :pass)");
+            $statement->bindParam(":username", $user);
+            $statement->bindParam(":pass", $pass);
+            $statement->execute();
+            $dbh = null;
+    
+            return 1;
+        }
+        else{
+            return 0;
+        }
 		
         }catch(PDOException $e){
                 print "Error!" . $e->getMessage() . "<br/>";

@@ -78,7 +78,7 @@ call create_user('admin2', 'admin2');
 
 call add_userdata(1, 500, 0, 0, 0);
 
-update userdata set balance=150 where account=1;
+update userdata set balance=450 where account=1;
 
 call add_transaction(1, 500, 450);
 

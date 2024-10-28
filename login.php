@@ -86,7 +86,7 @@ if(isset($_POST["login"])){
 	}
 	else{
 	    echo '<div class="error-container">';
-		echo '<p style="color:red">Incorrect username and password</p>';
+		echo '<p style="color:red">Incorrect username or password</p>';
 		echo '</div>';
 	}
 }

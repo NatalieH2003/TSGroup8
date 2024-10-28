@@ -85,7 +85,6 @@
           <button id="play-again-btn" style="display: none;" onclick="resetGame()">Play Again</button>
           <button id="reset-bet-btn" style="display: none;" onclick="resetBet()">Change Bet</button>
         </div>
-        <!-- New button for back to the main page -->
         <button class="back-button" onclick="goToMainPage()">Back to Main Page</button>
       </div>
     </div>
@@ -129,11 +128,11 @@
         playerCards = [drawCard(), drawCard()];
         dealerCards = [drawCard(), drawCard()];
         gameOver = false;
-        pullBlackjack(playerCards, dealerCards);
         document.getElementById("result").textContent = "";
-        document.getElementById("play-again-btn").style.display = "none"; // Hide the Play Again button at the start
-        document.getElementById("reset-bet-btn").style.display = "none"; // Hide the Play Again button at the start
-        updateCards(); // Initial card display with second dealer card hidden
+        document.getElementById("play-again-btn").style.display = "none";
+        document.getElementById("reset-bet-btn").style.display = "none";
+        updateCards();
+        pullBlackjack(); // Check for Blackjack immediately after dealing cards
       }
 
       // Draw card
@@ -155,7 +154,6 @@
             total += parseInt(card.value);
           }
         }
-        // Adjust for aces if total > 21
         while (total > 21 && aceCount > 0) {
           total -= 10;
           aceCount--;
@@ -172,30 +170,26 @@
             document.getElementById("result").textContent = "You Bust! Dealer Wins!";
             dealerWins++;
             updateStats();
-            if (balance > 0){
+            if (balance > 0) {
               balance -= bet;
-              if (balance <= 0){
-                balance = 0;
-              }
-              if(balance === 0){
-                bet = 0;
-              }
+              if (balance <= 0) balance = 0;
+              if (balance === 0) bet = 0;
               saveData();
               updateCurrency();
             }
             gameOver = true;
-            showPlayAgainButton(); // Show Play Again button when the game ends
+            showPlayAgainButton();
           }
         }
       }
 
-      // Stand action to reveal the dealer's second card
+      // Stand action
       function stand() {
         if (!gameOver) {
           while (calculateHand(dealerCards) < 17) {
             dealerCards.push(drawCard());
           }
-          updateCards(true); // Reveal the dealer's second card
+          updateCards(true);
 
           let playerScore = calculateHand(playerCards);
           let dealerScore = calculateHand(dealerCards);
@@ -218,11 +212,11 @@
           updateStats();
           updateCurrency();
           gameOver = true;
-          showPlayAgainButton(); // Show Play Again button when the game ends
+          showPlayAgainButton();
         }
       }
 
-      // Update cards display with images, including hidden dealer's second card
+      // Update cards display
       function updateCards(showDealerSecondCard = false) {
         document.getElementById("player-cards").innerHTML = playerCards
           .map(
@@ -234,7 +228,6 @@
         document.getElementById("dealer-cards").innerHTML = dealerCards
           .map((card, index) => {
             if (index === 1 && !showDealerSecondCard) {
-              // Hide the second card initially
               return `<div><img src="Playing Cards/card_back.png" alt="Hidden Card" style="width:100px;"></div>`;
             } else {
               return `<div><img src="Playing Cards/${card.value}_of_${card.suit}.png" alt="${card.value} of ${card.suit}" style="width:100px;"></div>`;
@@ -243,41 +236,45 @@
           .join("");
       }
 
-      //End game when Blackjack is pulled
-      function pullBlackjack(){
-        if (!gameOver) {
-          const player = calculateHand(playerCards);
-          const dealer = calculateHand(dealerCards);
-          if(player === 21 &&  dealer === 21){
-            document.getElementById("result").textContent = "BlackJack! It's a Tie!";
-            gameOver = true;
-            showPlayAgainButton();
-            return;
-          }
-          if(dealer === 21 ){
-            document.getElementById("result").textContent = "BlackJack! Dealer Wins!";
-            dealerWins++;
-            balance -= (bet * 1.5);
-            gameOver = true;
-            saveData();
-            updateCurrency();
-            showPlayAgainButton();
-            return;
-          }
-          if(player === 21){
-            document.getElementById("result").textContent = "BlackJack! You Win!";
-            playerWins++;
-            balance += (bet * 1.5);
-            gameOver = true;
-            saveData();
-            updateCurrency();
-            showPlayAgainButton();
-            return;
-          }     
+      // Handle Blackjack
+      function pullBlackjack() {
+        const player = calculateHand(playerCards);
+        const dealer = calculateHand(dealerCards);
+
+        // Player gets priority for blackjack win
+        if (player === 21) {
+          document.getElementById("result").textContent = "BlackJack! You Win!";
+          playerWins++;
+          balance += (bet * 1.5);
+          saveData();
+          updateCurrency();
+          gameOver = true;
+          showPlayAgainButton(); // End game after player Blackjack win
+          return;
+        }
+
+        // If dealer has blackjack and player does not, dealer wins
+        if (dealer === 21) {
+          document.getElementById("result").textContent = "BlackJack! Dealer Wins!";
+          dealerWins++;
+          balance -= (bet * 1.5);
+          saveData();
+          updateCurrency();
+          gameOver = true;
+          showPlayAgainButton();
+          return;
+        }
+
+        // Tie if both have blackjack (added here for completeness)
+        if (player === 21 && dealer === 21) {
+          document.getElementById("result").textContent = "BlackJack! It's a Tie!";
+          gameOver = true;
+          showPlayAgainButton();
+          return;
         }
       }
 
-      // Show Play Again button when the game is over
+      // Show Play Again button
       function showPlayAgainButton() {
         document.getElementById("play-again-btn").style.display = "inline-block";
         document.getElementById("reset-bet-btn").style.display = "inline-block";
@@ -294,20 +291,9 @@
       }
 
       // Save Data
-      function saveData(){
+      function saveData() {
         localStorage.setItem('shareBet', bet);
         localStorage.setItem('shareCurrency', balance);
-      }
-
-      // Go back to Betting Screen
-      function resetBet() {
-        saveData();
-        location.href="betting.html";
-      }
-
-      // Go back to Main Page
-      function goToMainPage() {
-        location.href = "TSP.html"; // Redirects to TSP.html
       }
 
       // Reset game
@@ -315,10 +301,20 @@
         startGame();
       }
 
-      // Initialize game on load
+      // Reset bet
+      function resetBet() {
+        saveData();
+        location.href="betting.html";
+      }
+
+      // Go to main page
+      function goToMainPage() {
+        location.href = "TSP.html";
+      }
+
       window.onload = function() {
         startGame();
-        updateCards(); // Hide the dealer's second card initially
+        updateCards();
       };
     </script>
   </body>

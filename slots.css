@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Slot Machine</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #2e8b57;
+      color: white;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    .game-container {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #444;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    }
+    .slot-reels {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    .reel {
+      font-size: 36px;
+      margin: 0 10px;
+      width: 80px;
+      height: 80px;
+      line-height: 80px;
+      background-color: #333;
+      border-radius: 10px;
+      text-align: center;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .buttons {
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      margin: 5px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    .back-button {
+      margin-top: 20px;
+    }
+    .results {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Slot Machine</h1>
+  <div class="game-container">
+    <div class="slot-reels">
+      <div id="reel1" class="reel">🍒</div>
+      <div id="reel2" class="reel">🍒</div>
+      <div id="reel3" class="reel">🍒</div>
+      <div id="reel4" class="reel">🍒</div>
+      <div id="reel5" class="reel">🍒</div>
+    </div>
+    <div class="results" id="result"></div>
+    <div class="results" id="currency-stats">
+      GBucks: 0 | Bet: 0
+    </div>
+    <div class="buttons">
+      <button onclick="spin()">Spin</button>
+      <button class="back-button" onclick="goToMainPage()">Back to Main Page</button>
+      <button class="back-button" onclick="changeBet()">Change Bet</button>
+    </div>
+  </div>
+
+  <script>
+    const symbols = ["🍒", "🍋", "🍊", "🍇", "🍉"];
+    let balance = parseFloat(localStorage.getItem("shareCurrency")) || 0;
+    let bet = parseInt(localStorage.getItem("shareBet")) || 1;
+    updateCurrency();
+
+    function spin() {
+      if (balance < bet) {
+        document.getElementById("result").textContent = "Not enough GBucks!";
+        return;
+      }
+
+      // Array to store interval IDs for each reel
+      const intervals = [];
+
+      // Start spinning each reel by changing symbols at a fast interval
+      document.querySelectorAll('.reel').forEach((reel, index) => {
+        const intervalId = setInterval(() => {
+          reel.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        }, 100); // Change symbol every 100ms
+        intervals.push(intervalId);
+      });
+
+      // Stop spinning after 2.5 seconds and set final symbols
+      setTimeout(() => {
+        intervals.forEach((intervalId, index) => {
+          clearInterval(intervalId);
+          // Set final random symbol for each reel
+          const reel = document.getElementById(`reel${index + 1}`);
+          reel.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        });
+        checkResults(); // Check results after final symbols are set
+      }, 2500);
+    }
+
+    function checkResults() {
+      const reels = [
+        document.getElementById("reel1").textContent,
+        document.getElementById("reel2").textContent,
+        document.getElementById("reel3").textContent,
+        document.getElementById("reel4").textContent,
+        document.getElementById("reel5").textContent
+      ];
+      
+      let winAmount = 0;
+      let consecutiveCount = 1;
+
+      for (let i = 0; i < reels.length - 1; i++) {
+        if (reels[i] === reels[i + 1]) {
+          consecutiveCount++;
+        } else {
+          winAmount += calculateWin(consecutiveCount);
+          consecutiveCount = 1;
+        }
+      }
+
+      winAmount += calculateWin(consecutiveCount);
+
+      if (winAmount > 0) {
+        balance += winAmount;
+        document.getElementById("result").textContent = `${winAmount} GBucks! You win.`;
+      } else {
+        balance -= bet;
+        document.getElementById("result").textContent = "You lost! Try again.";
+      }
+
+      saveData();
+      updateCurrency();
+    }
+
+    function calculateWin(consecutiveCount) {
+      if (consecutiveCount === 5) return bet * 10;
+      if (consecutiveCount === 4) return bet * 5;
+      if (consecutiveCount === 3) return bet * 3.5;
+      if (consecutiveCount === 2) return bet * 2.5;
+      return 0;
+    }
+
+    function updateCurrency() {
+      document.getElementById("currency-stats").textContent = `GBucks: ${balance} | Bet: ${bet}`;
+    }
+
+    function saveData() {
+      localStorage.setItem("shareCurrency", balance);
+      localStorage.setItem("shareBet", bet);
+    }
+
+    function changeBet() {
+      location.href = "betting.html";
+    }
+
+    function goToMainPage() {
+      location.href = "TSP.html";
+    }
+
+    window.onload = updateCurrency;
+  </script>
+</body>
+</html>

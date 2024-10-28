@@ -24,6 +24,17 @@
         border-radius: 10px;
         box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
       }
+      .error-container {
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #444;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-left: 20px;
+        padding-right: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      }
       .buttons {
         margin-top: 20px;
       }
@@ -74,8 +85,14 @@ if(isset($_POST["login"])){
 		return;
 	}
 	else{
+	    echo '<div class="error-container">';
 		echo '<p style="color:red">Incorrect username and password</p>';
+		echo '</div>';
 	}
+}
+else if(isset($_POST["register"])){
+     header("LOCATION:register.php");
+     return;
 }
 
 
@@ -86,16 +103,19 @@ if(isset($_POST["logout"])){
 ?>
 </body>
 </html>
-
-
     <h1>Login to Gamble Smart</h1>
     <div class="game-container">
     <form method="post" action"login.php">
         <input type="text" id="username" name="username" placeholder="Username" required>
         <input type="password" id="password" name="password" placeholder="Password" required><br>
         <button class="buttons" type="submit" value="Login" name="login">Login</button>
+    </form>
+    </div>
+    <div class="game-container">
+        <h2>Don't have an account? Register now!</h2>
+        <form method="post" action"register.php">
+        <button class="buttons" type="submit" value="Register" name="register">Register</button>
         </form>
-      </div>
     </div>
   </body>
 </html>

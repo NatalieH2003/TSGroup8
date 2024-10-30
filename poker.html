@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poker Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #006400;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            margin-top: 20px;
+        }
+        .game-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #444;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .results {
+            margin-top: 20px;
+        }
+        .cards {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .cards img {
+            margin: 10px;
+            width: 100px;
+            height: 150px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Poker Game</h1>
+    <div class="game-container">
+        <h2>Player's Hand</h2>
+        <div class="cards" id="player-cards"></div>
+
+        <h2>House's Hand</h2>
+        <div class="cards" id="house-cards"></div>
+
+        <div class="results" id="result"></div>
+
+        <div class="buttons">
+            <button onclick="playHand()">Play</button>
+            <button onclick="foldHand()">Fold</button>
+            <button onclick="resetGame()">Reset Game</button>
+        </div>
+    </div>
+
+    <script>
+        let deck = [];
+        let playerHand = [];
+        let houseHand = [];
+        let houseCardsRevealed = false;
+
+        // Create deck
+        function createDeck() {
+            const suits = ['hearts', 'clubs', 'diamonds', 'spades'];
+            const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'jack', 'queen', 'king', 'ace'];
+            deck = [];
+            
+            for (let suit of suits) {
+                for (let value of values) {
+                    deck.push({ suit: suit, value: value });
+                }
+            }
+
+            // Shuffle the deck
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+        }
+
+        // Draw a card
+        function drawCard() {
+            return deck.pop();
+        }
+
+        // Deal hands to player and house
+        function dealHands() {
+            if (deck.length < 10) {
+                document.getElementById('result').textContent = 'Deck is low! Please reset the game.';
+                return;
+            }
+
+            playerHand = [];
+            houseHand = [];
+            houseCardsRevealed = false;
+
+            for (let i = 0; i < 7; i++) {
+                playerHand.push(drawCard());
+                houseHand.push(drawCard());
+            }
+
+            updateHandsDisplay();
+            document.getElementById('result').textContent = '';
+        }
+
+        // Show the player and house hands
+        function updateHandsDisplay() {
+            const playerContainer = document.getElementById('player-cards');
+            const houseContainer = document.getElementById('house-cards');
+
+            playerContainer.innerHTML = playerHand.map(card => 
+                `<img src="Playing Cards/${card.value}_of_${card.suit}.png" alt="${card.value} of ${card.suit}">`
+            ).join('');
+
+            if (houseCardsRevealed) {
+                houseContainer.innerHTML = houseHand.map(card => 
+                    `<img src="Playing Cards/${card.value}_of_${card.suit}.png" alt="${card.value} of ${card.suit}">`
+                ).join('');
+            } else {
+                houseContainer.innerHTML = houseHand.map(() => 
+                    `<img src="Playing Cards/card_back.png" alt="Card Back">`
+                ).join('');
+            }
+        }
+
+        // Play hand
+        function playHand() {
+            houseCardsRevealed = true;
+            updateHandsDisplay(); 
+
+            const playerScore = evaluateHand(playerHand);
+            const houseScore = evaluateHand(houseHand);
+
+            const playerHandType = getHandType(playerHand);
+            const houseHandType = getHandType(houseHand);
+
+            let resultText = `Player has ${playerHandType}. House has ${houseHandType}. `;
+
+            if (playerScore > houseScore) {
+                resultText += 'You won!';
+            } else if (playerScore < houseScore) {
+                resultText += 'You lost!';
+            } else {
+                resultText += 'It\'s a tie!';
+            }
+
+            document.getElementById('result').textContent = resultText;
+        }
+
+        // scoring system
+        function evaluateHand(hand) {
+            const valueMap = {
+                '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10,
+                'jack': 11, 'queen': 12, 'king': 13, 'ace': 14
+            };
+            return hand.reduce((sum, card) => sum + valueMap[card.value], 0);
+        }
+
+        // Determine type of poker hand
+        function getHandType(hand) {
+            const counts = {};
+            hand.forEach(card => counts[card.value] = (counts[card.value] || 0) + 1);
+
+            const values = Object.values(counts);
+            const maxCount = Math.max(...values);
+
+            if (maxCount === 4) return 'Four of a Kind';
+            if (maxCount === 3 && values.includes(2)) return 'Full House';
+            if (maxCount === 3) return 'Three of a Kind';
+            if (values.filter(count => count === 2).length === 2) return 'Two Pair';
+            if (maxCount === 2) return 'One Pair';
+            return 'High Card';
+        }
+
+        // Fold hand
+        function foldHand() {
+            dealHands();
+            document.getElementById('result').textContent = 'Hand folded. New cards dealt.';
+        }
+
+        // Reset the game
+        function resetGame() {
+            createDeck();
+            dealHands();
+            document.getElementById('result').textContent = '';
+        }
+
+        window.onload = resetGame;
+    </script>
+</body>
+</html>

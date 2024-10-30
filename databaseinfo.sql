@@ -1,4 +1,5 @@
 show databases;
+create database if not exists tspgamblesmart;
 use tspgamblesmart;
 
 drop table if exists tasks;

@@ -154,8 +154,10 @@
   <script>
     let num = 0;
     let balance = parseFloat(num.toFixed(2));
+    let checkNaN = Number(localStorage.getItem('shareCurrency'));
 
-    if (!localStorage.getItem('shareCurrency')) {
+    if (!localStorage.getItem('shareCurrency') || !checkNaN) {
+      localStorage.setItem('shareCurrency', 500);
       balance = 500;
     } else {
       balance = parseFloat(localStorage.getItem('shareCurrency'), 10);

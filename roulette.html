@@ -15,27 +15,17 @@
       padding: 0;
     }
     .game-container {
-        max-width: 600px;
-        width: 600px;
+        max-width: 1200px;
+        width: 1200px;
         margin: 20px auto;
         background-color: #444;
         padding: 10px 20px;
         border-radius: 10px;
         box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-        position: fixed;
         bottom: 30px;
         left: 100px;
     }
-    .bettingtable {
-        position: fixed;
-        top: 65px;
-        left: 50px;
-    }
-    .wheel {
-        position: fixed;
-        top: 25px;
-        right: 40px;
-    }
+    .roulettetable {}
     .buttons {
       margin-top: 0px;
     }
@@ -49,7 +39,9 @@
       cursor: pointer;
       border-radius: 5px;
     }
-    button:hover {
+    .uibutton {}
+    .uibutton:hover {background-color: #218838;}
+    .back-button:hover {
       background-color: #218838;
     }
     .back-button {
@@ -58,30 +50,228 @@
     .results {
       margin-top: 20px;
     }
+    .betbutton {
+        margin-top: 20px;
+        border-radius: 0px;
+        background-color: #007502;
+    }
+    .BetTable {
+        maxwidth: 700px;
+        width: 700px;
+        height: auto;
+        float: left;
+        margin-top: 50px;
+        background-color: #000000;
+        border: solid black;
+    }
+    .centerBetTable {
+        max-width: 650px;
+        width: 650px;
+        height: auto;
+        float: right;
+    }
+    .leftBetTable {
+        width: 50px;
+        height: 150px;
+        float: left;
+    }
+    .redbutton {
+        background-color: #db1d1d;
+        float: left;
+        width: 50px;
+        height: 50px;
+        padding: 0px 0px;
+        text-align: center;
+        font-size: 30px;
+        border: solid black;
+        border-radius: 0px;
+        margin: 0px;
+    }
+    .redbutton:hover {border: solid #FFFFFF;}
+    .blackbutton {
+        background-color: #3d3d3d;
+        float: left;
+        width: 50px;
+        height: 50px;
+        padding: 0px 0px;
+        text-align: center;
+        font-size: 30px;
+        border: solid black;
+        border-radius: 0px;
+        margin: 0px;
+    }
+    .blackbutton:hover {border: solid #FFFFFF;}
+    .zerobuttons {
+        background-color: #2e8b57;
+        width: 50px;
+        height: 75px;
+        display: block;
+        padding: 0px 0px;
+        text-align: center;
+        font-size: 30px;
+        border: solid black;
+        border-radius: 0px;
+        margin: 0px;
+    }
+    .zerobuttons:hover {border: solid #FFFFFF;}
+    .columnbutton {
+        background-color: #2e8b57;
+        font-size: 20px;
+        float: left;
+        width: 50px;
+        height: 50px;
+        padding: 0px 0px;
+        text-align: center;
+        border: solid black;
+        border-radius: 0px;
+        margin: 0px;
+    }
+    .columnbutton:hover {border: solid #FFFFFF;}
+    .rowbutton {
+        width: 200px;
+        height: 50px;
+        background-color: #2e8b57;
+        float: left;
+        padding: 0px 0px;
+        text-align: center;
+        font-size: 30px;
+        border: solid black;
+        border-radius: 0px;
+        margin: 0px;
+    }
+    .rowbutton:hover {border: solid #FFFFFF;}
+    .bottombutton {
+        width: 100px;
+        height: 50px;
+        background-color: #2e8b57;
+        float: left;
+        padding: 0px 0px;
+        text-align: center;
+        font-size: 30px;
+        border: solid black;
+        border-radius: 0px;
+        margin: 0px;
+    }
+    .bottombutton:hover {border: solid #FFFFFF;}
+    .betredbutton {
+        width: 100px;
+        height: 50px;
+        background-color: #db1d1d;
+        float: left;
+        padding: 0px 0px;
+        text-align: center;
+        font-size: 30px;
+        border: solid black;
+        border-radius: 0px;
+        margin: 0px;
+    }
+    .betredbutton:hover {border: solid #FFFFFF;}
+    .betblackbutton {
+        width: 100px;
+        height: 50px;
+        background-color: #3d3d3d;
+        float: left;
+        padding: 0px 0px;
+        text-align: center;
+        font-size: 30px;
+        border: solid black;
+        border-radius: 0px;
+        margin: 0px;
+    }
+    .betblackbutton:hover {border: solid #FFFFFF;}
 </style>
 <body>
     <h1>Roulette</h1>
-    <div class="bettingtable">
-        <img id="betTable" src="RouletteAssets/bettingtable.png" alt="Betting Table" width="750" height=auto/>
-    </div>
-    <div class="wheel">
-        <img id="spinWheel" src="RouletteAssets/wheel.png" alt="Spinning Wheel" width="650" height=auto>
-    </div>
-    <div class="game-container">
+        <div class="game-container">
+            <div class="roulettetable">
+                <div class="BetTable">
+                    <div class="leftBetTable"> 
+                        <button class="zerobuttons" id="0Btn"> 0 </button>
+                        <button class="zerobuttons" id="00Btn"> 00 </button>
+                    </div>
+                    <div class="centerBetTable">
+                        <button class="redbutton" id="3Btn"> 3 </button>
+                        <button class="blackbutton" id="6Btn"> 6 </button>
+                        <button class="redbutton" id="9Btn"> 9 </button>
+                        <button class="redbutton" id="12Btn"> 12 </button>
+                        <button class="blackbutton" id="15Btn"> 15 </button>
+                        <button class="redbutton" id="18Btn"> 18 </button>
+                        <button class="redbutton" id="21Btn"> 21 </button>
+                        <button class="blackbutton" id="24Btn"> 24 </button>
+                        <button class="redbutton" id="27Btn"> 27 </button>
+                        <button class="redbutton" id="30Btn"> 30 </button>
+                        <button class="blackbutton" id="33Btn"> 33 </button>
+                        <button class="redbutton" id="36Btn"> 36 </button>
+                        <button class="columnbutton" id="1stClm"> 2:1 </button>
+
+                        <button class="blackbutton" id="2Btn"> 2 </button>
+                        <button class="redbutton" id="5Btn"> 5 </button>
+                        <button class="blackbutton" id="8Btn"> 8 </button>
+                        <button class="blackbutton" id="11Btn"> 11 </button>
+                        <button class="redbutton" id="14Btn"> 14 </button>
+                        <button class="blackbutton" id="17Btn"> 17 </button>
+                        <button class="blackbutton" id="20Btn"> 20 </button>
+                        <button class="redbutton" id="23Btn"> 23 </button>
+                        <button class="blackbutton" id="26Btn"> 26 </button>
+                        <button class="blackbutton" id="29Btn"> 29 </button>
+                        <button class="redbutton" id="32Btn"> 32 </button>
+                        <button class="blackbutton" id="35Btn"> 35 </button>
+                        <button class="columnbutton" id="2ndClm"> 2:1 </button>
+
+                        <button class="redbutton" id="1Btn"> 1 </button>
+                        <button class="blackbutton" id="4Btn"> 4 </button>
+                        <button class="redbutton" id="7Btn"> 7 </button>
+                        <button class="blackbutton" id="10Btn"> 10 </button>
+                        <button class="blackbutton" id="13Btn"> 13 </button>
+                        <button class="redbutton" id="16Btn"> 16 </button>
+                        <button class="redbutton" id="19Btn"> 19 </button>
+                        <button class="blackbutton" id="22Btn"> 22 </button>
+                        <button class="redbutton" id="25Btn"> 25 </button>
+                        <button class="blackbutton" id="28Btn"> 28 </button>
+                        <button class="blackbutton" id="31Bnt"> 31 </button>
+                        <button class="redbutton" id="34Btn"> 34 </button>
+                        <button class="columnbutton" id="3rdClm"> 2:1 </button>
+
+                        <button class="rowbutton" id="1/3"> 1-12 </button>
+                        <button class="rowbutton" id="2/3"> 13-24 </button>
+                        <button class="rowbutton" id="3/3"> 25-36 </button>
+
+                        <button class="bottombutton" id="1stHalf"> 1-18 </button>
+                        <button class="bottombutton" id="Even"> Even </button>
+                        <button class="betredbutton" id="Red"> Red </button>
+                        <button class="betblackbutton" id="Black"> Black </button>
+                        <button class="bottombutton" id="Odd"> Odd </button>
+                        <button class="bottombutton" id="2ndHalf"> 19-36 </button>
+                    </div>
+                </div>
+            <img id="spinWheel" src="RouletteAssets/wheel.png" alt="Spinning Wheel" width="400" height=auto>
+        </div>
         <div class="buttons">
-            <button onclick="spin()">Spin</button>
+            <button class="uibutton" onclick="spin()">Spin</button>
+            <button class="uibutton" id="reset-bet-btn" style="display: none;" onclick="resetBet()">Change Bet</button>
             <button class="back-button" onclick="goToMainPage()">Back to Main Page</button>
         </div>
         <div class="results" id="currency-stats">
-            GBucks: 0
+            GBucks: 0 | Bet: 0
         </div>
     </div>
 
     <script>
-        let balance = parseFloat(localStorage.getItem("shareCurrency")) || 0;
+        let balance = 500; // parseFloat(localStorage.getItem("shareCurrency")) || 0; 
+        let bet = parseInt(localStorage.getItem('shareBet')) || 10;
+        let evenRolls = ["2Btn", "4Btn", "6Btn", "8Btn", "10Btn", "12Btn", "14Btn", "16Btn", "18Btn", "20Btn", "22Btn", "24Btn", "26Btn", "28Btn", "30Btn", "32Btn", "34Btn", "36Btn"];
+        let oddRolls = ["1Btn", "3Btn", "5Btn", "7Btn", "9Btn", "11Btn", "13Btn", "15Btn", "17Btn", "19Btn", "21Btn", "23Btn", "25Btn", "27Btn", "29Btn", "31Btn", "33Btn", "35Btn"];
+        let redRolls = ["1Btn", "3Btn", "5Btn", "7Btn", "9Btn", "12Btn", "14Btn", "16Btn", "18Btn", "19Btn", "21Btn", "23Btn", "25Btn", "27Btn", "30Btn", "32Btn", "34Btn", "36Btn"];
+        let blackRolls = ["2Btn", "4Btn", "6Btn", "8Btn", "10Btn", "11Btn", "13Btn", "15Btn", "17Btn", "20Btn", "22Btn", "24Btn", "26Btn", "28Btn", "29Btn", "31Btn", "33Btn", "35Btn"];
+        updateCurrency();
+
+        function resetBet() {
+            saveData();
+            location.href="betting.html";
+        }
 
         function updateCurrency() {
-            document.getElementById("currency-stats").textContent = `GBucks: ${balance}`;
+            document.getElementById("currency-stats").textContent = `GBucks: ${balance} | Bet: ${bet}`;
         }
 
         function goToMainPage() {

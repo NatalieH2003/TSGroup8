@@ -130,12 +130,19 @@
             const playerContainer = document.getElementById('player-cards');
             const houseContainer = document.getElementById('house-cards');
 
-            playerContainer.innerHTML = playerHand.map(card => 
+            // Sort hands by rank
+            const valueMap = {
+                '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10,
+                'jack': 11, 'queen': 12, 'king': 13, 'ace': 14
+            };
+            const sortHand = (hand) => hand.sort((a, b) => valueMap[b.value] - valueMap[a.value]);
+
+            playerContainer.innerHTML = sortHand(playerHand).map(card => 
                 `<img src="Playing Cards/${card.value}_of_${card.suit}.png" alt="${card.value} of ${card.suit}">`
             ).join('');
 
             if (houseCardsRevealed) {
-                houseContainer.innerHTML = houseHand.map(card => 
+                houseContainer.innerHTML = sortHand(houseHand).map(card => 
                     `<img src="Playing Cards/${card.value}_of_${card.suit}.png" alt="${card.value} of ${card.suit}">`
                 ).join('');
             } else {
@@ -145,69 +152,140 @@
             }
         }
 
-        // Play hand
         function playHand() {
             houseCardsRevealed = true;
             updateHandsDisplay(); 
 
-            const playerScore = evaluateHand(playerHand);
-            const houseScore = evaluateHand(houseHand);
+            const playerEvaluation = evaluateHand(playerHand);
+            const houseEvaluation = evaluateHand(houseHand);
 
-            const playerHandType = getHandType(playerHand);
-            const houseHandType = getHandType(houseHand);
+            let resultText = `Player has ${playerEvaluation.handType}. House has ${houseEvaluation.handType}. `;
 
-            let resultText = `Player has ${playerHandType}. House has ${houseHandType}. `;
-
-            if (playerScore > houseScore) {
+            if (playerEvaluation.handType === 'Royal Flush') {
+                resultText += 'Congratulations! You hit a Royal Flush!';
+            } else if (houseEvaluation.handType === 'Royal Flush') {
+                resultText += 'Oh no! The House hit a Royal Flush!';
+            } else if (playerEvaluation.rank > houseEvaluation.rank) {
                 resultText += 'You won!';
-            } else if (playerScore < houseScore) {
+            } else if (playerEvaluation.rank < houseEvaluation.rank) {
                 resultText += 'You lost!';
             } else {
-                resultText += 'It\'s a tie!';
+                // Handle tie by comparing sorted values of both hands
+                const playerHighCards = playerEvaluation.sortedValues;
+                const houseHighCards = houseEvaluation.sortedValues;
+
+                let tieResult = 'It\'s a tie!'; // Default to tie unless we find a winner
+
+                for (let i = 0; i < Math.min(playerHighCards.length, houseHighCards.length); i++) {
+                    if (playerHighCards[i] > houseHighCards[i]) {
+                        tieResult = 'You won!';
+                        break; // Player wins
+                    } else if (playerHighCards[i] < houseHighCards[i]) {
+                        tieResult = 'You lost!';
+                        break; // House wins
+                    }
+                }
+                resultText += tieResult; // Add the tie result to the main result text
             }
 
-            document.getElementById('result').textContent = resultText;
+            document.getElementById('result').textContent = resultText; // Show the result
         }
 
-        // scoring system
         function evaluateHand(hand) {
+            const counts = {};
+            const suits = {};
             const valueMap = {
                 '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10,
                 'jack': 11, 'queen': 12, 'king': 13, 'ace': 14
             };
-            return hand.reduce((sum, card) => sum + valueMap[card.value], 0);
+            const values = hand.map(card => valueMap[card.value]).sort((a, b) => a - b);
+
+            // Count occurrences of each card value and suit
+            hand.forEach(card => {
+                counts[card.value] = (counts[card.value] || 0) + 1;
+                suits[card.suit] = (suits[card.suit] || 0) + 1;
+            });
+
+            // Check for flush (five cards of the same suit)
+            const flushSuit = Object.keys(suits).find(suit => suits[suit] >= 5);
+            const isFlush = !!flushSuit;
+
+            // Check for straight (five cards in ranking order)
+            let isStraight = false;
+            for (let i = 0; i <= values.length - 5; i++) {
+                if (values[i] + 4 === values[i + 4] && new Set(values.slice(i, i + 5)).size === 5) {
+                    isStraight = true;
+                    break;
+                }
+            }
+
+            // Determine hand rank based on the poker hand hierarchy
+            const valuesCount = Object.values(counts);
+            const maxCount = Math.max(...valuesCount);
+            const pairs = valuesCount.filter(count => count === 2).length;
+
+            // Check for Royal Flush
+            if (isFlush && isStraight && values.includes(valueMap['10']) && values.includes(valueMap['jack']) && values.includes(valueMap['queen']) && values.includes(valueMap['king']) && values.includes(valueMap['ace'])) {
+                return { rank: 9, handType: 'Royal Flush', sortedValues: values.sort((a, b) => b - a) };
+            }
+
+            // Check for Straight Flush
+            if (isFlush && isStraight) {
+                return { rank: 8, handType: 'Straight Flush', sortedValues: values.sort((a, b) => b - a) };
+            }
+
+            // Check for Four of a Kind
+            if (maxCount === 4) {
+                return { rank: 7, handType: 'Four of a Kind', sortedValues: values.sort((a, b) => b - a) };
+            }
+
+            // Check for Full House
+            if (maxCount === 3 && pairs === 1) {
+                return { rank: 6, handType: 'Full House', sortedValues: values.sort((a, b) => b - a) };
+            }
+
+            // Check for Flush
+            if (isFlush) {
+                return { rank: 5, handType: 'Flush', sortedValues: values.sort((a, b) => b - a) };
+            }
+
+            // Check for Straight
+            if (isStraight) {
+                return { rank: 4, handType: 'Straight', sortedValues: values.sort((a, b) => b - a) };
+            }
+
+            // Check for Three of a Kind
+            if (maxCount === 3) {
+                return { rank: 3, handType: 'Three of a Kind', sortedValues: values.sort((a, b) => b - a) };
+            }
+
+            // Check for Two Pair
+            if (pairs === 2) {
+                return { rank: 2, handType: 'Two Pair', sortedValues: values.sort((a, b) => b - a) };
+            }
+
+            // Check for One Pair
+            if (pairs === 1) {
+                return { rank: 1, handType: 'One Pair', sortedValues: values.sort((a, b) => b - a) };
+            }
+
+            // High Card
+            return { rank: 0, handType: 'High Card', sortedValues: values.sort((a, b) => b - a) };
         }
 
-        // Determine type of poker hand
-        function getHandType(hand) {
-            const counts = {};
-            hand.forEach(card => counts[card.value] = (counts[card.value] || 0) + 1);
-
-            const values = Object.values(counts);
-            const maxCount = Math.max(...values);
-
-            if (maxCount === 4) return 'Four of a Kind';
-            if (maxCount === 3 && values.includes(2)) return 'Full House';
-            if (maxCount === 3) return 'Three of a Kind';
-            if (values.filter(count => count === 2).length === 2) return 'Two Pair';
-            if (maxCount === 2) return 'One Pair';
-            return 'High Card';
-        }
-
-        // Fold hand
         function foldHand() {
-            dealHands();
-            document.getElementById('result').textContent = 'Hand folded. New cards dealt.';
+            alert("You folded the hand.");
+            resetGame();
         }
 
-        // Reset the game
         function resetGame() {
             createDeck();
             dealHands();
-            document.getElementById('result').textContent = '';
         }
 
-        window.onload = resetGame;
+        // Initialize the game
+        createDeck();
+        dealHands();
     </script>
 </body>
 </html>

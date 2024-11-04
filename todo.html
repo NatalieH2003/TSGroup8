@@ -50,6 +50,11 @@
         align-items: center;
         padding: 10px;
       }
+      .main-button {
+        display: flex;
+        align-items: left;
+        padding: 10px;
+      }
       ul {
         list-style: none;
         padding: 0;
@@ -66,10 +71,6 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-      }
-      ul li.checked {
-        color: #555;
-        text-decoration: line-through;
       }
       #input {
         width: 100%;
@@ -88,9 +89,13 @@
         <button class="Add" onclick="addTask()">Add</button>
       </div>
       <ul id="list"></ul>
+      <button class="main-button" onclick="goToMainPage()">
+        Back to Main Page
+      </button>
     </div>
 
     <script>
+      //Variables
       let balance = parseFloat(localStorage.getItem("shareCurrency"), 10);
       document.getElementById(
         "gBucksDisplay"
@@ -127,8 +132,6 @@
         const buttonContainer = document.createElement("div");
         buttonContainer.style.display = "flex";
         buttonContainer.style.gap = "5px";
-
-        //Append buttons together
         newTask.appendChild(buttonContainer);
         buttonContainer.appendChild(complete);
         buttonContainer.appendChild(remove);
@@ -157,14 +160,14 @@
           saveData();
         }
       }
+      // Go back to Main Page
+      function goToMainPage() {
+        location.href = "TSP.html"; // Redirects to TSP.html
+      }
       function saveData() {
         localStorage.setItem("tasks", lists.innerHTML);
         localStorage.setItem("shareCurrency", balance);
       }
-      /*function showTask() {
-        lists.innerHTML = localStorage.getItem("tasks");
-      }
-      showTask();*/
     </script>
   </body>
 </html>

@@ -67,11 +67,14 @@
         <div class="cards" id="house-cards"></div>
 
         <div class="results" id="result"></div>
+        <div class="results" id="player-stats">Wins: 0 | Losses: 0</div>
+        <div class="results" id="gbucks-stats">GBucks: 0 | Bet: 0</div>
 
         <div class="buttons">
             <button onclick="playHand()">Play</button>
             <button onclick="foldHand()">Fold</button>
-            <button onclick="resetGame()">Reset Game</button>
+            <button id="play-again-btn" style="display: none;" onclick="playAgain()">Play Again</button>
+            <button class="back-button" onclick="goToMainPage()">Back to Main Page</button>
         </div>
     </div>
 
@@ -80,6 +83,11 @@
         let playerHand = [];
         let houseHand = [];
         let houseCardsRevealed = false;
+        let wins = parseInt(localStorage.getItem('pokerWins') || '0');
+        let losses = parseInt(localStorage.getItem('pokerLosses') || '0');
+        let balance = parseFloat(localStorage.getItem('shareCurrency'), 10);
+        let bet = parseInt(localStorage.getItem('shareBet'), 10);
+        updateCurrencyDisplay();
 
         // Create deck
         function createDeck() {
@@ -110,6 +118,7 @@
             if (deck.length < 10) {
                 document.getElementById('result').textContent = 'Deck is low! Please reset the game.';
                 return;
+                
             }
 
             playerHand = [];
@@ -123,6 +132,7 @@
 
             updateHandsDisplay();
             document.getElementById('result').textContent = '';
+            document.getElementById('play-again-btn').style.display = "none";
         }
 
         // Show the player and house hands
@@ -167,8 +177,12 @@
                 resultText += 'Oh no! The House hit a Royal Flush!';
             } else if (playerEvaluation.rank > houseEvaluation.rank) {
                 resultText += 'You won!';
+                wins++;
+                balance += bet;
             } else if (playerEvaluation.rank < houseEvaluation.rank) {
                 resultText += 'You lost!';
+                losses++;
+                balance -= bet;
             } else {
                 // Handle tie by comparing sorted values of both hands
                 const playerHighCards = playerEvaluation.sortedValues;
@@ -188,7 +202,10 @@
                 resultText += tieResult; // Add the tie result to the main result text
             }
 
-            document.getElementById('result').textContent = resultText; // Show the result
+            document.getElementById('result').textContent = resultText;
+            document.getElementById('play-again-btn').style.display = "inline-block";
+            updateCurrencyDisplay();
+            saveData();
         }
 
         function evaluateHand(hand) {
@@ -275,15 +292,33 @@
 
         function foldHand() {
             alert("You folded the hand.");
-            resetGame();
+            losses++;
+            balance -= bet;
+            updateCurrencyDisplay();
+            saveData();
+            playAgain();
         }
-
-        function resetGame() {
+        function playAgain() {
             createDeck();
             dealHands();
         }
 
-        // Initialize the game
+        function goToMainPage() {
+            window.location.href = "TSP.html"; // replace with actual path
+        }
+
+        function updateCurrencyDisplay() {
+            document.getElementById('gbucks-stats').textContent = `GBucks: ${balance.toFixed(2)} | Bet: ${bet}`;
+            document.getElementById('player-stats').textContent = `Wins: ${wins} | Losses: ${losses}`;
+        }
+
+        function saveData() {
+            localStorage.setItem('gbucksBalance', balance.toFixed(2));
+            localStorage.setItem('pokerWins', wins);
+            localStorage.setItem('pokerLosses', losses);
+            localStorage.setItem('currentBet', bet);
+        }
+
         createDeck();
         dealHands();
     </script>

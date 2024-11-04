@@ -90,6 +90,7 @@
       <div>
         <button onclick="startGame('blackjack')">Start Blackjack</button>
         <button onclick="startGame('slots')">Start Slots</button>
+        <button onclick="startGame('poker')">Start Poker</button>
       </div>
     </div>
     <div class="results" id="gBucksDisplay"></div>
@@ -124,6 +125,9 @@
         location.href = "blackjack.html";
       } else if (game === 'slots') {
         location.href = "slots.html";
+      }
+      else if (game === 'poker') {
+        location.href = "poker.html";
       }
     }
   </script>

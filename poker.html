@@ -304,7 +304,7 @@
         }
 
         function goToMainPage() {
-            window.location.href = "TSP.html"; // replace with actual path
+            window.location.href = "TSP.html"; //Make sure it's using the homepage path
         }
 
         function updateCurrencyDisplay() {
@@ -317,6 +317,8 @@
             localStorage.setItem('pokerWins', wins);
             localStorage.setItem('pokerLosses', losses);
             localStorage.setItem('currentBet', bet);
+            localStorage.setItem('shareBet', bet);
+            localStorage.setItem('shareCurrency', balance);
         }
 
         createDeck();

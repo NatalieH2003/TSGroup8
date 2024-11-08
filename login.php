@@ -73,15 +73,8 @@ require "db.php";
 session_start();
 if(isset($_POST["login"])){
 	if(authenticate($_POST["username"], $_POST["password"]) == 1){
-		/*if(strcmp($_SESSION["sesh_type"],"student") == 0){
-			header("LOCATION:stu_main.php");
-		}
-		else{
-			header("LOCATION:inst_main.php");
-		}*/
-		header("LOCATION:TSP.php");
-
 		$_SESSION["username"]=$_POST["username"];
+		header("LOCATION:TSP.php");
 		return;
 	}
 	else{
@@ -96,7 +89,7 @@ else if(isset($_POST["register"])){
 }
 
 
-if(isset($_POST["logout"])){
+if(isset($_POST["Logout"])){
 	session_destroy();
 }
 

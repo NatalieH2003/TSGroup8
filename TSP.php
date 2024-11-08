@@ -98,23 +98,20 @@
     <h1>Gamble Smart</h1>
     <p>Balance gambling with productivity and fun!</p>
     <?php
-              session_start();
-              require "db.php";
-              if(isset($_SESSION["username"])){
+        session_start();
+        require "db.php";
+        if(isset($_SESSION["username"])){
                       
-              ?>
-              <form method="post" action="login.php">
-                
-                    <?php
-                    echo '<label> Welcome '. $_SESSION["username"].'!</label>';
-                    ?>
-                  <input type="submit" class="logout-btn" value="logout" name="logout">
-                
-              </form>
-              <?php
-              }
-              
-              ?>
+        ?>
+        <form method="post" action="login.php">
+            <?php
+            echo '<label> Welcome '. $_SESSION["username"].'!</label>';
+            ?>
+            <input type="submit" class="logout-btn" value="Logout" name="Logout">        
+        </form>
+        <?php
+        }
+        ?>
   </header>
   
   <nav>

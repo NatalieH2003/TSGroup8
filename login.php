@@ -79,7 +79,7 @@ if(isset($_POST["login"])){
 		else{
 			header("LOCATION:inst_main.php");
 		}*/
-		header("LOCATION:TSP.html");
+		header("LOCATION:TSP.php");
 
 		$_SESSION["username"]=$_POST["username"];
 		return;

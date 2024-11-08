@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,15 +8,17 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #006400;
+            background-color: #2e8b57;
             color: white;
             text-align: center;
             margin: 0;
             padding: 0;
         }
+
         h1 {
             margin-top: 20px;
         }
+
         .game-container {
             max-width: 800px;
             margin: 20px auto;
@@ -24,9 +27,11 @@
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
         }
+
         .buttons {
             margin-top: 20px;
         }
+
         button {
             padding: 10px 20px;
             font-size: 16px;
@@ -37,17 +42,21 @@
             cursor: pointer;
             border-radius: 5px;
         }
+
         button:hover {
-            background-color: #218838;
+            background-color: #28a745;
         }
+
         .results {
             margin-top: 20px;
         }
+
         .cards {
             display: flex;
             justify-content: center;
             margin-top: 20px;
         }
+
         .cards img {
             margin: 10px;
             width: 100px;
@@ -57,6 +66,7 @@
         }
     </style>
 </head>
+
 <body>
     <h1>Poker Game</h1>
     <div class="game-container">
@@ -71,10 +81,11 @@
         <div class="results" id="gbucks-stats">GBucks: 0 | Bet: 0</div>
 
         <div class="buttons">
-            <button onclick="playHand()">Play</button>
+            <button id="play-hand-btn" onclick="playHand()">Play Hand</button>
             <button onclick="foldHand()">Fold</button>
             <button id="play-again-btn" style="display: none;" onclick="playAgain()">Play Again</button>
-            <button class="back-button" onclick="goToMainPage()">Back to Main Page</button>
+            <button onclick="goToMainPage()">Back to Main Page</button>
+            <button onclick="goToBettingPage()">Go to Betting Page</button>
         </div>
     </div>
 
@@ -94,7 +105,7 @@
             const suits = ['hearts', 'clubs', 'diamonds', 'spades'];
             const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'jack', 'queen', 'king', 'ace'];
             deck = [];
-            
+
             for (let suit of suits) {
                 for (let value of values) {
                     deck.push({ suit: suit, value: value });
@@ -118,7 +129,7 @@
             if (deck.length < 10) {
                 document.getElementById('result').textContent = 'Deck is low! Please reset the game.';
                 return;
-                
+
             }
 
             playerHand = [];
@@ -147,16 +158,16 @@
             };
             const sortHand = (hand) => hand.sort((a, b) => valueMap[b.value] - valueMap[a.value]);
 
-            playerContainer.innerHTML = sortHand(playerHand).map(card => 
+            playerContainer.innerHTML = sortHand(playerHand).map(card =>
                 `<img src="Playing Cards/${card.value}_of_${card.suit}.png" alt="${card.value} of ${card.suit}">`
             ).join('');
 
             if (houseCardsRevealed) {
-                houseContainer.innerHTML = sortHand(houseHand).map(card => 
+                houseContainer.innerHTML = sortHand(houseHand).map(card =>
                     `<img src="Playing Cards/${card.value}_of_${card.suit}.png" alt="${card.value} of ${card.suit}">`
                 ).join('');
             } else {
-                houseContainer.innerHTML = houseHand.map(() => 
+                houseContainer.innerHTML = houseHand.map(() =>
                     `<img src="Playing Cards/card_back.png" alt="Card Back">`
                 ).join('');
             }
@@ -164,7 +175,9 @@
 
         function playHand() {
             houseCardsRevealed = true;
-            updateHandsDisplay(); 
+            updateHandsDisplay();
+
+            document.getElementById('play-hand-btn').style.display = "none";
 
             const playerEvaluation = evaluateHand(playerHand);
             const houseEvaluation = evaluateHand(houseHand);
@@ -177,11 +190,8 @@
                 resultText += 'Oh no! The House hit a Royal Flush!';
             } else if (playerEvaluation.rank > houseEvaluation.rank) {
                 resultText += 'You won!';
-<<<<<<< HEAD
-=======
                 wins++;
                 balance += bet;
->>>>>>> 2e570ce72f04d5627c0ca6ee9db2ffc1cce97e0c
             } else if (playerEvaluation.rank < houseEvaluation.rank) {
                 resultText += 'You lost!';
                 losses++;
@@ -205,14 +215,10 @@
                 resultText += tieResult; // Add the tie result to the main result text
             }
 
-<<<<<<< HEAD
-            document.getElementById('result').textContent = resultText; // Show the result
-=======
             document.getElementById('result').textContent = resultText;
             document.getElementById('play-again-btn').style.display = "inline-block";
             updateCurrencyDisplay();
             saveData();
->>>>>>> 2e570ce72f04d5627c0ca6ee9db2ffc1cce97e0c
         }
 
         function evaluateHand(hand) {
@@ -299,12 +305,6 @@
 
         function foldHand() {
             alert("You folded the hand.");
-<<<<<<< HEAD
-            resetGame();
-        }
-
-        function resetGame() {
-=======
             losses++;
             balance -= bet;
             updateCurrencyDisplay();
@@ -312,16 +312,17 @@
             playAgain();
         }
         function playAgain() {
->>>>>>> 2e570ce72f04d5627c0ca6ee9db2ffc1cce97e0c
             createDeck();
             dealHands();
+            document.getElementById('play-hand-btn').style.display = "inline-block";
         }
 
-<<<<<<< HEAD
-        // Initialize the game
-=======
         function goToMainPage() {
             window.location.href = "TSP.html"; // replace with actual path
+        }
+
+        function goToBettingPage() {
+            window.location.href = "betting.html"; // redirect to the betting page
         }
 
         function updateCurrencyDisplay() {
@@ -334,11 +335,13 @@
             localStorage.setItem('pokerWins', wins);
             localStorage.setItem('pokerLosses', losses);
             localStorage.setItem('currentBet', bet);
+            localStorage.setItem('shareBet', bet);
+            localStorage.setItem('shareCurrency', balance);
         }
 
->>>>>>> 2e570ce72f04d5627c0ca6ee9db2ffc1cce97e0c
         createDeck();
         dealHands();
     </script>
 </body>
+
 </html>

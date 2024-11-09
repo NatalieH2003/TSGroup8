@@ -87,7 +87,9 @@
         border-radius: 0px;
         margin: 0px;
     }
-    .redbutton:hover {border: solid #FFFFFF;}
+    .redbutton:hover {
+        border: solid white!important;
+    }
     .blackbutton {
         background-color: #3d3d3d;
         float: left;
@@ -100,7 +102,9 @@
         border-radius: 0px;
         margin: 0px;
     }
-    .blackbutton:hover {border: solid #FFFFFF;}
+    .blackbutton:hover {
+        border: solid white!important;
+    }
     .zerobuttons {
         background-color: #2e8b57;
         width: 50px;
@@ -113,7 +117,9 @@
         border-radius: 0px;
         margin: 0px;
     }
-    .zerobuttons:hover {border: solid #FFFFFF;}
+    .zerobuttons:hover {
+        border: solid white!important;
+    }
     .columnbutton {
         background-color: #2e8b57;
         font-size: 20px;
@@ -126,7 +132,9 @@
         border-radius: 0px;
         margin: 0px;
     }
-    .columnbutton:hover {border: solid #FFFFFF;}
+    .columnbutton:hover {
+        border: solid white!important;
+    }
     .rowbutton {
         width: 200px;
         height: 50px;
@@ -139,7 +147,9 @@
         border-radius: 0px;
         margin: 0px;
     }
-    .rowbutton:hover {border: solid #FFFFFF;}
+    .rowbutton:hover {
+        border: solid white!important;
+    }
     .bottombutton {
         width: 100px;
         height: 50px;
@@ -152,7 +162,9 @@
         border-radius: 0px;
         margin: 0px;
     }
-    .bottombutton:hover {border: solid #FFFFFF;}
+    .bottombutton:hover {
+        border: solid white!important;
+    }
     .betredbutton {
         width: 100px;
         height: 50px;
@@ -165,7 +177,9 @@
         border-radius: 0px;
         margin: 0px;
     }
-    .betredbutton:hover {border: solid #FFFFFF;}
+    .betredbutton:hover {
+        border: solid white!important;
+    }
     .betblackbutton {
         width: 100px;
         height: 50px;
@@ -178,7 +192,9 @@
         border-radius: 0px;
         margin: 0px;
     }
-    .betblackbutton:hover {border: solid #FFFFFF;}
+    .betblackbutton:hover {
+        border: solid white!important;
+    }
 </style>
 <body>
     <h1>Roulette</h1>
@@ -186,62 +202,62 @@
             <div class="roulettetable">
                 <div class="BetTable">
                     <div class="leftBetTable"> 
-                        <button class="zerobuttons" id="0Btn"> 0 </button>
-                        <button class="zerobuttons" id="00Btn"> 00 </button>
+                        <button class="zerobuttons" onclick="placeBet(this.id)" id="0Btn"> 0 </button>
+                        <button class="zerobuttons" onclick="placeBet(this.id)" id="00Btn"> 00 </button>
                     </div>
                     <div class="centerBetTable">
-                        <button class="redbutton" id="3Btn"> 3 </button>
-                        <button class="blackbutton" id="6Btn"> 6 </button>
-                        <button class="redbutton" id="9Btn"> 9 </button>
-                        <button class="redbutton" id="12Btn"> 12 </button>
-                        <button class="blackbutton" id="15Btn"> 15 </button>
-                        <button class="redbutton" id="18Btn"> 18 </button>
-                        <button class="redbutton" id="21Btn"> 21 </button>
-                        <button class="blackbutton" id="24Btn"> 24 </button>
-                        <button class="redbutton" id="27Btn"> 27 </button>
-                        <button class="redbutton" id="30Btn"> 30 </button>
-                        <button class="blackbutton" id="33Btn"> 33 </button>
-                        <button class="redbutton" id="36Btn"> 36 </button>
-                        <button class="columnbutton" onclick="selectColumn('first')" id="1stClm"> 2:1 </button>
+                        <button class="redbutton" onclick="placeBet(this.id)" id="3Btn"> 3 </button>
+                        <button class="blackbutton" onclick="placeBet(this.id)" id="6Btn"> 6 </button>
+                        <button class="redbutton" onclick="placeBet(this.id)" id="9Btn"> 9 </button>
+                        <button class="redbutton" onclick="placeBet(this.id)" id="12Btn"> 12 </button>
+                        <button class="blackbutton" onclick="placeBet(this.id)" id="15Btn"> 15 </button>
+                        <button class="redbutton" onclick="placeBet(this.id)" id="18Btn"> 18 </button>
+                        <button class="redbutton" onclick="placeBet(this.id)" id="21Btn"> 21 </button>
+                        <button class="blackbutton" onclick="placeBet(this.id)" id="24Btn"> 24 </button>
+                        <button class="redbutton" onclick="placeBet(this.id)" id="27Btn"> 27 </button>
+                        <button class="redbutton" onclick="placeBet(this.id)" id="30Btn"> 30 </button>
+                        <button class="blackbutton" onclick="placeBet(this.id)" id="33Btn"> 33 </button>
+                        <button class="redbutton" onclick="placeBet(this.id)" id="36Btn"> 36 </button>
+                        <button class="columnbutton" onclick="placeBet('firstColumn')" id="1stClm"> 2:1 </button>
 
-                        <button class="blackbutton" id="2Btn"> 2 </button>
-                        <button class="redbutton" id="5Btn"> 5 </button>
-                        <button class="blackbutton" id="8Btn"> 8 </button>
-                        <button class="blackbutton" id="11Btn"> 11 </button>
-                        <button class="redbutton" id="14Btn"> 14 </button>
-                        <button class="blackbutton" id="17Btn"> 17 </button>
-                        <button class="blackbutton" id="20Btn"> 20 </button>
-                        <button class="redbutton" id="23Btn"> 23 </button>
-                        <button class="blackbutton" id="26Btn"> 26 </button>
-                        <button class="blackbutton" id="29Btn"> 29 </button>
-                        <button class="redbutton" id="32Btn"> 32 </button>
-                        <button class="blackbutton" id="35Btn"> 35 </button>
-                        <button class="columnbutton" onclick="selectColumn('second')" id="2ndClm"> 2:1 </button>
+                        <button class="blackbutton" onclick="placeBet(this.id)" id="2Btn"> 2 </button>
+                        <button class="redbutton" onclick="placeBet(this.id)" id="5Btn"> 5 </button>
+                        <button class="blackbutton" onclick="placeBet(this.id)" id="8Btn"> 8 </button>
+                        <button class="blackbutton" onclick="placeBet(this.id)" id="11Btn"> 11 </button>
+                        <button class="redbutton" onclick="placeBet(this.id)" id="14Btn"> 14 </button>
+                        <button class="blackbutton" onclick="placeBet(this.id)" id="17Btn"> 17 </button>
+                        <button class="blackbutton" onclick="placeBet(this.id)" id="20Btn"> 20 </button>
+                        <button class="redbutton" onclick="placeBet(this.id)" id="23Btn"> 23 </button>
+                        <button class="blackbutton" onclick="placeBet(this.id)" id="26Btn"> 26 </button>
+                        <button class="blackbutton" onclick="placeBet(this.id)" id="29Btn"> 29 </button>
+                        <button class="redbutton" onclick="placeBet(this.id)" id="32Btn"> 32 </button>
+                        <button class="blackbutton" onclick="placeBet(this.id)" id="35Btn"> 35 </button>
+                        <button class="columnbutton" onclick="placeBet('secondColumn')" id="2ndClm"> 2:1 </button>
 
-                        <button class="redbutton" id="1Btn"> 1 </button>
-                        <button class="blackbutton" id="4Btn"> 4 </button>
-                        <button class="redbutton" id="7Btn"> 7 </button>
-                        <button class="blackbutton" id="10Btn"> 10 </button>
-                        <button class="blackbutton" id="13Btn"> 13 </button>
-                        <button class="redbutton" id="16Btn"> 16 </button>
-                        <button class="redbutton" id="19Btn"> 19 </button>
-                        <button class="blackbutton" id="22Btn"> 22 </button>
-                        <button class="redbutton" id="25Btn"> 25 </button>
-                        <button class="blackbutton" id="28Btn"> 28 </button>
-                        <button class="blackbutton" id="31Btn"> 31 </button>
-                        <button class="redbutton" id="34Btn"> 34 </button>
-                        <button class="columnbutton" onclick="selectColumn('third')" id="3rdClm"> 2:1 </button>
+                        <button class="redbutton" onclick="placeBet(this.id)" id="1Btn"> 1 </button>
+                        <button class="blackbutton" onclick="placeBet(this.id)" id="4Btn"> 4 </button>
+                        <button class="redbutton" onclick="placeBet(this.id)" id="7Btn"> 7 </button>
+                        <button class="blackbutton" onclick="placeBet(this.id)" id="10Btn"> 10 </button>
+                        <button class="blackbutton" onclick="placeBet(this.id)" id="13Btn"> 13 </button>
+                        <button class="redbutton" onclick="placeBet(this.id)" id="16Btn"> 16 </button>
+                        <button class="redbutton" onclick="placeBet(this.id)" id="19Btn"> 19 </button>
+                        <button class="blackbutton" onclick="placeBet(this.id)" id="22Btn"> 22 </button>
+                        <button class="redbutton" onclick="placeBet(this.id)" id="25Btn"> 25 </button>
+                        <button class="blackbutton" onclick="placeBet(this.id)" id="28Btn"> 28 </button>
+                        <button class="blackbutton" onclick="placeBet(this.id)" id="31Btn"> 31 </button>
+                        <button class="redbutton" onclick="placeBet(this.id)" id="34Btn"> 34 </button>
+                        <button class="columnbutton" onclick="placeBet('thirdColumn')" id="3rdClm"> 2:1 </button>
 
-                        <button class="rowbutton" id="1/3"> 1-12 </button>
-                        <button class="rowbutton" id="2/3"> 13-24 </button>
-                        <button class="rowbutton" id="3/3"> 25-36 </button>
+                        <button class="rowbutton" onclick="placeBet('1Third')" id="1/3"> 1-12 </button>
+                        <button class="rowbutton" onclick="placeBet('2Third')" id="2/3"> 13-24 </button>
+                        <button class="rowbutton" onclick="placeBet('3Third')" id="3/3"> 25-36 </button>
 
-                        <button class="bottombutton" id="1stHalf"> 1-18 </button>
-                        <button class="bottombutton" id="Even"> Even </button>
-                        <button class="betredbutton" id="Red"> Red </button>
-                        <button class="betblackbutton" id="Black"> Black </button>
-                        <button class="bottombutton" id="Odd"> Odd </button>
-                        <button class="bottombutton" id="2ndHalf"> 19-36 </button>
+                        <button class="bottombutton" onclick="placeBet('1Half')" id="1stHalf"> 1-18 </button>
+                        <button class="bottombutton" onclick="placeBet('even')" id="Even"> Even </button>
+                        <button class="betredbutton" onclick="placeBet('red')" id="Red"> Red </button>
+                        <button class="betblackbutton" onclick="placeBet('black')" id="Black"> Black </button>
+                        <button class="bottombutton" onclick="placeBet('odd')" id="Odd"> Odd </button>
+                        <button class="bottombutton" onclick="placeBet('2Half')" id="2ndHalf"> 19-36 </button>
                     </div>
                 </div>
             <img id="spinWheel" src="RouletteAssets/wheel.png" alt="Spinning Wheel" width="400" height=auto>
@@ -257,7 +273,7 @@
     </div>
 
     <script>
-        let balance = 500; // parseFloat(localStorage.getItem("shareCurrency")) || 0; 
+        let balance = parseFloat(localStorage.getItem("shareCurrency")) || 0; 
         let bet = parseInt(localStorage.getItem('shareBet')) || 10;
         let evenRolls = ["2Btn", "4Btn", "6Btn", "8Btn", "10Btn", "12Btn", "14Btn", "16Btn", "18Btn", "20Btn", "22Btn", "24Btn", "26Btn", "28Btn", "30Btn", "32Btn", "34Btn", "36Btn"];
         let oddRolls = ["1Btn", "3Btn", "5Btn", "7Btn", "9Btn", "11Btn", "13Btn", "15Btn", "17Btn", "19Btn", "21Btn", "23Btn", "25Btn", "27Btn", "29Btn", "31Btn", "33Btn", "35Btn"];
@@ -266,23 +282,79 @@
         let firstClm = ["3Btn", "6Btn", "9Btn", "12Btn", "15Btn", "18Btn", "21Btn", "24Btn", "27Btn", "30Btn", "33Btn", "36Btn"];
         let secondClm = ["2Btn", "5Btn", "8Btn", "11Btn", "14Btn", "17Btn", "20Btn", "23Btn", "26Btn", "29Btn", "32Btn", "35Btn"];
         let thirdClm = ["1Btn", "4Btn", "7Btn", "10Btn", "13Btn", "16Btn", "19Btn", "22Btn", "25Btn", "28Btn", "31Btn", "34Btn"];
-        let firstRow = [];
-        let secondRow = [];
-        let thirdRow = [];
-        let firstHalf = [];
-        let secondHalf = []
+        let firstThird = ["1Btn", "2Btn", "3Btn", "4Btn", "5Btn", "6Btn", "7Btn", "8Btn", "9Btn", "10Btn", "11Btn", "12Btn"];
+        let secondThird = ["13Btn", "14Btn", "15Btn", "16Btn", "17Btn", "18Btn", "19Btn", "20Btn", "21Btn", "22Btn", "23Btn", "24Btn"];
+        let thirdThird = ["25Btn", "26Btn", "27Btn", "28Btn", "29Btn", "30Btn", "31Btn", "32Btn", "33Btn", "34Btn", "35Btn", "36Btn"];
+        let firstHalf = ["1Btn", "2Btn", "3Btn", "4Btn", "5Btn", "6Btn", "7Btn", "8Btn", "9Btn", "10Btn", "11Btn", "12Btn", "13Btn", "14Btn", "15Btn", "16Btn", "17Btn", "18Btn"];
+        let secondHalf = ["19Btn", "20Btn", "21Btn", "22Btn", "23Btn", "24Btn", "25Btn", "26Btn", "27Btn", "28Btn", "29Btn", "30Btn", "31Btn", "32Btn", "33Btn", "34Btn", "35Btn", "36Btn"]
         let colm1 = false;
         let colm2 = false;
         let colm3 = false;
-        let firstThird = false;
-        let secondThird = false;
-        let thirdThird = false;
-        let fstHalf = false;
-        let scdHalf = false;
+        let third1 = false;
+        let third2 = false;
+        let third3 = false;
+        let half1 = false;
+        let half2 = false;
+        let redS = false;
+        let blackS = false;
+        let evenS = false;
+        let oddS = false;
+        let singleBet = false;
+        let isbetPlaced = false;
+        let betPlaced = "";
         updateCurrency();
 
+        function placeBet(betName) {
+            if (isbetPlaced === false) {
+                if (betName === "firstColumn" || betName === "secondColumn" || betName === "thirdColumn") {
+                    selectColumn(betName);
+                } else if (betName === "1Third" || betName === "2Third" || betName === "3Third") {
+                    selectThird(betName);
+                } else if (betName === "1Half" || betName == "2Half") {
+                    selectHalf(betName);
+                } else if (betName === "red" || betName === "black") {
+                    selectColor(betName);
+                } else if (betName === "even" || betName === "odd") {
+                    selectParity(betName);
+                } else {
+                    selectSingle(betName);
+                }
+                isbetPlaced = true;
+                betPlaced = betName;
+            } else if (isbetPlaced === true && betName === betPlaced) {
+                if (betName === "firstColumn" || betName === "secondColumn" || betName === "thirdColumn") {
+                    selectColumn(betName);
+                } else if (betName === "1Third" || betName === "2Third" || betName === "3Third") {
+                    selectThird(betName);
+                } else if (betName === "1Half" || betName == "2Half") {
+                    selectHalf(betName);
+                } else if (betName === "red" || betName === "black") {
+                    selectColor(betName);
+                } else if (betName === "even" || betName === "odd") {
+                    selectParity(betName);
+                } else {
+                    selectSingle(betName);
+                }
+                isbetPlaced = false;
+            }
+        }
+
+        function betTableHover(buttonID) {
+            document.getElementById(buttonID).style.borderColor = "white";
+        }
+
+        function selectSingle(buttonID) {
+            if (singleBet === false) {
+                document.getElementById(buttonID).style.borderColor = "white";
+                singleBet = true;
+            } else {
+                document.getElementById(buttonID).style.borderColor = "black";
+                singleBet = false;
+            }
+        }
+
         function selectColumn(column) {
-            if (column === "first") {
+            if (column === "firstColumn") {
                 if (colm1 === false) {
                     for (let i = 0; i < firstClm.length; i++) {
                         document.getElementById(firstClm[i]).style.borderColor = "white";
@@ -294,7 +366,7 @@
                     }
                     colm1 = false;
                 }
-            } else if (column === "second") {
+            } else if (column === "secondColumn") {
                 if (colm2 === false) {
                     for (let i = 0; i < secondClm.length; i++) {
                         document.getElementById(secondClm[i]).style.borderColor = "white";
@@ -306,7 +378,7 @@
                     }
                     colm2 = false;
                 }
-            } else if (column === "third") {
+            } else if (column === "thirdColumn") {
                 if (colm3 === false) {
                     for (let i = 0; i < thirdClm.length; i++) {
                         document.getElementById(thirdClm[i]).style.borderColor = "white";
@@ -317,6 +389,130 @@
                         document.getElementById(thirdClm[i]).style.borderColor = "black";
                     }
                     colm3 = false;
+                }
+            }
+        }
+
+        function selectThird(third) {
+            if (third === "1Third") {
+                if (third1 === false) {
+                    for (let i = 0; i < firstThird.length; i++) {
+                        document.getElementById(firstThird[i]).style.borderColor = "white";
+                    }
+                    third1 = true;
+                } else {
+                    for (let i = 0; i < firstThird.length; i++) {
+                        document.getElementById(firstThird[i]).style.borderColor = "black";
+                    }
+                    third1 = false;
+                }
+            } else if (third === "2Third") {
+                if (third2 === false) {
+                    for (let i = 0; i < secondThird.length; i++) {
+                        document.getElementById(secondThird[i]).style.borderColor = "white";
+                    }
+                    third2 = true;
+                } else {
+                    for (let i = 0; i < secondThird.length; i++) {
+                        document.getElementById(secondThird[i]).style.borderColor = "black";
+                    }
+                    third2 = false;
+                }
+            } else if (third === "3Third") {
+                if (third3 === false) {
+                    for (let i = 0; i < thirdThird.length; i++) {
+                        document.getElementById(thirdThird[i]).style.borderColor = "white";
+                    }
+                    third3 = true;
+                } else {
+                    for (let i = 0; i < thirdThird.length; i++) {
+                        document.getElementById(thirdThird[i]).style.borderColor = "black";
+                    }
+                    third3 = false;
+                }
+            }
+        }
+
+        function selectHalf(half) {
+            if (half === "1Half") {
+                if (half1 === false) {
+                    for (let i = 0; i < firstHalf.length; i++) {
+                        document.getElementById(firstHalf[i]).style.borderColor = "white";
+                    }
+                    half1 = true;
+                } else {
+                    for (let i = 0; i < firstHalf.length; i++) {
+                        document.getElementById(firstHalf[i]).style.borderColor = "black";
+                    }
+                    half1 = false;
+                }
+            } else if (half === "2Half") {
+                if (half2 === false) {
+                    for (let i = 0; i < secondHalf.length; i++) {
+                        document.getElementById(secondHalf[i]).style.borderColor = "white";
+                    }
+                    half2 = true;
+                } else {
+                    for (let i = 0; i < secondHalf.length; i++) {
+                        document.getElementById(secondHalf[i]).style.borderColor = "black";
+                    }
+                    half2 = false;
+                }
+            }
+        }
+
+        function selectColor(color) {
+            if (color === "red") {
+                if (redS === false) {
+                    for (let i = 0; i < redRolls.length; i++) {
+                        document.getElementById(redRolls[i]).style.borderColor = "white";
+                    }
+                    redS = true;
+                } else {
+                    for (let i = 0; i < redRolls.length; i++) {
+                        document.getElementById(redRolls[i]).style.borderColor = "black";
+                    }
+                    redS = false;
+                }
+            } else if (color === "black") {
+                if (blackS === false) {
+                    for (let i = 0; i < blackRolls.length; i++) {
+                        document.getElementById(blackRolls[i]).style.borderColor = "white";
+                    }
+                    blackS = true;
+                } else {
+                    for (let i = 0; i < blackRolls.length; i++) {
+                        document.getElementById(blackRolls[i]).style.borderColor = "black";
+                    }
+                    blackS = false;
+                }
+            }
+        }
+
+        function selectParity(parity) {
+            if (parity === "even") {
+                if (evenS === false) {
+                    for (let i = 0; i < evenRolls.length; i++) {
+                        document.getElementById(evenRolls[i]).style.borderColor = "white";
+                    }
+                    evenS = true;
+                } else {
+                    for (let i = 0; i < evenRolls.length; i++) {
+                        document.getElementById(evenRolls[i]).style.borderColor = "black";
+                    }
+                    evenS = false;
+                }
+            } else if (parity === "odd") {
+                if (oddS === false) {
+                    for (let i = 0; i < oddRolls.length; i++) {
+                        document.getElementById(oddRolls[i]).style.borderColor = "white";
+                    }
+                    oddS = true;
+                } else {
+                    for (let i = 0; i < oddRolls.length; i++) {
+                        document.getElementById(oddRolls[i]).style.borderColor = "black";
+                    }
+                    oddS = false;
                 }
             }
         }

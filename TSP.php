@@ -111,7 +111,18 @@
         </form>
         <?php
         }
+        else{
         ?>
+        <form method="post" action="login.php">
+            <?php
+            echo '<label> Welcome Guest!</label>';
+            ?>
+            <input type="submit" class="logout-btn" value="Login" name="toLogin">        
+        </form>
+        
+        <?php
+        }
+    ?>
   </header>
   
   <nav>

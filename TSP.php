@@ -105,7 +105,7 @@
         ?>
         <form method="post" action="login.php">
             <?php
-            echo '<label> Welcome '. $_SESSION["username"].'!</label>';
+            echo '<label> Welcome ' . $_SESSION["username"] . '!</label>';
             ?>
             <input type="submit" class="logout-btn" value="Logout" name="Logout">        
         </form>
@@ -177,6 +177,19 @@
 
   <script>
     let balance = 500; // Default starting balance
+    
+    
+    <?php
+    if(isset($_SESSION["username"])){
+    ?>
+    
+    balance = <?php echo json_encode(getbalance($_SESSION["username"])); ?>;
+    localStorage.setItem("shareCurrency", balance);
+    
+    <?php
+    }
+    else{
+    ?>
 
     // Check if 'shareCurrency' exists and is a valid number
     if (localStorage.getItem("shareCurrency") && !isNaN(localStorage.getItem("shareCurrency"))) {
@@ -184,6 +197,9 @@
     } else {
       localStorage.setItem("shareCurrency", balance);
     }
+    <?php
+    }
+    ?>
 
     // Display the balance
     document.getElementById("gbucks-total").textContent = `GBucks: ${balance}`;

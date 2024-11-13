@@ -91,6 +91,11 @@ else if(isset($_POST["register"])){
 
 if(isset($_POST["Logout"])){
 	session_destroy();
+	?>
+	<script>
+	localStorage.setItem("shareCurrency", 500);
+	</script>
+	<?php
 }
 
 ?>

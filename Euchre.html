@@ -72,12 +72,19 @@
       font-size: 1.2em;
       color: #ffcc00;
     }
+    .highlight {
+      border: 2px solid yellow;
+    }
+    .disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
   <h1>Euchre Game</h1>
   <div class="game-container">
-    <div id="bet-info"></div> <!-- Display bet and balance information -->
+    <div id="bet-info"></div>
     <h2>Your Hand</h2>
     <div class="player-hand" id="player-hand"></div>
 
@@ -103,7 +110,6 @@
   </div>
 
   <script>
-    // Retrieve bet and balance from localStorage
     let bet = parseFloat(localStorage.getItem('shareBet')) || 0;
     let balance = parseFloat(localStorage.getItem('shareCurrency')) || 0;
 
@@ -114,26 +120,23 @@
     }
 
     function goToBetting() {
-      // Reset the bet to zero before navigating back to the betting page
       bet = 0;
       localStorage.setItem('shareBet', bet);
       location.href = "betting.html";
     }
 
-    // Euchre game variables
     let deck = [];
     let playerHand = [];
     let computerHands = [[], [], []];
     let trumpSuit;
     let currentTrick = [];
     let leadingSuit = null;
-    let currentPlayer = 0; // Tracks whose turn it is
-    let trickWinner = 0; // Tracks the winner of the last trick
+    let currentPlayer = 0;
+    let trickWinner = 0;
     let playerTeamPoints = 0;
     let opposingTeamPoints = 0;
-    const totalTricks = 5; // Each player starts with 5 cards
+    const totalTricks = 5;
 
-    // Create and shuffle the deck
     function createDeck() {
       const suits = ["hearts", "clubs", "diamonds", "spades"];
       const values = ["9", "10", "jack", "queen", "king", "ace"];
@@ -145,14 +148,12 @@
         }
       }
 
-      // Shuffle the deck
       for (let i = deck.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [deck[i], deck[j]] = [deck[j], deck[i]];
       }
     }
 
-    // Deal hands
     function dealHands() {
       playerHand = deck.splice(0, 5);
       for (let i = 0; i < 3; i++) {
@@ -160,21 +161,23 @@
       }
     }
 
-    // Display the player's hand
     function displayPlayerHand() {
       const handDiv = document.getElementById("player-hand");
-      handDiv.innerHTML = playerHand.map((card, index) =>
-        `<img src="Playing Cards/${card.value}_of_${card.suit}.png" alt="${card.value} of ${card.suit}" onclick="playCard(${index})">`
-      ).join("");
+      const canFollowSuit = playerHand.some(card => card.suit === leadingSuit);
+
+      handDiv.innerHTML = playerHand.map((card, index) => {
+        const followsSuit = card.suit === leadingSuit || !canFollowSuit;
+        const highlightClass = followsSuit ? "highlight" : "disabled";
+
+        return `<img src="Playing Cards/${card.value}_of_${card.suit}.png" alt="${card.value} of ${card.suit}" onclick="playCard(${index})" class="${highlightClass}" style="${followsSuit ? '' : 'pointer-events: none; opacity: 0.5;'}">`;
+      }).join("");
     }
 
-    // Set trump suit and display it
     function setTrumpSuit() {
       trumpSuit = deck[Math.floor(Math.random() * deck.length)].suit;
       document.getElementById("trump-display").textContent = `Trump Suit: ${trumpSuit}`;
     }
 
-    // Reset played cards display
     function resetPlayedCards() {
       document.getElementById("player-played").innerHTML = "You";
       document.getElementById("computer1-played").innerHTML = "Computer 1";
@@ -184,37 +187,36 @@
       leadingSuit = null;
     }
 
-    // Start game
     function startGame() {
       createDeck();
       dealHands();
       setTrumpSuit();
       displayPlayerHand();
       resetPlayedCards();
-      currentPlayer = (trickWinner + 1) % 4; // Start from the left of the last winner
-      document.getElementById("reset-button").disabled = true; // Disable reset button at the start
+      currentPlayer = (trickWinner + 1) % 4;
+      document.getElementById("reset-button").disabled = true;
       playTurn();
     }
 
-    // Play a card for the current player
     function playTurn() {
       if (currentTrick.length >= 4) {
-        checkTrickWinner(); // Check who won the trick when all cards are played
-      } else if (currentPlayer === 0) { // Player's turn
+        checkTrickWinner();
+      } else if (currentPlayer === 0) {
         document.getElementById("result").textContent = "Your turn! Choose a card to play.";
-      } else { // Computer player's turn
+        displayPlayerHand();
+      } else {
         playComputerCard(currentPlayer - 1);
       }
     }
 
-    // Enforce following suit and play a card for the player
     function playCard(index) {
       if (currentPlayer !== 0) return;
 
       const selectedCard = playerHand[index];
 
-      // Enforce following suit rule
-      if (leadingSuit && playerHand.some(card => card.suit === leadingSuit) && selectedCard.suit !== leadingSuit) {
+      if (currentTrick.length === 0) {
+        leadingSuit = selectedCard.suit; // Set the leading suit based on the first card played
+      } else if (leadingSuit && playerHand.some(card => card.suit === leadingSuit) && selectedCard.suit !== leadingSuit) {
         document.getElementById("result").textContent = "You must follow suit!";
         return;
       }
@@ -223,29 +225,31 @@
       currentTrick.push({ player: "You", card: playedCard });
       document.getElementById("player-played").innerHTML = `<img src="Playing Cards/${playedCard.value}_of_${playedCard.suit}.png" alt="${playedCard.value} of ${playedCard.suit}">`;
 
-      if (!leadingSuit) leadingSuit = playedCard.suit;
-
       currentPlayer = (currentPlayer + 1) % 4;
-      displayPlayerHand(); // Update player's hand after playing a card
-      playTurn(); // Move to the next turn
+      displayPlayerHand();
+      playTurn();
     }
 
-    // Play a card for a computer player
     function playComputerCard(computerIndex) {
       const computerHand = computerHands[computerIndex];
       let cardToPlay = computerHand.find(card => card.suit === leadingSuit);
+
       if (!cardToPlay) {
         cardToPlay = computerHand[0];
       }
+      
+      if (currentTrick.length === 0) {
+        leadingSuit = cardToPlay.suit; // Set leading suit based on first card
+      }
+
       currentTrick.push({ player: `Computer ${computerIndex + 1}`, card: cardToPlay });
       computerHand.splice(computerHand.indexOf(cardToPlay), 1);
       document.getElementById(`computer${computerIndex + 1}-played`).innerHTML = `<img src="Playing Cards/${cardToPlay.value}_of_${cardToPlay.suit}.png" alt="${cardToPlay.value} of ${cardToPlay.suit}">`;
 
       currentPlayer = (currentPlayer + 1) % 4;
-      setTimeout(playTurn, 1000); // Pause briefly before the next turn
+      setTimeout(playTurn, 1000);
     }
 
-    // Check winner of the trick and update scores
     function checkTrickWinner() {
       const trumpCards = currentTrick.filter(entry => entry.card.suit === trumpSuit);
       let winningEntry;
@@ -259,7 +263,6 @@
 
       document.getElementById("result").textContent = `Winner of the trick: ${winningEntry.player} with ${winningEntry.card.value} of ${winningEntry.card.suit}`;
 
-      // Award points based on the winning team
       if (winningEntry.player === "You" || winningEntry.player === "Computer 2") {
         playerTeamPoints++;
         document.getElementById("player-team-points").textContent = playerTeamPoints;
@@ -270,42 +273,37 @@
 
       trickWinner = currentTrick.indexOf(winningEntry);
       resetPlayedCards();
-      currentPlayer = trickWinner; // Set the winner to start the next trick
+      currentPlayer = trickWinner;
 
-      // Check if the game is over
       if (playerHand.length === 0) {
         endGame();
       } else {
-        playTurn(); // Start the next trick
+        playTurn();
       }
     }
 
-    // Card value for comparison
     function cardValue(card) {
       const values = ["9", "10", "jack", "queen", "king", "ace"];
       return values.indexOf(card.value);
     }
 
-    // End the game and adjust balance based on the result
     function endGame() {
       if (playerTeamPoints > opposingTeamPoints) {
         document.getElementById("result").textContent = "Player's team wins the game!";
-        balance += bet; // Win: increase balance by the bet amount
+        balance += bet;
       } else if (opposingTeamPoints > playerTeamPoints) {
         document.getElementById("result").textContent = "Opposing team wins the game!";
-        balance -= bet; // Loss: decrease balance by the bet amount
+        balance -= bet;
       } else {
         document.getElementById("result").textContent = "It's a tie!";
       }
 
-      // Save the updated balance
       localStorage.setItem('shareCurrency', balance);
       document.getElementById("bet-info").textContent = `Current Bet: ${bet} | Balance: ${balance}`;
 
-      document.getElementById("reset-button").disabled = false; // Enable reset button after the game ends
+      document.getElementById("reset-button").disabled = false;
     }
 
-    // Reset the game
     function resetGame() {
       playerTeamPoints = 0;
       opposingTeamPoints = 0;
@@ -314,7 +312,6 @@
       startGame();
     }
 
-    // Initialize game
     window.onload = startGame;
   </script>
 </body>

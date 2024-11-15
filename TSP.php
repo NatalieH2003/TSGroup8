@@ -101,6 +101,9 @@
         session_start();
         require "db.php";
         if(isset($_SESSION["username"])){
+            if(isset($_POST["backMain"])){
+                updateBalance($_SESSION["username"], $_COOKIE["newBal"]);
+            }
                       
         ?>
         <form method="post" action="login.php">
@@ -176,10 +179,10 @@
     <h2>Play Games</h2>
     <p>Ready to test your luck? Choose a game below and enjoy responsibly.</p>
     <a href="todo.html" class="game-btn">To-Do List</a>
-    <a href="betting.html" class="game-btn">Place a Bet</a>
-    <a href="betting.html" class="game-btn">Play Blackjack</a>
-    <a href="betting.html" class="game-btn">Play Slots</a>
-    <a href="betting.html" class="game-btn">Play Poker</a>
+    <a href="betting.php" class="game-btn">Place a Bet</a>
+    <a href="betting.php" class="game-btn">Play Blackjack</a>
+    <a href="betting.php" class="game-btn">Play Slots</a>
+    <a href="betting.php" class="game-btn">Play Poker</a>
   </section>
 
   <footer>

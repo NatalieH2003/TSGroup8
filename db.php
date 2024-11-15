@@ -94,15 +94,17 @@ function updateBalance($user, $newBal){
     $userID = $row[0];
      
     $dbh = connectDB();
-    $statement = $dbh->prepare("SELECT balance FROM userdata where name = :username ");
-    $statement->bindParam(":username", $user);
+    $statement = $dbh->prepare("SELECT balance FROM userdata where account = :account ");
+    $statement->bindParam(":account", $userID);
     $statement->execute();
     $row = $statement->fetch();
     $oldBal = $row[0];
 
+    if($newBal != $oldBal){
     $dbh = connectDB();
     $statement = $dbh->prepare("call add_transaction(:account, :oldBal, :newBal);");
     $statement->bindParam(":account", $userID);
+    $statement->bindParam(":oldBal", $oldBal);
     $statement->bindParam(":newBal", $newBal);
     $statement->execute();
     $row = $statement->fetch();
@@ -113,8 +115,8 @@ function updateBalance($user, $newBal){
     $statement->bindParam(":balance", $newBal);
     $statement->execute();
     $row = $statement->fetch();
+    }
     
-    return $row[0];
 }
 
 ?>

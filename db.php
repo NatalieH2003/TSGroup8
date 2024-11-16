@@ -119,4 +119,107 @@ function updateBalance($user, $newBal){
     
 }
 
+function getTasks($user){
+    $dbh = connectDB();
+    $statement = $dbh->prepare("SELECT account FROM users where name = :username ");
+    $statement->bindParam(":username", $user);
+    $statement->execute();
+    $row = $statement->fetch();
+    $userID = $row[0];
+    
+    $dbh = connectDB();
+    $statement = $dbh->prepare("SELECT id, task FROM tasks where account = :account and completed = false");
+    $statement->bindParam(":account", $userID);
+    $statement->execute();
+    
+    return $statement->fetchAll();
+    
+}
+
+function addTask($user, $taskDesc, $value){
+    $dbh = connectDB();
+    $statement = $dbh->prepare("SELECT account FROM users where name = :username ");
+    $statement->bindParam(":username", $user);
+    $statement->execute();
+    $row = $statement->fetch();
+    $userID = $row[0];
+
+    $dbh = connectDB();
+    $statement = $dbh->prepare("SELECT count(*) FROM tasks where account = :account and task = :taskDesc and completed = false");
+    $statement->bindParam(":account", $userID);
+    $statement->bindParam(":taskDesc", $taskDesc);
+    $statement->execute();
+    $row = $statement->fetch();
+
+    if($row[0] != 1){
+    $dbh = connectDB();
+    $statement = $dbh->prepare("call add_task(:account, :taskDesc, :value);");
+    $statement->bindParam(":account", $userID);
+    $statement->bindParam(":taskDesc", $taskDesc);
+    $statement->bindParam(":value", $value);
+    $statement->execute();
+    $row = $statement->fetch();
+    }
+}
+
+function completeTask($user, $taskID){
+    $dbh = connectDB();
+    $statement = $dbh->prepare("SELECT account FROM users where name = :username ");
+    $statement->bindParam(":username", $user);
+    $statement->execute();
+    $row = $statement->fetch();
+    $userID = $row[0];
+    
+    $dbh = connectDB();
+    $statement = $dbh->prepare("SELECT balance FROM userdata where account = :account ");
+    $statement->bindParam(":account", $userID);
+    $statement->execute();
+    $row = $statement->fetch();
+    $balance = $row[0];
+
+    $dbh = connectDB();
+    $statement = $dbh->prepare("SELECT count(*) FROM tasks where account = :account and id = :taskID and completed = false");
+    $statement->bindParam(":account", $userID);
+    $statement->bindParam(":taskID", $taskID);
+    $statement->execute();
+    $row = $statement->fetch();
+
+    if($row[0] == 1){
+    $dbh = connectDB();
+    $statement = $dbh->prepare("update tasks set completed = true where account = :account and id = :taskID;");
+    $statement->bindParam(":account", $userID);
+    $statement->bindParam(":taskID", $taskID);
+    $statement->execute();
+    $row = $statement->fetch();
+    
+    updateBalance($user, $balance+25);
+    }
+}
+
+function removeTask($user, $taskID){
+    $dbh = connectDB();
+    $statement = $dbh->prepare("SELECT account FROM users where name = :username ");
+    $statement->bindParam(":username", $user);
+    $statement->execute();
+    $row = $statement->fetch();
+    $userID = $row[0];
+
+    $dbh = connectDB();
+    $statement = $dbh->prepare("SELECT count(*) FROM tasks where account = :account and id = :taskID and completed = false");
+    $statement->bindParam(":account", $userID);
+    $statement->bindParam(":taskID", $taskID);
+    $statement->execute();
+    $row = $statement->fetch();
+
+    if($row[0] == 1){
+    $dbh = connectDB();
+    $statement = $dbh->prepare("delete from tasks where account = :account and id = :taskID;");
+    $statement->bindParam(":account", $userID);
+    $statement->bindParam(":taskID", $taskID);
+    $statement->execute();
+    $row = $statement->fetch();
+    }
+}
+
+
 ?>

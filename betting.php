@@ -166,7 +166,7 @@
         } else if (game === "slots") {
           location.href = "slots.html";
         } else if (game === "poker") {
-          location.href = "poker.html";
+          location.href = "poker.php";
         }
       }
 

@@ -76,6 +76,13 @@
       margin-left: 100px; /* Shift column buttons further to the right */
       margin-top: 10px;
     }
+    .button-group {
+      display: flex;
+      flex-flow: row wrap;
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, 0%);
+    }
     .buttons {
       margin-top: 20px;
     }
@@ -154,9 +161,12 @@
       GBucks: 0 | Bet per line: 1 | Total Bet: 0
     </div>
     <div class="buttons">
+      <div class="button-group">
       <button onclick="spin()">Spin</button>
-      <button onclick="goToMainPage()">Back to Main Page</button>
-      <button onclick="changeBet()">Change Bet</button>
+      <form method="post" action="TSP.php"><button type="submit" onclick="goToMainPage()" value="backMain" name="backMain">Back to Main Page</button></form>
+      <form method="post" action="betting.php"><button type="submit" onclick="changeBet()" value="changeBet" name="changeBet">Change Bet</button></form>
+      </div>
+      <br>
     </div>
 
     <!-- Win sound effect for winning condition -->
@@ -243,6 +253,7 @@
 
       balance += winAmount - totalBet;
       saveData();
+      newBalance();
       updateCurrency();
     }
 
@@ -276,6 +287,11 @@
 
     function goToMainPage() {
       location.href = "TSP.php";
+    }
+
+    // save balance value in a cookie to update the database
+    function newBalance(){
+      document.cookie = "newBal="+ Math.round(balance)+"; SameSite=None; Secure";
     }
 
     window.onload = updateCurrency;

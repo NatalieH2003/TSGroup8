@@ -179,6 +179,8 @@
     <h2>Play Games</h2>
     <p>Ready to test your luck? Choose a game below and enjoy responsibly.</p>
     <a href="todo.php" class="game-btn">To-Do List</a>
+    <a href="shop.html" class="game-btn">Shop</a>
+    <a href="inventory.html" class="game-btn">Inventory</a>
     <a href="betting.php" class="game-btn">Place a Bet</a>
     <a href="betting.php" class="game-btn">Play Blackjack</a>
     <a href="betting.php" class="game-btn">Play Slots</a>

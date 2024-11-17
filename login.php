@@ -73,15 +73,8 @@ require "db.php";
 session_start();
 if(isset($_POST["login"])){
 	if(authenticate($_POST["username"], $_POST["password"]) == 1){
-		/*if(strcmp($_SESSION["sesh_type"],"student") == 0){
-			header("LOCATION:stu_main.php");
-		}
-		else{
-			header("LOCATION:inst_main.php");
-		}*/
-		header("LOCATION:TSP.html");
-
 		$_SESSION["username"]=$_POST["username"];
+		header("LOCATION:TSP.php");
 		return;
 	}
 	else{
@@ -94,10 +87,19 @@ else if(isset($_POST["register"])){
      header("LOCATION:register.php");
      return;
 }
+else if(isset($_POST["continue"])){
+     header("LOCATION:TSP.php");
+     return;
+}
 
 
-if(isset($_POST["logout"])){
+if(isset($_POST["Logout"])){
 	session_destroy();
+	?>
+	<script>
+	localStorage.setItem("shareCurrency", 500);
+	</script>
+	<?php
 }
 
 ?>
@@ -115,6 +117,12 @@ if(isset($_POST["logout"])){
         <h2>Don't have an account? Register now!</h2>
         <form method="post" action"register.php">
         <button class="buttons" type="submit" value="Register" name="register">Register</button>
+        </form>
+    </div>
+    <div class="game-container">
+        <h2>Continue as a Guest</h2>
+        <form method="post" action"register.php">
+        <button class="buttons" type="submit" value="Continue" name="continue">Continue</button>
         </form>
     </div>
   </body>

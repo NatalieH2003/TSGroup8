@@ -50,6 +50,11 @@
         align-items: center;
         padding: 10px;
       }
+      .main-button {
+        display: flex;
+        align-items: left;
+        padding: 10px;
+      }
       ul {
         list-style: none;
         padding: 0;
@@ -67,30 +72,112 @@
         justify-content: space-between;
         align-items: center;
       }
-      ul li.checked {
-        color: #555;
-        text-decoration: line-through;
-      }
       #input {
         width: 100%;
         height: 50px;
         padding: 10px;
         box-sizing: border-box;
       }
+      .taskInput {
+        width: 85%;
+        height: 50px;
+        padding: 10px;
+        box-sizing: border-box;
+      }
+      .addTasks{
+        width: 600px;  
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+      }
+      .displayTask{
+        width: 600px;  
+        display: flex;
+      }
+      .taskLabel {
+        width: 85%;
+        padding-top: 15px;
+        text-align: left;
+        box-sizing: border-box;
+      }
     </style>
   </head>
+  
+  <?php
+  session_start();
+  require "db.php";
+  if(isset($_SESSION["username"])){
+    if(isset($_POST["add"])){
+        addTask($_SESSION["username"], $_POST["task"], 25);
+    }
+    if(isset($_POST["complete"])){
+        completeTask($_SESSION["username"], $_POST["id"]);
+    }
+    if(isset($_POST["remove"])){
+        removeTask($_SESSION["username"], $_POST["id"]);
+    }
+  }
+  ?>
   <body>
     <h1>To-Do-List</h1>
     <div class="balance" id="gBucksDisplay"></div>
     <div class="container">
       <div class="row">
+        <?php
+        if(isset($_SESSION["username"])){
+        ?>
+        <form class="addTasks" method="post" action="todo.php">
+        <input required type="text" class="taskInput" name="task" placeholder="Enter a task">
+        <button type="submit" onclick="addTask()" value="add" name="add">Add</button>
+        </form>
+        <?php     
+        }
+        else{
+        ?>
         <input type="text" id="input" placeholder="Enter a task" />
         <button class="Add" onclick="addTask()">Add</button>
+        <?php
+        }
+        ?>
       </div>
-      <ul id="list"></ul>
+      <ul id="list">
+          <?php
+          if(isset($_SESSION["username"])){
+            $remainingTasks = getTasks($_SESSION["username"]);
+            foreach($remainingTasks as $task){
+            ?>
+            <li>
+                <form class="displayTask" method="post" action="todo.php">
+                <label name="task" class="taskLabel"><?php echo $task[1]; ?></label>
+                <input name="id" value= <?php echo $task[0]; ?> style="display: none;"></input>
+                <div style="display: flex; gap: 5px;">
+                    <button class="button-check" type="submit" value="complete" name="complete">✔</button>
+                    <button class="button-remove" type="submit" value="remove" name="remove">X</button>
+                </div>
+                </form>
+            </li>
+            <?php
+            }
+          }
+          ?>
+          </ul>
+      <button class="main-button" onclick="goToMainPage()">
+        Back to Main Page
+      </button>
     </div>
 
     <script>
+        <?php 
+        if(isset($_SESSION["username"])){
+            if(isset($_POST["complete"])){
+        ?>
+            localStorage.setItem("shareCurrency", parseFloat(localStorage.getItem("shareCurrency"), 10)+25);
+        <?php
+            }
+        }
+        ?>
+        
+      //Variables
       let balance = parseFloat(localStorage.getItem("shareCurrency"), 10);
       document.getElementById(
         "gBucksDisplay"
@@ -127,8 +214,6 @@
         const buttonContainer = document.createElement("div");
         buttonContainer.style.display = "flex";
         buttonContainer.style.gap = "5px";
-
-        //Append buttons together
         newTask.appendChild(buttonContainer);
         buttonContainer.appendChild(complete);
         buttonContainer.appendChild(remove);
@@ -157,14 +242,14 @@
           saveData();
         }
       }
+      // Go back to Main Page
+      function goToMainPage() {
+        location.href = "TSP.php"; // Redirects to TSP.html
+      }
       function saveData() {
         localStorage.setItem("tasks", lists.innerHTML);
         localStorage.setItem("shareCurrency", balance);
       }
-      /*function showTask() {
-        lists.innerHTML = localStorage.getItem("tasks");
-      }
-      showTask();*/
     </script>
   </body>
 </html>

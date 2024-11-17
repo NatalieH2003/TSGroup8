@@ -93,6 +93,10 @@ else if(isset($_POST["login"])){
     header("LOCATION:login.php");
     return;
 }
+else if(isset($_POST["continue"])){
+     header("LOCATION:TSP.php");
+     return;
+}
 
 
 if(isset($_POST["logout"])){
@@ -111,10 +115,16 @@ if(isset($_POST["logout"])){
     </form>
     </div>
     <div class="game-container">
-            <h2>Already have an account? Login now!</h2>
-            <form method="post" action"login.php">
-            <button class="buttons" type="submit" value="Login" name="login">Login</button>
-            </form>
-        </div>
+        <h2>Already have an account? Login now!</h2>
+        <form method="post" action"login.php">
+        <button class="buttons" type="submit" value="Login" name="login">Login</button>
+        </form>
+    </div>
+    <div class="game-container">
+        <h2>Continue as a Guest</h2>
+        <form method="post" action"register.php">
+        <button class="buttons" type="submit" value="Continue" name="continue">Continue</button>
+        </form>
+    </div>
   </body>
 </html>

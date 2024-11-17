@@ -97,17 +97,16 @@
     </style>
   </head>
   <body>
-      
-      <?php
-        session_start();
-        require "db.php";
-        if(isset($_SESSION["username"])){
-            if(isset($_POST["changeBet"])){
-                updateBalance($_SESSION["username"], $_COOKIE["newBal"]);
-            }
+    <?php
+      session_start();
+      require "db.php";
+      if (isset($_SESSION["username"])) {
+        if (isset($_POST["changeBet"])) {
+          updateBalance($_SESSION["username"], $_COOKIE["newBal"]);
         }
-      ?>
-      
+      }
+    ?>
+
     <h1>Place your Bets</h1>
     <div class="game-container">
       <div class="buttons">
@@ -125,8 +124,11 @@
           <button onclick="startGame('slots')">Start Slots</button>
           <button onclick="startGame('poker')">Start Poker</button>
           <button onclick="startGame('roulette')">Start Roulette</button>
+          <button onclick="startGame('euchre')">Start Euchre</button>
         </div>
-        <form method="post" action="TSP.php"><button type="submit" class="back-button" onclick="goToMainPage()" value="backMain" name="backMain">Back to Main Page</button></form>
+        <form method="post" action="TSP.php">
+          <button type="submit" class="back-button" onclick="goToMainPage()" value="backMain" name="backMain">Back to Main Page</button>
+        </form>
       </div>
       <div class="results" id="gBucksDisplay"></div>
     </div>
@@ -170,14 +172,14 @@
           location.href = "poker.php";
         } else if (game === "roulette") {
           location.href = "roulette.html";
+        } else if (game === "euchre") {
+          location.href = "euchre.html";
         }
       }
 
-      // Go to main page
       function goToMainPage() {
         location.href = "TSP.php";
       }
-      
     </script>
   </body>
 </html>

@@ -173,7 +173,7 @@
         } else if (game === "roulette") {
           location.href = "roulette.html";
         } else if (game === "euchre") {
-          location.href = "euchre.html";
+          location.href = "Euchre.html";
         }
       }
 

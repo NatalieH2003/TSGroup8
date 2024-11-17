@@ -49,6 +49,11 @@
         align-items: left;
         padding: 10px;
       }
+      .shop-button{
+        display: flex;
+        align-items: left;
+        padding: 10px;
+      }
       #display{
         font-size: 50px;
         display: flex;
@@ -66,21 +71,24 @@
       <button class="main-button" onclick="goToMainPage()">
         Back to Main Page
       </button>
+      <button class="shop-button" onclick="goToShop()">
+        Go to Shop
+      </button>
     </div>
 
     <script>
       let items = JSON.parse(localStorage.getItem("inventory")) || ["🐹", "🐶"];
-      const element = document.createElement("div");
 
       //Loop through inventory and display
       items.forEach(displayItem);
 
       function displayItem(item){
         const display = document.getElementById("display");
+        const element = document.createElement("div");
         element.className = "Icon";
         element.textContent = item;
         display.appendChild(element);
-        //element.addEventListener("click", icon);
+
       }
 
       // Go back to Main Page
@@ -88,10 +96,11 @@
         location.href = "TSP.php"; // Redirects to TSP.html
       }
 
-      /*function icon() {
-        document.getElementById("Icon");
+      function goToShop(){
+        location.href = "shop.html";
+      }
 
-      }*/
+    
 
     </script>
   </body>

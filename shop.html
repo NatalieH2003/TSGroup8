@@ -110,6 +110,12 @@
         font-size: 16px;
         padding: 10px;
       }
+      .inventory-button{
+        display: flex;
+        align-items: left;
+        font-size: 16px;
+        padding: 10px;
+      }
     </style>
   </head>
   
@@ -134,6 +140,9 @@
       </div>
       <button class="main-button" onclick="goToMainPage()">
         Back to Main Page
+      </button>
+      <button class="inventory-button" onclick="goToInventory()">
+        Go to Inventory
       </button>
     </div>
 
@@ -252,7 +261,7 @@
       }
 
       function goToInventory() {
-        location.href = "inventory.html"; // Redirects to TSP.html
+        location.href = "inventory.html"; 
       }
 
       function saveData() {

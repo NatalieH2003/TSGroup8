@@ -116,13 +116,13 @@
     document.getElementById("bet-info").textContent = `Current Bet: ${bet} | Balance: ${balance}`;
 
     function goToHome() {
-      location.href = "TSP.php";
+      location.href = "TSP.html";
     }
 
     function goToBetting() {
       bet = 0;
       localStorage.setItem('shareBet', bet);
-      location.href = "betting.php";
+      location.href = "betting.html";
     }
 
     let deck = [];

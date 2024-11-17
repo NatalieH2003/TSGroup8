@@ -28,6 +28,18 @@
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
         }
 
+        .buttons .back-button{
+            margin-top: 40px;
+        }
+    
+        .button-group {
+            display: flex;
+            flex-flow: row wrap;
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%, 0%);
+        }
+  
         .buttons {
             margin-top: 20px;
         }
@@ -67,6 +79,15 @@
     </style>
 </head>
 
+<?php
+      session_start();
+      require "db.php";
+      if(isset($_SESSION["username"])){
+        if(isset($_POST["playAgain"])){
+            updateBalance($_SESSION["username"], $_COOKIE["newBal"]);
+        }
+      }
+      ?>
 <body>
     <h1>Poker Game</h1>
     <div class="game-container">
@@ -81,11 +102,13 @@
         <div class="results" id="gbucks-stats">GBucks: 0 | Bet: 0</div>
 
         <div class="buttons">
+            <div class="button-group">
             <button id="play-hand-btn" onclick="playHand()">Play Hand</button>
             <button onclick="foldHand()">Fold</button>
-            <button id="play-again-btn" style="display: none;" onclick="playAgain()">Play Again</button>
-            <button onclick="goToMainPage()">Back to Main Page</button>
-            <button onclick="goToBettingPage()">Go to Betting Page</button>
+            <form method="post" action="poker.php"><button type="submit" id="play-again-btn" style="display: none;" value="playAgain" name="playAgain" onclick="playAgain()">Play Again</button></form>
+            <form method="post" action="TSP.php"><button type="submit" onclick="goToMainPage()" value="backMain" name="backMain">Back to Main Page</button></form>
+            <form method="post" action="betting.php"><button type="submit" onclick="goToBettingPage()" value="changeBet" name="changeBet">Go to Betting Page</button></form>
+            </div><br><br><br>
         </div>
     </div>
 
@@ -192,10 +215,12 @@
                 resultText += 'You won!';
                 wins++;
                 balance += bet;
+                newBalance();
             } else if (playerEvaluation.rank < houseEvaluation.rank) {
                 resultText += 'You lost!';
                 losses++;
                 balance -= bet;
+                newBalance();
             } else {
                 // Handle tie by comparing sorted values of both hands
                 const playerHighCards = playerEvaluation.sortedValues;
@@ -307,6 +332,7 @@
             alert("You folded the hand.");
             losses++;
             balance -= bet;
+            newBalance();
             updateCurrencyDisplay();
             saveData();
             playAgain();
@@ -322,7 +348,7 @@
         }
 
         function goToBettingPage() {
-            window.location.href = "betting.html"; // redirect to the betting page
+            window.location.href = "betting.php"; // redirect to the betting page
         }
 
         function updateCurrencyDisplay() {
@@ -337,6 +363,11 @@
             localStorage.setItem('currentBet', bet);
             localStorage.setItem('shareBet', bet);
             localStorage.setItem('shareCurrency', balance);
+        }
+    
+        // save balance value in a cookie to update the database
+        function newBalance(){
+            document.cookie = "newBal="+ Math.round(balance)+"; SameSite=None; Secure";
         }
 
         createDeck();

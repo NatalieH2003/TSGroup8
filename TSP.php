@@ -184,6 +184,7 @@
     <a href="betting.php" class="game-btn">Place a Bet</a>
     <a href="betting.php" class="game-btn">Play Blackjack</a>
     <a href="betting.php" class="game-btn">Play Slots</a>
+    <a href="betting.php" class="game-btn">Play Euchre</a>
     <a href="betting.php" class="game-btn">Play Poker</a>
     <a href="betting.php" class="game-btn">Play Roulette</a>
   </section>

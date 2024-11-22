@@ -16,6 +16,13 @@
         h1 {
             margin-top: 20px;
         }
+        .button-group {
+            display: flex;
+            flex-flow: row wrap;
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%, 0%);
+        }
         .game-container {
             max-width: 800px;
             margin: 20px auto;
@@ -81,6 +88,17 @@
         }
     </style>
 </head>
+
+<?php
+session_start();
+require "db.php";
+if(isset($_SESSION["username"])){
+if(isset($_POST["playAgain"])){
+updateBalance($_SESSION["username"], $_COOKIE["newBal"]);
+}
+}
+?>
+
 <body>
     <h1>Euchre Game</h1>
     <div class="game-container">
@@ -103,9 +121,11 @@
             <p>Opposing Team Points: <span id="opposing-team-points">0</span></p>
         </div>
         <div class="buttons">
-            <button onclick="goToHome()">Home</button>
-            <button onclick="goToBetting()">Back to Betting</button>
-            <button id="reset-button" onclick="resetGame()" disabled>Reset Game</button>
+            <div class="button-group">
+            <form method="post" action="TSP.php"><button type="submit" onclick="goToHome()" value="backMain" name="backMain">Home</button></form>
+            <form method="post" action="betting.php"><button type="submit" onclick="goToBetting()" value="changeBet" name="changeBet">Back to Betting</button></form>
+            <form method="post" action="Euchre.php"><button type="submit" id="reset-button" value="playAgain" name="playAgain" disabled>Reset Game</button></form>
+            </div><br><br>
         </div>
     </div>
 
@@ -291,9 +311,11 @@
             if (playerTeamPoints > opposingTeamPoints) {
                 document.getElementById("result").textContent = "Player's team wins the game!";
                 balance += bet;
+                newBalance();
             } else if (opposingTeamPoints > playerTeamPoints) {
                 document.getElementById("result").textContent = "Opposing team wins the game!";
                 balance -= bet;
+                newBalance();
             } else {
                 document.getElementById("result").textContent = "It's a tie!";
             }
@@ -310,6 +332,11 @@
             document.getElementById("player-team-points").textContent = playerTeamPoints;
             document.getElementById("opposing-team-points").textContent = opposingTeamPoints;
             startGame();
+        }
+    
+        // save balance value in a cookie to update the database
+        function newBalance(){
+            document.cookie = "newBal="+ Math.round(balance)+"; SameSite=None; Secure";
         }
 
         window.onload = startGame;

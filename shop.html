@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>To-Do-List</title>
+    <title>Shop</title>
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -26,6 +26,7 @@
         background-color: #444;
         padding: 20px;
         border-radius: 10px;
+        box-sizing: border-box;  
         box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
       }
       .buttons {
@@ -47,212 +48,130 @@
       button:hover {
         background-color: #218838;
       }
+      .emoji-section{
+        padding: 10px 20px;
+        font-size: 25px;
+        margin: 5px;
+        cursor: pointer;
+      }
+      .emoji{
+        display: inline-block;
+        font-size: 40px;
+        margin: 10px;
+        cursor: pointer;
+      }
+      h2 {
+        font-size: 20px;
+        margin: 10px;
+        align-items: left;
+      }
       .column {
-        display: flex;
+        display:flex;
         flex-direction: column;
         align-items: center;
       }
-      .Forest.clicked {
-        background-color: chocolate;
-        font-size: 25px;
-      }
-      .Grassland.clicked {
-        background-color: lightgreen;
-        font-size: 25px;
-      }
-      .Freshwater.clicked {
-        background-color: lightblue;
-        font-size: 25px;
-      }
-      .Farm.clicked {
-        background-color: red;
-        font-size: 25px;
-      }
-      .Bamboo.clicked {
-        background-color: greenyellow;
-        font-size: 25px;
-      }
-      .Wetlands.clicked {
-        background-color: rgb(66, 180, 218);
-        font-size: 25px;
-      }
-      .Mountains.clicked {
-        background-color: grey;
-        font-size: 25px;
-      }
-      .Caves.clicked {
-        background-color: rgb(73, 70, 70);
-        font-size: 25px;
-      }
-      .Oceans.clicked {
-        background-color: darkblue;
-        font-size: 25px;
-      }
-      .Desert.clicked {
-        background-color: goldenrod;
-        font-size: 25px;
-      }
-      .Tundra.clicked {
-        background-color: beige;
-        font-size: 25px;
-      }
-      .Savannah.clicked {
-        background-color: yellow;
-        font-size: 25px;
-      }
-      .Rainforest.clicked {
-        background-color: #00755e;
-        font-size: 25px;
+      .row{
+        display:flex;
+        flex-direction: row;
       }
       .main-button {
-        display: flex;
-        align-items: left;
         font-size: 16px;
         padding: 10px;
       }
       .inventory-button{
-        display: flex;
-        align-items: left;
         font-size: 16px;
         padding: 10px;
       }
     </style>
   </head>
-  
   <body>
     <h1>Shop</h1>
     <div class="balance" id="gBucksDisplay"></div>
     <div class="container">
       <div class="column">
-        <button class="buttons Forest"  onclick="purchase(this, 1000)">1,000</button>
-        <button class="buttons Grassland" onclick="purchase(this, 5000)">5,000</button>
-        <button class="buttons Freshwater"  onclick="purchase(this, 10000)">10,000</button>
-        <button class="buttons Farm"  onclick="purchase(this, 25000)">25,000</button>
-        <button class="buttons Bamboo"  onclick="purchase(this, 50000)">50,000</button>
-        <button class="buttons Wetlands"  onclick="purchase(this, 75000)">75,000</button>
-        <button class="buttons Mountains"  onclick="purchase(this, 100000)">100,000</button>
-        <button class="buttons Caves"  onclick="purchase(this, 200000)">200,000</button>
-        <button class="buttons Oceans" onclick="purchase(this, 300000)">300,000</button>
-        <button class="buttons Desert"  onclick="purchase(this, 400000)">400,000</button>
-        <button class="buttons Tundra"  onclick="purchase(this, 500000)">500,000</button>
-        <button class="buttons Savannah"  onclick="purchase(this, 750000)">750,000</button>
-        <button class="buttons Rainforest"  onclick="purchase(this, 1000000)">1,000,000</button>
+        <div id = "suburb" class="emoji-section">
+          <h2>Suburb Animals - 50</h2>
+        </div>
+        <div id = "farm" class="emoji-section">
+          <h2>Farm Animals - 100</h2>
+        </div>
+        <div id = "forest" class="emoji-section">
+          <h2>Forest Animals - 200</h2>
+        </div>
+        <div id = "ocean" class="emoji-section">
+          <h2>Ocean Animals - 300</h2>
+        </div>
+        <div id = "desert" class="emoji-section">
+          <h2>Desert Animals - 400</h2>
+        </div>
+        <div id = "mythical" class="emoji-section">
+          <h2>Mythical/Extinct Animals - 500</h2>
+        </div>
+      <div class="row">
+        <button class="main-button" onclick="goToMainPage()">
+          Back to Main Page
+        </button>
+        <button class="inventory-button" onclick="goToInventory()">
+          Go to Inventory
+        </button>
       </div>
-      <button class="main-button" onclick="goToMainPage()">
-        Back to Main Page
-      </button>
-      <button class="inventory-button" onclick="goToInventory()">
-        Go to Inventory
-      </button>
     </div>
 
     <script>
       let balance = parseFloat(localStorage.getItem("shareCurrency"), 10);
+      let inventory = JSON.parse(localStorage.getItem("inventory")) || [];
+      const suburb = ["\u{1F422}", "\u{1F431}", "\u{1F436}", "\u{1F439}", "\u{1F42D}"];
+      const farm = ["\u{1F404}", "\u{1F411}", "\u{1F413}", "\u{1F425}", "\u{1F416}"];
+      const forest = ["\u{1F43F}", "\u{1F430}", "\u{1F43B}", "\u{1F43A}", "\u{1F98A}", "\u{1F98C}"];
+      const ocean = ["\u{1F419}", "\u{1F420}", "\u{1F421}", "\u{1F42C}", "\u{1F433}"];
+      const desert = ["\u{1F42B}", "\u{1F418}", "\u{1F98E}", "\u{1F981}", "\u{1F98F}"];
+      const mythical = ["\u{1F9A4}", "\u{1F996}", "\u{1F409}", "\u{1F995}", "\u{1F984}"];
+      
+      displayItem("suburb", suburb, 50);
+      displayItem("farm", farm, 100);
+      displayItem("forest", forest, 200);
+      displayItem("ocean", ocean, 300);
+      displayItem("desert", desert, 400);
+      displayItem("mythical", mythical, 500);
 
       //Retrieve variables
       document.getElementById("gBucksDisplay").textContent = `GBucks: ${balance}`;
-      let items = JSON.parse(localStorage.getItem("savedButtons")) || [];
 
-      let inventory = ["🐹", "🐶"];
-      let savedButtons = [];
+      //Iterate through array and display
+      function displayItem(sectionId, myArray, price){
+        const section = document.getElementById(sectionId);
+        myArray.forEach((item) => {
+          const emoji = document.createElement("div");  //Create emoji element
+          emoji.classList.add("emoji");
+          emoji.innerHTML = item; //Display emoji
 
-      function purchase(button, price){
-        buy(price, button)
+          //Call buy function when emoji is clicked
+          emoji.onclick = function(){
+            buy(item, price);
+          }
+          
+          section.appendChild(emoji); //Add emoji to section
+        });
       }
 
-      function buy(price, button) {
+      //Buy emoji and place in inventory
+      function buy(emoji, price, ) {
         if (balance >= price) {
           balance -= price;
+          inventory.push(emoji);
           document.getElementById("gBucksDisplay").textContent = `GBucks: ${balance}`;
-          changeButton(button);
-          changeButton();
+          saveData();
         } else {
           disable(price);
         }
       }
 
-      function changeButton(button) {
-        const buttonType = button.classList[1];
-        if (buttonType === "Forest") {
-          button.textContent = "Forest";
-          inventory.push("🐿️");
-          button.classList.toggle("clicked");
-          button.disabled = true;
-        } else if (buttonType === "Grassland") {
-          button.textContent = "Grassland";
-          inventory.push("🦌");
-          button.classList.toggle("clicked");
-          button.disabled = true;
-        } else if (buttonType === "Freshwater") {
-          button.textContent = "Freshwater";
-          inventory.push("🐊");
-          button.classList.toggle("clicked");
-          button.disabled = true;
-        } else if (buttonType === "Farm") {
-          button.textContent = "Farm";
-          inventory.push("🐥");
-          button.classList.toggle("clicked");
-          button.disabled = true;
-        } else if (buttonType === "Bamboo") {
-          button.textContent = "Bamboo";
-          inventory.push("🐼");
-          button.classList.toggle("clicked");
-          button.disabled = true;
-        } else if (buttonType === "Wetlands") {
-          button.textContent = "Wetlands";
-          inventory.push("🦅");
-          button.classList.toggle("clicked");
-          button.disabled = true;
-        } else if (buttonType === "Mountains") {
-          button.textContent = "Mountains";
-          inventory.push("🐐");
-          button.classList.toggle("clicked");
-          button.disabled = true;
-        } else if (buttonType === "Caves") {
-          button.textContent = "Caves";
-          inventory.push("🦇");
-          button.classList.toggle("clicked");
-          button.disabled = true;
-        } else if (buttonType === "Oceans") {
-          button.textContent = "Oceans";
-          inventory.push("🐳");
-          button.classList.toggle("clicked");
-          button.disabled = true;
-        } else if (buttonType === "Desert") {
-          button.textContent = "Desert";
-          inventory.push("🦙");
-          button.classList.toggle("clicked");
-          button.disabled = true;
-        } else if (buttonType === "Tundra") {
-          button.textContent = "Tundra";
-          inventory.push("🐧");
-          button.classList.toggle("clicked");
-          button.disabled = true;
-        } else if (buttonType === "Savannah") {
-          button.textContent = "Savannah";
-          inventory.push("🐘");
-          button.classList.toggle("clicked");
-          button.disabled = true;
-        } else if (buttonType === "Rainforest") {
-          button.textContent = "Rainforest";
-          inventory.push("🐯");
-          inventory.push("🦥");
-          inventory.push("🦍");
-          button.classList.toggle("clicked");
-          button.disabled = true;
-        }
-        savedButtons.push({
-          id: buttonType,           
-          textContent: button.textContent,  
-          classList: button.classList.value, 
-          disabled: button.disabled 
-       });
-
-        saveData();
-      }
-
+      //Disable clicks when balance is below price
       function disable(price) {
-        document.getElementById("buttons").disabled = balance < price;
+        const container = document.getElementById("emoji-container");
+        if(balance<price){
+          container.style.pointerEvents = "none";
+        }
       }
 
       // Go back to Main Page
@@ -260,16 +179,17 @@
         location.href = "TSP.php"; // Redirects to TSP.html
       }
 
+      //Go to Inventory
       function goToInventory() {
         location.href = "inventory.html"; 
       }
 
       function saveData() {
         localStorage.setItem("shareCurrency", balance);
-        //Store arrays
         localStorage.setItem("inventory",JSON.stringify(inventory));
-        localStorage.setItem("savedButtons",JSON.stringify(savedButtons));
+        localStorage.setItem("purchased",JSON.stringify(purchased));
       }
+
     </script>
   </body>
 </html>

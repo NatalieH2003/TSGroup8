@@ -91,11 +91,25 @@
       max-width: 300px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
+    .row{
+      display:flex;
+      justify-content: center;
+      flex-direction: row;
+      text-align: center;
+      align-items: center;
+      
+    }
+    #displayEmoji{
+      font-size: 40px;
+    }
   </style>
 </head>
 <body>
   <header>
+    <div class = "row">
+    <div id="displayEmoji"></div>
     <h1>Gamble Smart</h1>
+    </div>
     <p>Balance gambling with productivity and fun!</p>
     <?php
         session_start();
@@ -195,8 +209,15 @@
 
   <script>
     let balance = 500; // Default starting balance
-    
-    
+
+    let emoji = localStorage.getItem("equippedEmoji");
+    const display = document.getElementById("displayEmoji");
+      if (emoji) {
+        display.textContent = emoji; 
+      } else {
+        display.textContent = "\u{1F928}"; 
+      }
+
     <?php
     if(isset($_SESSION["username"])){
     ?>

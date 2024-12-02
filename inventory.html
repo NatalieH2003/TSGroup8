@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>To-Do-List</title>
+    <title>Inventory</title>
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -41,6 +41,7 @@
         cursor: pointer;
         border-radius: 5px;
       }
+      
       button:hover {
         background-color: #218838;
       }
@@ -54,12 +55,17 @@
         align-items: left;
         padding: 10px;
       }
-      #display{
-        font-size: 50px;
-        display: flex;
+      .row{
+        display:flex;
         flex-direction: row;
-        padding: 30px;
-        letter-spacing: 40px;
+      }
+      .Icon{
+        font-size: 50px;
+        margin: 10px;
+        display:inline-block;
+        padding: 10px;
+        text-align: center;
+        cursor: pointer;
       }
     </style>
   </head>
@@ -68,17 +74,18 @@
     <div class="balance" id="gBucksDisplay"></div>
     <div class="container">
       <div id="display"></div>
-      <button class="main-button" onclick="goToMainPage()">
-        Back to Main Page
-      </button>
-      <button class="shop-button" onclick="goToShop()">
-        Go to Shop
-      </button>
+      <div class="row">
+        <button class="main-button" onclick="goToMainPage()">
+          Back to Main Page
+        </button>
+        <button class="shop-button" onclick="goToShop()">
+          Go to Shop
+        </button>
     </div>
 
     <script>
-      let items = JSON.parse(localStorage.getItem("inventory")) || ["🐹", "🐶"];
-
+      let items = JSON.parse(localStorage.getItem("inventory")) || [];
+      console.log(items);
       //Loop through inventory and display
       items.forEach(displayItem);
 
@@ -87,8 +94,16 @@
         const element = document.createElement("div");
         element.className = "Icon";
         element.textContent = item;
-        display.appendChild(element);
 
+        element.onclick = function(){
+            equip(item);
+          }
+
+        display.appendChild(element);
+      }
+
+      function equip(emoji) {
+        localStorage.setItem("equippedEmoji", emoji);
       }
 
       // Go back to Main Page

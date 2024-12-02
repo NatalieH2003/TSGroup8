@@ -197,6 +197,8 @@
     <a href="betting.php" class="game-btn">Play Slots</a>
     <a href="betting.php" class="game-btn">Play Euchre</a>
     <a href="betting.php" class="game-btn">Play Poker</a>
+    <a href="betting.php" class="game-btn">Play Horse Betting</a>
+    <a href="betting.php" class="game-btn">Play Texas Hold'Em</a>
     <a href="betting.php" class="game-btn">Play Roulette</a>
   </section>
 

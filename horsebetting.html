@@ -128,6 +128,8 @@
     const bars = document.querySelectorAll('.bar-inner');
     const horseButtons = document.querySelectorAll('.button-group button');
     const startRaceButton = document.getElementById('start-race');
+
+    const raceAudio = new Audio('Horses/horse sounds.mp3');
   
     // Start bars at empty
     function loadBars() {
@@ -153,6 +155,9 @@
   
       document.getElementById('status').textContent = 'Race is on!';
       startRaceButton.disabled = true;
+
+      // Play race audio
+      raceAudio.play();
   
       // Animate bars randomly with large jumps
       raceInterval = setInterval(() => {
@@ -166,6 +171,9 @@
       setTimeout(() => {
         clearInterval(raceInterval);
         declareWinner();
+        // Stop race audio after the race
+        raceAudio.pause();
+        raceAudio.currentTime = 0;  // Reset audio to the beginning
         // Re-enable buttons after the race
         disableButtons(false);
       }, 5000);

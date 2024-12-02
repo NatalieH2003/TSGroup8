@@ -118,9 +118,9 @@
     </div>
 
     <script>
-      let clicked = JSON.parse(localStorage.getItem("purchased") || false);
       let balance = parseFloat(localStorage.getItem("shareCurrency"), 10);
       let inventory = JSON.parse(localStorage.getItem("inventory")) || [];
+      //Index as ID
       const suburb = ["\u{1F422}", "\u{1F431}", "\u{1F436}", "\u{1F439}", "\u{1F42D}"];
       const farm = ["\u{1F404}", "\u{1F411}", "\u{1F413}", "\u{1F425}", "\u{1F416}"];
       const forest = ["\u{1F43F}", "\u{1F430}", "\u{1F43B}", "\u{1F43A}", "\u{1F98A}", "\u{1F98C}"];
@@ -141,14 +141,28 @@
       //Iterate through array and display
       function displayItem(sectionId, myArray, price){
         const section = document.getElementById(sectionId);
+
+        //Array for purchased emojis
+        const purchased = JSON.parse(localStorage.getItem("purchased")) || [];
+
         myArray.forEach((item) => {
           const emoji = document.createElement("div");  //Create emoji element
           emoji.classList.add("emoji");
           emoji.innerHTML = item; //Display emoji
 
-          //Call buy function when emoji is clicked
-          emoji.onclick = function(){
-            buy(item, price);
+          //Check if emoji is in purchased array
+          if(purchased.includes(item)){
+            emoji.style.pointerEvents = "none";
+            emoji.style.opacity = .2;
+          } 
+          else if (balance < price){
+            emoji.style.pointerEvents = "none";   
+          }
+          else{
+            //Call buy function when emoji is clicked
+            emoji.onclick = function(){
+              buy(emoji, item, price);
+            };
           }
           
           section.appendChild(emoji); //Add emoji to section
@@ -156,27 +170,21 @@
       }
 
       //Buy emoji and place in inventory
-      function buy(emoji, price) {
-        if (clicked){
-          alert("Already Purchased!");
-        }
-        else if (!clicked && balance >= price) {
+      function buy(element, emoji, price) {
+        const purchased = JSON.parse(localStorage.getItem("purchased")) || [];
+
+        if (balance >= price) {
           balance -= price;
           inventory.push(emoji);
           document.getElementById("gBucksDisplay").textContent = `GBucks: ${balance}`;
-          clicked = true;
+          element.clicked = true;
+          purchased.push(emoji);  //Push emoji to purchased list
+          localStorage.setItem("purchased", JSON.stringify(purchased));
           saveData();
+          element.style.pointerEvents = "none";
         } 
-        else if(!clicked && balance <= price) {
-          disable(price);
-        }
-      }
-
-      //Disable clicks when balance is below price
-      function disable(price) {
-        const container = document.getElementById("emoji-container");
-        if(balance<price){
-          container.style.pointerEvents = "none";
+        else{
+          alert("Not enough GBucks!");
         }
       }
 
@@ -193,7 +201,6 @@
       function saveData() {
         localStorage.setItem("shareCurrency", balance);
         localStorage.setItem("inventory",JSON.stringify(inventory));
-        localStorage.setItem("purchased", clicked);
       }
 
     </script>

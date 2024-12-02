@@ -59,6 +59,10 @@
         font-size: 40px;
         margin: 10px;
         cursor: pointer;
+        transition: transform 0.2s ease;
+      }
+      .emoji:hover{
+        transform: scale(1.5);
       }
       h2 {
         font-size: 20px;
@@ -120,6 +124,7 @@
     <script>
       let balance = parseFloat(localStorage.getItem("shareCurrency"), 10);
       let inventory = JSON.parse(localStorage.getItem("inventory")) || [];
+      let purchased = JSON.parse(localStorage.getItem("purchased")) || [];
       //Index as ID
       const suburb = ["\u{1F422}", "\u{1F431}", "\u{1F436}", "\u{1F439}", "\u{1F42D}"];
       const farm = ["\u{1F404}", "\u{1F411}", "\u{1F413}", "\u{1F425}", "\u{1F416}"];
@@ -175,10 +180,13 @@
 
         if (balance >= price) {
           balance -= price;
-          inventory.push(emoji);
+
+          inventory.push(emoji);  //Push emoji to inventory
           document.getElementById("gBucksDisplay").textContent = `GBucks: ${balance}`;
+
           element.clicked = true;
           purchased.push(emoji);  //Push emoji to purchased list
+
           localStorage.setItem("purchased", JSON.stringify(purchased));
           saveData();
           element.style.pointerEvents = "none";

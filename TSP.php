@@ -91,57 +91,47 @@
       max-width: 300px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-    .row{
-      display:flex;
+    .row {
+      display: flex;
       justify-content: center;
       flex-direction: row;
       text-align: center;
       align-items: center;
-      
     }
-    #displayEmoji{
+    #displayEmoji {
       font-size: 40px;
     }
   </style>
 </head>
 <body>
   <header>
-    <div class = "row">
-    <div id="displayEmoji"></div>
-    <h1>Gamble Smart</h1>
+    <div class="row">
+      <div id="displayEmoji"></div>
+      <h1>Gamble Smart</h1>
     </div>
     <p>Balance gambling with productivity and fun!</p>
     <?php
-        session_start();
-        require "db.php";
-        if(isset($_SESSION["username"])){
-            if(isset($_POST["backMain"])){
-                updateBalance($_SESSION["username"], $_COOKIE["newBal"]);
-            }
-                      
-        ?>
-        <form method="post" action="login.php">
-            <?php
-            echo '<label> Welcome ' . $_SESSION["username"] . '!</label>';
-            ?>
-            <input type="submit" class="logout-btn" value="Logout" name="Logout">        
-        </form>
-        <?php
-        }
-        else{
-        ?>
-        <form method="post" action="login.php">
-            <?php
-            echo '<label> Welcome Guest!</label>';
-            ?>
-            <input type="submit" class="logout-btn" value="Login" name="toLogin">        
-        </form>
-        
-        <?php
-        }
+      session_start();
+      require "db.php";
+      if (isset($_SESSION["username"])) {
+          if (isset($_POST["backMain"])) {
+              updateBalance($_SESSION["username"], $_COOKIE["newBal"]);
+          }
     ?>
+    <form method="post" action="login.php">
+      <?php echo '<label> Welcome ' . $_SESSION["username"] . '!</label>'; ?>
+      <input type="submit" class="logout-btn" value="Logout" name="Logout">
+    </form>
+    <?php
+      } else {
+    ?>
+    <form method="post" action="login.php">
+      <label> Welcome Guest!</label>
+      <input type="submit" class="logout-btn" value="Login" name="toLogin">
+    </form>
+    <?php } ?>
   </header>
-  
+
   <nav>
     <a href="#about">About the App</a>
     <a href="#features">Features</a>
@@ -189,13 +179,19 @@
     <div id="gbucks-total" class="gbucks-total"></div>
   </section>
 
-  <section id="games">
+  <!-- Rules / Shop / To-Do / Inventory Container -->
+  <section id="rules-container" style="border: 1px solid black; padding: 20px; margin: 20px auto; background: white; border-radius: 8px; max-width: 1200px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+    <h2>Rules / Shop / To-Do List / Inventory</h2>
+    <a href="rules.html" class="game-btn">Rules</a>
+    <a href="shop.html" class="game-btn">Shop</a>
+    <a href="todo.php" class="game-btn">To-Do List</a>
+    <a href="inventory.html" class="game-btn">Inventory</a>
+  </section>
+
+  <!-- Games Container -->
+  <section id="games-container" style="border: 1px solid black; padding: 20px; margin: 20px auto; background: white; border-radius: 8px; max-width: 1200px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
     <h2>Play Games</h2>
     <p>Ready to test your luck? Choose a game below and enjoy responsibly.</p>
-    <a href="todo.php" class="game-btn">To-Do List</a>
-    <a href="shop.html" class="game-btn">Shop</a>
-    <a href="inventory.html" class="game-btn">Inventory</a>
-    <a href="rules.html" class="game-btn">Rules</a>
     <a href="betting.php" class="game-btn">Place a Bet</a>
     <a href="betting.php" class="game-btn">Play Blackjack</a>
     <a href="betting.php" class="game-btn">Play Slots</a>
@@ -213,35 +209,23 @@
 
     let emoji = localStorage.getItem("equippedEmoji");
     const display = document.getElementById("displayEmoji");
-      if (emoji) {
-        display.textContent = emoji; 
-      } else {
-        display.textContent = "\u{1F928}"; 
-      }
+    if (emoji) {
+      display.textContent = emoji; 
+    } else {
+      display.textContent = "\u{1F928}"; 
+    }
 
-    <?php
-    if(isset($_SESSION["username"])){
-    ?>
-    
+    <?php if (isset($_SESSION["username"])) { ?>
     balance = <?php echo json_encode(getbalance($_SESSION["username"])); ?>;
     localStorage.setItem("shareCurrency", balance);
-    
-    <?php
-    }
-    else{
-    ?>
-
-    // Check if 'shareCurrency' exists and is a valid number
+    <?php } else { ?>
     if (localStorage.getItem("shareCurrency") && !isNaN(localStorage.getItem("shareCurrency"))) {
       balance = parseFloat(localStorage.getItem("shareCurrency"));
     } else {
       localStorage.setItem("shareCurrency", balance);
     }
-    <?php
-    }
-    ?>
+    <?php } ?>
 
-    // Display the balance
     document.getElementById("gbucks-total").textContent = `GBucks: ${balance}`;
   </script>
 </body>

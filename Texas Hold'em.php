@@ -41,6 +41,14 @@
             cursor: pointer;
             border-radius: 5px;
         }
+    
+        .button-group {
+            display: flex;
+            flex-flow: row wrap;
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%, 0%);
+        }
 
         .results {
             margin-top: 20px;
@@ -61,6 +69,16 @@
         }
     </style>
 </head>
+
+<?php
+      session_start();
+      require "db.php";
+      if(isset($_SESSION["username"])){
+        if(isset($_POST["playAgain"])){
+            updateBalance($_SESSION["username"], $_COOKIE["newBal"]);
+        }
+      }
+      ?>
 <body>
     <h1>Texas Hold'em Poker Game</h1>
     <div class="game-container">
@@ -78,12 +96,14 @@
         <div class="results" id="gbucks-stats">GBucks: 0 | Bet: 0</div>
 
         <div class="buttons">
+            <div class="button-group">
             <button id="next-phase-btn" onclick="nextPhase()">Next Phase</button>
             <button id="increase-bet-btn" onclick="increaseBet()" style="display: none;">Increase Bet (10 GBucks)</button>
             <button id="fold-btn" onclick="fold()" style="display: none;">Fold</button>
-            <button id="play-again-btn" style="display: none;" onclick="playAgain()">Play Again</button>
-            <button onclick="goToMainPage()">Back to Main Page</button>
-            <button onclick="goToBettingPage()">Go to Betting Page</button>
+            <form method="post" action="Texas Hold'em.php"><button type="submit" id="play-again-btn" style="display: none;" value="playAgain" name="playAgain" onclick="playAgain()">Play Again</button></form>
+            <form method="post" action="TSP.php"><button type="submit" onclick="goToMainPage()" value="backMain" name="backMain">Back to Main Page</button></form>
+            <form method="post" action="betting.php"><button type="submit" onclick="goToBettingPage()" value="changeBet" name="changeBet">Go to Betting Page</button></form>
+            </div><br><br>
         </div>
     </div>
 
@@ -182,6 +202,7 @@
             if (balance >= increaseAmount) {
                 bet += increaseAmount;
                 balance -= increaseAmount;
+                newBalance();
                 updateCurrencyDisplay();
             } else {
                 alert('Not enough GBucks to increase the bet!');
@@ -192,6 +213,7 @@
             function fold() {
     losses++;
     balance -= bet;  // Deduct bet when player folds
+    newBalance();
     updateCurrencyDisplay();
     saveData();
     
@@ -214,10 +236,12 @@
             resultText += 'You won!';
             wins++;
             balance += bet;
+            newBalance();
         } else if (playerEvaluation.rank < houseEvaluation.rank) {
             resultText += 'You lost!';
             losses++;
             balance -= bet;
+            newBalance();
         } else {
             resultText += 'It\'s a tie!';
         }
@@ -355,6 +379,11 @@
         function goToBettingPage() {
             // Redirect to the betting page
             window.location.href = "betting.html";
+        }
+    
+        // save balance value in a cookie to update the database
+        function newBalance(){
+            document.cookie = "newBal="+ Math.round(balance)+"; SameSite=None; Secure";
         }
 
         // Initialize the game

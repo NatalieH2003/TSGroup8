@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rules - Gamble Smart</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+        nav {
+            background-color: #444;
+            padding: 10px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        nav a {
+            color: #ffcc00;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        nav a:hover {
+            background-color: #555;
+        }
+        h1 {
+            text-align: center;
+        }
+        .content {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .rules-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        .rules-box h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        a {
+            color: #28a745;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .button-container {
+            margin-top: 15px;
+        }
+        .btn {
+            display: inline-block;
+            margin-top: 10px;
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .btn:hover {
+            background-color: #218838;
+        }
+        .back-button {
+            display: block;
+            text-align: center;
+            margin: 20px auto;
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            max-width: 200px;
+        }
+        .back-button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Gamble Smart</h1>
+        <p>Your guide to responsible gambling and productivity.</p>
+    </header>
+
+    <nav>
+        <a href="#blackjack">Blackjack</a>
+        <a href="#euchre">Euchre</a>
+        <a href="#poker">Poker</a>
+        <a href="#roulette">Roulette</a>
+        <a href="#texas-holdem">Texas Hold'em</a>
+        <a href="#slots">Slots</a>
+        <a href="#horse-betting">Horse Betting</a>
+    </nav>
+
+    <div class="content">
+        <h1>Rules and Directions</h1>
+
+        <!-- Blackjack Rules -->
+        <div id="blackjack" class="rules-box">
+            <h2>Blackjack</h2>
+            <p>Blackjack is a classic card game where the goal is to beat the dealer by getting as close to 21 as possible without going over.</p>
+            <ul>
+                <li>Each player starts with two cards. Face cards are worth 10, and Aces can be 1 or 11.</li>
+                <li>Players can choose to "Hit" (take another card) or "Stand" (keep their current total).</li>
+                <li>If your total exceeds 21, you bust and lose the round.</li>
+            </ul>
+            <div class="button-container">
+                <a href="betting.php" class="btn">Back to Blackjack</a>
+            </div>
+        </div>
+
+        <!-- Euchre Rules -->
+        <div id="euchre" class="rules-box">
+            <h2>Euchre</h2>
+            <p>Euchre is a team-based card game where players compete to win tricks.</p>
+            <ul>
+                <li>The game is played with a deck of 24 cards (9 through Ace).</li>
+                <li>Players bid on the trump suit, which dominates all others.</li>
+                <li>Points are scored based on the number of tricks won by the bidding team.</li>
+            </ul>
+            <div class="button-container">
+                <a href="betting.php" class="btn">Back to Euchre</a>
+            </div>
+        </div>
+
+        <!-- Poker Rules -->
+        <div id="poker" class="rules-box">
+            <h2>Poker</h2>
+            <p>Poker is a strategic card game involving betting, bluffing, and hand ranking.</p>
+            <ul>
+                <li>Players aim to form the best five-card hand using their hole cards and community cards.</li>
+                <li>Hand rankings: Royal Flush, Straight Flush, Four of a Kind, Full House, Flush, Straight, Three of a Kind, Two Pair, One Pair, High Card.</li>
+                <li>Bets are placed in rounds: pre-flop, flop, turn, and river.</li>
+            </ul>
+            <div class="button-container">
+                <a href="betting.php" class="btn">Back to Poker</a>
+            </div>
+        </div>
+
+        <!-- Roulette Rules -->
+        <div id="roulette" class="rules-box">
+            <h2>Roulette</h2>
+            <p>Roulette is a casino game where players bet on where a ball will land on a spinning wheel.</p>
+            <ul>
+                <li>The wheel has 38 slots (1-36, 0, and 00).</li>
+                <li>Bets can be placed on individual numbers, groups, colors, or odd/even.</li>
+                <li>Winnings are based on the odds of the selected bet.</li>
+            </ul>
+            <div class="button-container">
+                <a href="betting.php" class="btn">Back to Roulette</a>
+            </div>
+        </div>
+
+        <!-- Texas Hold'em Rules -->
+        <div id="texas-holdem" class="rules-box">
+            <h2>Texas Hold'em</h2>
+            <p>Texas Hold'em is a popular poker variation where players use two hole cards and five community cards to form their best hand.</p>
+            <ul>
+                <li>Each player is dealt two hole cards face down.</li>
+                <li>Five community cards are revealed in phases: flop (3 cards), turn (1 card), and river (1 card).</li>
+                <li>Players bet in four rounds: pre-flop, flop, turn, and river.</li>
+            </ul>
+            <div class="button-container">
+                <a href="betting.php" class="btn">Back to Texas Hold'em</a>
+            </div>
+        </div>
+
+        <!-- Slots Rules -->
+        <div id="slots" class="rules-box">
+            <h2>Slots</h2>
+            <p>Slots is a simple and fun game where you spin reels to match symbols and win rewards.</p>
+            <ul>
+                <li>Choose your bet amount and select lines to bet on (rows or columns).</li>
+                <li>Click the "Spin" button to start the reels.</li>
+                <li>Match symbols on the selected lines to win.</li>
+                <li>The payout depends on the number of matched symbols and the line bet.</li>
+            </ul>
+            <div class="button-container">
+                <a href="slots.html" class="btn">Back to Slots</a>
+            </div>
+        </div>
+
+        <!-- Horse Betting Rules -->
+        <div id="horse-betting" class="rules-box">
+            <h2>Horse Betting</h2>
+            <p>Horse Betting is an exciting game where you can bet on your favorite horse and watch it race to victory!</p>
+            <ul>
+                <li>Select a horse from the options provided.</li>
+                <li>Place your bet and start the race.</li>
+                <li>Watch the race progress, and the first horse to reach the finish line wins.</li>
+                <li>If your selected horse wins, you earn rewards based on your bet.</li>
+            </ul>
+            <div class="button-container">
+                <a href="horsebetting.html" class="btn">Play Horse Betting</a>
+            </div>
+        </div>
+
+        <a href="TSP.php" class="back-button">Back to Home</a>
+    </div>
+</body>
+</html>

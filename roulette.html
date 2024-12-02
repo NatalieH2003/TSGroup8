@@ -34,6 +34,13 @@
     .buttons {
       margin-top: 0px;
     }
+    .button-group {
+        display: flex;
+        flex-flow: row wrap;
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%, 0%);
+    }
     button {
       padding: 10px 20px;
       font-size: 16px;
@@ -43,6 +50,10 @@
       margin: 5px;
       cursor: pointer;
       border-radius: 5px;
+    }
+    .button-group button{
+        margin: 5px;
+        align-self: center;
     }
     p {
         margin-bottom: 0px;
@@ -297,10 +308,12 @@
             </div>
             <p id="noBet"></p>
             <div class="buttons">
-                <button class="uibutton" id="play-button" onclick="spin()">Play</button>
-                <button class="uibutton" id="play-again" style="display: none;" onclick="spin()">Play Again</button>
-                <button class="uibutton" id="change-bet" style="display: none;" onclick="changeBet()">Change Bet</button>
-                <button class="back-button" id="go-main" onclick="goToMainPage()">Back to Main Page</button>
+                <div class="button-group">
+                    <button class="uibutton" id="play-button" onclick="spin()">Play</button>
+                    <button class="uibutton" id="play-again" style="display: none;" onclick="spin()">Play Again</button>
+                    <form method="post" action="betting.php"><button type="submit" class="uibutton" id="change-bet" style="display: none;" onclick="changeBet()" value="changeBet" name="changeBet">Change Bet</button></form>
+                    <form method="post" action="TSP.php"><button type="submit" class="back-button" id="go-main" onclick="goToMainPage()" value="backMain" name="backMain">Back to Main Page</button></form>
+                </div><br><br><br>
             </div>
             <div class="results" id="currency-stats">
                 GBucks: 0 | Bet: 0
@@ -655,16 +668,20 @@
                 if (betPlaced === "1stClm" || betPlaced === "2ndClm" || betPlaced === "3rdClm" || betPlaced === "1Third" || betPlaced === "2Third" || betPlaced === "3Third") {
                     winAmount = bet*2;
                     balance = balance + winAmount;
+                    newBalance();
                 } else if (betPlaced === "red" || betPlaced === "black" || betPlaced === "even" || betPlaced === "odd" || betPlaced === "1Half" || betPlaced === "2Half") {
                     winAmount = bet;
                     balance = balance + winAmount;
+                    newBalance();
                 } else {
                     winAmount = bet*35
                     balance = balance + winAmount;
+                    newBalance();
                 }
             } else {
                 winAmount = bet;
                 balance = balance - winAmount;
+                newBalance();
             }
         }
 
@@ -856,6 +873,11 @@
 
         function goToMainPage() {
             location.href = "TSP.php";
+        }
+
+        // save balance value in a cookie to update the database
+        function newBalance(){
+            document.cookie = "newBal="+ Math.round(balance)+"; SameSite=None; Secure";
         }
         
         window.onload = updateCurrency;

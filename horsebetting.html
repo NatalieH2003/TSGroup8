@@ -193,6 +193,11 @@
       horseButtons.forEach(button => button.disabled = disabled);
       startRaceButton.disabled = disabled;
     }
+
+    // save balance value in a cookie to update the database
+    function newBalance(){
+      document.cookie = "newBal="+ Math.round(balance)+"; SameSite=None; Secure";
+    }
   
     // Load bars when the page loads
     window.onload = loadBars;

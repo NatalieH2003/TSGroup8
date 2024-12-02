@@ -118,7 +118,7 @@
     </div>
 
     <script>
-      let clicked = false;
+      let clicked = JSON.parse(localStorage.getItem("purchased") || false);
       let balance = parseFloat(localStorage.getItem("shareCurrency"), 10);
       let inventory = JSON.parse(localStorage.getItem("inventory")) || [];
       const suburb = ["\u{1F422}", "\u{1F431}", "\u{1F436}", "\u{1F439}", "\u{1F42D}"];
@@ -156,17 +156,18 @@
       }
 
       //Buy emoji and place in inventory
-      function buy(emoji, price, ) {
+      function buy(emoji, price) {
         if (clicked){
-          alert("Already Purchased!!");
+          alert("Already Purchased!");
         }
-        if (balance >= price) {
+        else if (!clicked && balance >= price) {
           balance -= price;
           inventory.push(emoji);
           document.getElementById("gBucksDisplay").textContent = `GBucks: ${balance}`;
           clicked = true;
           saveData();
-        } else {
+        } 
+        else if(!clicked && balance <= price) {
           disable(price);
         }
       }
@@ -192,7 +193,7 @@
       function saveData() {
         localStorage.setItem("shareCurrency", balance);
         localStorage.setItem("inventory",JSON.stringify(inventory));
-        localStorage.setItem("purchased",JSON.stringify(purchased));
+        localStorage.setItem("purchased", clicked);
       }
 
     </script>

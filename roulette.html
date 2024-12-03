@@ -324,6 +324,8 @@
         let balance = parseFloat(localStorage.getItem("shareCurrency")) || 0; 
         let bet = parseInt(localStorage.getItem('shareBet')) || 0;
         updateCurrency();
+
+        // Arrays that contain what type of bet each button belongs to, excluding the obvious single bet
         let evenRolls = ["2Btn", "4Btn", "6Btn", "8Btn", "10Btn", "12Btn", "14Btn", "16Btn", "18Btn", "20Btn", "22Btn", "24Btn", "26Btn", "28Btn", "30Btn", "32Btn", "34Btn", "36Btn"];
         let oddRolls = ["1Btn", "3Btn", "5Btn", "7Btn", "9Btn", "11Btn", "13Btn", "15Btn", "17Btn", "19Btn", "21Btn", "23Btn", "25Btn", "27Btn", "29Btn", "31Btn", "33Btn", "35Btn"];
         let redRolls = ["1Btn", "3Btn", "5Btn", "7Btn", "9Btn", "12Btn", "14Btn", "16Btn", "18Btn", "19Btn", "21Btn", "23Btn", "25Btn", "27Btn", "30Btn", "32Btn", "34Btn", "36Btn"];
@@ -336,6 +338,20 @@
         let thirdThird = ["25Btn", "26Btn", "27Btn", "28Btn", "29Btn", "30Btn", "31Btn", "32Btn", "33Btn", "34Btn", "35Btn", "36Btn"];
         let firstHalf = ["1Btn", "2Btn", "3Btn", "4Btn", "5Btn", "6Btn", "7Btn", "8Btn", "9Btn", "10Btn", "11Btn", "12Btn", "13Btn", "14Btn", "15Btn", "16Btn", "17Btn", "18Btn"];
         let secondHalf = ["19Btn", "20Btn", "21Btn", "22Btn", "23Btn", "24Btn", "25Btn", "26Btn", "27Btn", "28Btn", "29Btn", "30Btn", "31Btn", "32Btn", "33Btn", "34Btn", "35Btn", "36Btn"]
+        let dub1o2 = ["1Btn", "2Btn"];
+        let dub2o3 = ["2Btn", "3Btn"];
+        let dub4o5 = ["4Btn", "5Btn"];
+        let dub5o6 = ["5Btn", "6Btn"];
+        let dub7o8 = ["7Btn", "8Btn"];
+        let dub8o9 = ["8Btn", "9Btn"];
+        let dub10o11 = ["10Btn", "11Btn"];
+        let dub11o12 = ["11Btn", "12Btn"];
+        let dub13o14 = ["13Btn", "14Btn"];
+        let dub14o15 = ["14Btn", "15Btn"];
+        let dub16o17 = ["16Btn", "17Btn"];
+        let dub17o18 = ["17Btn", "18Btn"];
+
+        // Booleans that show whether a type of bet has been placed
         let colm1 = false;
         let colm2 = false;
         let colm3 = false;
@@ -349,6 +365,7 @@
         let evenS = false;
         let oddS = false;
         let singleBet = false;
+
         let isbetPlaced = false;
         let canPlaceBet = true;
         let betPlaced = "";
@@ -362,6 +379,7 @@
         let winLose = false;
         let winAmount = 0;
         
+        //Spin function for the wheel
         function spin() {
             winLose = false;
             if (balance === 0) {
@@ -392,6 +410,7 @@
             }
         }
 
+        //Function to determine if it you win or lose
         function winOrLose () {
             switch (value) {
                 case 0:
@@ -626,6 +645,7 @@
             document.getElementById("go-main").style.display = "inline-block";
         }
 
+        //Function to allow the player to place a bet
         function placeBet(betName) {
             if (canPlaceBet === true) {
                 if (isbetPlaced === false) {
@@ -663,6 +683,7 @@
             }
         }
 
+        //Determines the amount returned based on win, and default lose cost
         function returnResult() {
             if (winLose === true) {
                 if (betPlaced === "1stClm" || betPlaced === "2ndClm" || betPlaced === "3rdClm" || betPlaced === "1Third" || betPlaced === "2Third" || betPlaced === "3Third") {
@@ -685,6 +706,7 @@
             }
         }
 
+        //Placing a single bet
         function selectSingle(buttonID) {
             if (singleBet === false) {
                 document.getElementById(buttonID).style.borderColor = "white";
@@ -695,6 +717,7 @@
             }
         }
 
+        //Betting on a column
         function selectColumn(column) {
             if (column === "1stClm") {
                 if (colm1 === false) {
@@ -735,6 +758,7 @@
             }
         }
 
+        //Betting on a third
         function selectThird(third) {
             if (third === "1Third") {
                 if (third1 === false) {
@@ -775,6 +799,7 @@
             }
         }
 
+        //Betting on a half
         function selectHalf(half) {
             if (half === "1Half") {
                 if (half1 === false) {
@@ -803,6 +828,7 @@
             }
         }
 
+        //Betting on a color
         function selectColor(color) {
             if (color === "red") {
                 if (redS === false) {
@@ -831,6 +857,7 @@
             }
         }
 
+        //Betting on even or odd
         function selectParity(parity) {
             if (parity === "even") {
                 if (evenS === false) {
@@ -859,18 +886,22 @@
             }
         }
 
+        //Directing to bet page
         function changeBet() {
             location.href="betting.php";
         }
         
+        //Saving information
         function saveData() {
             localStorage.setItem("shareCurrency", balance);
         }
 
+        //Updating text on the page to show new balance after every game
         function updateCurrency() {
             document.getElementById("currency-stats").textContent = `GBucks: ${balance} | Bet Amount: ${bet}`;
         }
 
+        //Directing to main page
         function goToMainPage() {
             location.href = "TSP.php";
         }

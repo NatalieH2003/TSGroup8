@@ -183,7 +183,7 @@
   <section id="rules-container" style="border: 1px solid black; padding: 20px; margin: 20px auto; background: white; border-radius: 8px; max-width: 1200px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
     <h2>Rules / Shop / To-Do List / Inventory</h2>
     <a href="rules.html" class="game-btn">Rules</a>
-    <a href="shop.html" class="game-btn">Shop</a>
+    <a href="shop.php" class="game-btn">Shop</a>
     <a href="todo.php" class="game-btn">To-Do List</a>
     <a href="inventory.html" class="game-btn">Inventory</a>
   </section>

@@ -129,7 +129,11 @@
       <label> Welcome Guest!</label>
       <input type="submit" class="logout-btn" value="Login" name="toLogin">
     </form>
-    <?php } ?>
+    <?php } 
+    
+    
+    
+    ?>
   </header>
 
   <nav>
@@ -185,7 +189,7 @@
     <a href="rules.html" class="game-btn">Rules</a>
     <a href="shop.php" class="game-btn">Shop</a>
     <a href="todo.php" class="game-btn">To-Do List</a>
-    <a href="inventory.html" class="game-btn">Inventory</a>
+    <a href="inventory.php" class="game-btn">Inventory</a>
   </section>
 
   <!-- Games Container -->
@@ -207,8 +211,55 @@
   </footer>
 
   <script>
+const emojis = ["\u{1F422}", "\u{1F431}", "\u{1F436}", "\u{1F439}", "\u{1F42D}", "\u{1F404}", "\u{1F411}", "\u{1F413}", "\u{1F425}", "\u{1F416}", 
+"\u{1F43F}", "\u{1F430}", "\u{1F43B}", "\u{1F43A}", "\u{1F98A}", "\u{1F98C}", "\u{1F419}", "\u{1F420}", "\u{1F421}", "\u{1F42C}", "\u{1F433}", 
+"\u{1F42B}", "\u{1F418}", "\u{1F98E}", "\u{1F981}", "\u{1F98F}", "\u{1F9A4}", "\u{1F996}", "\u{1F409}", "\u{1F995}", "\u{1F984}"];
+let inventory = JSON.parse(localStorage.getItem("inventory")) || [];
+let purchased = JSON.parse(localStorage.getItem("purchased")) || [];
+    <?php
+    if (isset($_SESSION["username"]) && ($_SESSION["loaded"] == 0)) {
+        createProfile($_SESSION["username"]);
+        for($i = 0; $i < 6; $i++){
+            $num = 5;
+            $index = 0;
+            $emojiList = loadItems($_SESSION["username"], $i);
+            foreach($emojiList as $emojiInfo){
+                if($i == 2){
+                $num = 6;
+                }
+                for($j = 0; $j < $num; $j++){
+                    if($i > 2){
+                    $index = (5*$i) + $j + 1;
+                    }
+                    else{
+                    $index = (5*$i) + $j;
+                    }
+                    if($emojiInfo[$j+2] == 1){
+                    ?>
+                    inventory.push(emojis[<?php echo $index?>]);
+                    purchased.push(emojis[<?php echo $index?>]);
+                    localStorage.setItem("purchased", JSON.stringify(purchased));
+                    localStorage.setItem("inventory",JSON.stringify(inventory));
+                    
+                    <?php
+                    }
+                }
+            }
+        }
+        $_SESSION["loaded"]=1;
+    }
+    ?>
+      
     let balance = 500; // Default starting balance
 
+    <?php
+    if (isset($_SESSION["username"])){
+        $equipped = loadEquipped($_SESSION["username"]);
+        ?>
+        localStorage.setItem("equippedEmoji", <?php echo "\"$equipped\"" ?>);
+        <?php
+    }
+    ?>
     let emoji = localStorage.getItem("equippedEmoji");
     const display = document.getElementById("displayEmoji");
     if (emoji) {

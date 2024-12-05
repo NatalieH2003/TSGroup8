@@ -95,7 +95,7 @@ delimiter //
 drop procedure if exists create_user_profile//
 create procedure create_user_profile(account integer)
 begin
-insert into userProfile values(account, "\u{1F928}");
+insert into userProfile values(account, "\\u{1F928}");
 insert into ownedSuburbs values(account, 50, false, false, false, false, false);
 insert into ownedFarms values(account, 100, false, false, false, false, false);
 insert into ownedForests values(account, 200, false, false, false, false, false, false);

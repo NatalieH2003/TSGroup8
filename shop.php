@@ -213,12 +213,16 @@
 
       // Go back to Main Page
       function goToMainPage() {
+        document.cookie = "itemGroup="+ -1 +"; SameSite=None; Secure";
+        document.cookie = "itemID="+ -1 +"; SameSite=None; Secure";
         location.href = "TSP.php"; // Redirects to TSP.html
       }
 
       //Go to Inventory
       function goToInventory() {
-        location.href = "inventory.html"; 
+        document.cookie = "itemGroup="+ -1 +"; SameSite=None; Secure";
+        document.cookie = "itemID="+ -1 +"; SameSite=None; Secure";
+        location.href = "inventory.php"; 
       }
 
       function saveData() {

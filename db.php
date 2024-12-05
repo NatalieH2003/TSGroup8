@@ -754,7 +754,67 @@ function buyItem($user, $group, $id){
     updateBalance($user, $balance-$cost);
 }
 
-function loadItems($user){
+function loadItems($user, $group){
+    $dbh = connectDB();
+    $statement = $dbh->prepare("SELECT account FROM users where name = :username ");
+    $statement->bindParam(":username", $user);
+    $statement->execute();
+    $row = $statement->fetch();
+    $userID = $row[0];
+    
+    switch((int)$group){
+    case 0:
+        $dbh = connectDB();
+        $statement = $dbh->prepare("SELECT * FROM ownedSuburbs where account = :account");
+        $statement->bindParam(":account", $userID);
+        $statement->execute();
+        
+        return $statement->fetchAll();
+    break;
+    case 1:
+        $dbh = connectDB();
+        $statement = $dbh->prepare("SELECT * FROM ownedFarms where account = :account");
+        $statement->bindParam(":account", $userID);
+        $statement->execute();
+        
+        return $statement->fetchAll();
+    break;
+    case 2:
+        $dbh = connectDB();
+        $statement = $dbh->prepare("SELECT * FROM ownedForests where account = :account");
+        $statement->bindParam(":account", $userID);
+        $statement->execute();
+        
+        return $statement->fetchAll();
+    break;
+    case 3:
+        $dbh = connectDB();
+        $statement = $dbh->prepare("SELECT * FROM ownedOceans where account = :account");
+        $statement->bindParam(":account", $userID);
+        $statement->execute();
+        
+        return $statement->fetchAll();
+    break;
+    case 4:
+        $dbh = connectDB();
+        $statement = $dbh->prepare("SELECT * FROM ownedDeserts where account = :account");
+        $statement->bindParam(":account", $userID);
+        $statement->execute();
+        
+        return $statement->fetchAll();
+    break;
+    case 5:
+        $dbh = connectDB();
+        $statement = $dbh->prepare("SELECT * FROM ownedOthers where account = :account");
+        $statement->bindParam(":account", $userID);
+        $statement->execute();
+        
+        return $statement->fetchAll();
+    break;
+    default:
+    //for testing
+    break;
+    }
 
 }
 
@@ -779,6 +839,39 @@ function createProfile($user){
         $statement->execute();
         $row = $statement->fetch();
     }
+}
+
+function setEquipped($user, $emoji){
+    $dbh = connectDB();
+    $statement = $dbh->prepare("SELECT account FROM users where name = :username ");
+    $statement->bindParam(":username", $user);
+    $statement->execute();
+    $row = $statement->fetch();
+    $userID = $row[0];
+
+    $dbh = connectDB();
+    $statement = $dbh->prepare("update userProfile set equipped = :emoji where account = :account;");
+    $statement->bindParam(":account", $userID);
+    $statement->bindParam(":emoji", $emoji);
+    $statement->execute();
+    $row = $statement->fetch();
+}
+
+function loadEquipped($user){
+    $dbh = connectDB();
+    $statement = $dbh->prepare("SELECT account FROM users where name = :username ");
+    $statement->bindParam(":username", $user);
+    $statement->execute();
+    $row = $statement->fetch();
+    $userID = $row[0];
+
+    $dbh = connectDB();
+    $statement = $dbh->prepare("SELECT equipped FROM userProfile where account = :account ");
+    $statement->bindParam(":account", $userID);
+    $statement->execute();
+    $row = $statement->fetch();
+    
+    return $row[0];
 }
 
 ?>

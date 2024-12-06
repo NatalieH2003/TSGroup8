@@ -126,6 +126,7 @@
           <button onclick="startGame('roulette')">Start Roulette</button>
           <button onclick="startGame('euchre')">Start Euchre</button>
           <button onclick="startGame('texasHoldem')">Start Texas Hold'em</button>
+          <button onclick="startGame('horseBetting')">Start HorseBetting</button>
         </div>
         <form method="post" action="TSP.php">
           <button type="submit" class="back-button" onclick="goToMainPage()" value="backMain" name="backMain">Back to Main Page</button>
@@ -177,6 +178,8 @@
           location.href = "euchre.php";
         } else if (game === "texasHoldem") {
           location.href = "Texas Hold'em.php";
+        } else if (game === "horseBetting") {
+          location.href = "horseBetting.php";
         }
       }
 

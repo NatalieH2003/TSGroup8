@@ -176,7 +176,7 @@
         } else if (game === "euchre") {
           location.href = "euchre.php";
         } else if (game === "texasHoldem") {
-          location.href = "Texas Hold'em.html";
+          location.href = "Texas Hold'em.php";
         }
       }
 

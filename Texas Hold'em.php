@@ -102,6 +102,7 @@
             <button id="fold-btn" onclick="fold()" style="display: none;">Fold</button>
             <form method="post" action="Texas Hold'em.php"><button type="submit" id="play-again-btn" style="display: none;" value="playAgain" name="playAgain" onclick="playAgain()">Play Again</button></form>
             <form method="post" action="TSP.php"><button type="submit" onclick="goToMainPage()" value="backMain" name="backMain">Back to Main Page</button></form>
+            <form method="post" action="rules.html"><button type="submit" onclick="goToRulesPage()" value="backMain" name="backMain">Rules</button></form>
             <form method="post" action="betting.php"><button type="submit" onclick="goToBettingPage()" value="changeBet" name="changeBet">Go to Betting Page</button></form>
             </div><br><br>
         </div>
@@ -373,14 +374,17 @@
 
         function goToMainPage() {
             // Redirect to the main page
-            window.location.href = "main_page.html";
+            window.location.href = "TSP.php";
         }
 
         function goToBettingPage() {
             // Redirect to the betting page
-            window.location.href = "betting.html";
+            window.location.href = "betting.php";
         }
-    
+    	function goToRulesPage() {
+            // Redirect to the rules page
+            window.location.href = "rules.html";
+        }
         // save balance value in a cookie to update the database
         function newBalance(){
             document.cookie = "newBal="+ Math.round(balance)+"; SameSite=None; Secure";

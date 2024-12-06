@@ -73,6 +73,15 @@
       }
     </style>
   </head>
+  <?php
+      session_start();
+      require "db.php";
+      if(isset($_SESSION["username"])){
+        if(isset($_COOKIE["equip"])){
+            setEquipped($_SESSION["username"], $_COOKIE["equip"]);
+        }
+      }
+      ?>
   <body>
     <h1>Inventory</h1>
     <div class="balance" id="gBucksDisplay"></div>
@@ -108,6 +117,8 @@
 
       function equip(emoji) {
         localStorage.setItem("equippedEmoji", emoji);
+        document.cookie = "equip="+ emoji +"; SameSite=None; Secure";
+        location.href = "inventory.php";
       }
 
       // Go back to Main Page
@@ -116,7 +127,7 @@
       }
 
       function goToShop(){
-        location.href = "shop.html";
+        location.href = "shop.php";
       }
 
     

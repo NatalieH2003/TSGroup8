@@ -321,7 +321,7 @@
         </div>
 
     <script>
-        let balance = parseFloat(localStorage.getItem("shareCurrency")) || 0; 
+        let balance = parseFloat(localStorage.getItem("shareCurrency")) || 100; 
         let bet = parseInt(localStorage.getItem('shareBet')) || 0;
         updateCurrency();
 
@@ -338,7 +338,7 @@
         let thirdThird = ["25Btn", "26Btn", "27Btn", "28Btn", "29Btn", "30Btn", "31Btn", "32Btn", "33Btn", "34Btn", "35Btn", "36Btn"];
         let firstHalf = ["1Btn", "2Btn", "3Btn", "4Btn", "5Btn", "6Btn", "7Btn", "8Btn", "9Btn", "10Btn", "11Btn", "12Btn", "13Btn", "14Btn", "15Btn", "16Btn", "17Btn", "18Btn"];
         let secondHalf = ["19Btn", "20Btn", "21Btn", "22Btn", "23Btn", "24Btn", "25Btn", "26Btn", "27Btn", "28Btn", "29Btn", "30Btn", "31Btn", "32Btn", "33Btn", "34Btn", "35Btn", "36Btn"]
-        let dub1o2 = ["1Btn", "2Btn"];
+        /*let dub1o2 = ["1Btn", "2Btn"];
         let dub2o3 = ["2Btn", "3Btn"];
         let dub4o5 = ["4Btn", "5Btn"];
         let dub5o6 = ["5Btn", "6Btn"];
@@ -349,22 +349,20 @@
         let dub13o14 = ["13Btn", "14Btn"];
         let dub14o15 = ["14Btn", "15Btn"];
         let dub16o17 = ["16Btn", "17Btn"];
-        let dub17o18 = ["17Btn", "18Btn"];
+        let dub17o18 = ["17Btn", "18Btn"];*/
 
-        // Booleans that show whether a type of bet has been placed
-        let colm1 = false;
-        let colm2 = false;
-        let colm3 = false;
-        let third1 = false;
-        let third2 = false;
-        let third3 = false;
-        let half1 = false;
-        let half2 = false;
-        let redS = false;
-        let blackS = false;
-        let evenS = false;
-        let oddS = false;
-        let singleBet = false;
+        let lockC1 = false;
+        let lockC2 = false;
+        let lockC3 = false;
+        let lockT1 = false;
+        let lockT2 = false;
+        let lockT3 = false;
+        let lockH1 = false;
+        let lockH2 = false;
+        let lockR = false;
+        let lockB = false;
+        let lockE = false;
+        let lockO = false;
 
         let isbetPlaced = false;
         let canPlaceBet = true;
@@ -378,6 +376,8 @@
         let resultProperties = [""];
         let winLose = false;
         let winAmount = 0;
+        let tableBet = [];
+        let unitTable = [];
         
         //Spin function for the wheel
         function spin() {
@@ -645,8 +645,408 @@
             document.getElementById("go-main").style.display = "inline-block";
         }
 
-        //Function to allow the player to place a bet
+        //Function to check which bet is being placed
+        function betDecider(betName) {
+            if (betName === "1stClm" || betName === "2ndClm" || betName === "3rdClm") {
+                selectColumn(betName);
+            } else if (betName === "1Third" || betName === "2Third" || betName === "3Third") {
+                selectThird(betName);
+            } else if (betName === "1Half" || betName == "2Half") {
+                selectHalf(betName);
+            } else if (betName === "red" || betName === "black") {
+                selectColor(betName);
+            } else if (betName === "even" || betName === "odd") {
+                selectParity(betName);
+            } else {
+                selectSingle(betName);
+            }
+        }
+
+        //Function to place locks on other bets
+        function placeLocks(betName) {
+            if (betName === "1stClm" || betName === "2ndClm" || betName === "3rdClm") {
+                lockT1 = true;
+                lockT2 = true;
+                lockT3 = true;
+                lockH1 = true;
+                lockH2 = true;
+                lockR = true;
+                lockB = true;
+                lockE = true;
+                lockO = true;
+            } else if (betName === "1Third" || betName === "2Third" || betName === "3Third") {
+                lockC1 = true;
+                lockC2 = true;
+                lockC3 = true;
+                lockH1 = true;
+                lockH2 = true;
+                lockR = true;
+                lockB = true;
+                lockE = true;
+                lockO = true;
+            } else if (betName === "1Half" || betName == "2Half") {
+                lockC1 = true;
+                lockC2 = true;
+                lockC3 = true;
+                lockT1 = true;
+                lockT2 = true;
+                lockT3 = true;
+                lockR = true;
+                lockB = true;
+                lockE = true;
+                lockO = true;
+            } else if (betName === "red" || betName === "black") {
+                lockC1 = true;
+                lockC2 = true;
+                lockC3 = true;
+                lockT1 = true;
+                lockT2 = true;
+                lockT3 = true;
+                lockH1 = true;
+                lockH2 = true;
+                lockE = true;
+                lockO = true;
+            } else if (betName === "even" || betName === "odd") {
+                lockC1 = true;
+                lockC2 = true;
+                lockC3 = true;
+                lockT1 = true;
+                lockT2 = true;
+                lockT3 = true;
+                lockH1 = true;
+                lockH2 = true;
+                lockR = true;
+                lockB = true;
+            } else {
+                for (let i = 0; i < firstClm.length; i++) {
+                    if (betName === firstClm[i]) {
+                        lockC1 = true;
+                    }
+                }
+                for (let i = 0; i < secondClm.length; i++) {
+                    if (betName === secondClm[i]) {
+                        lockC2 = true;
+                    }
+                }
+                for (let i = 0; i < thirdClm.length; i++) {
+                    if (betName === thirdClm[i]) {
+                        lockC3 = true;
+                    }
+                }
+                for (let i = 0; i < firstThird.length; i++) {
+                    if (betName === firstThird[i]) {
+                        lockT1 = true;
+                    }
+                }
+                for (let i = 0; i < secondThird.length; i++) {
+                    if (betName === secondThird[i]) {
+                        lockT2 = true;
+                    }
+                }
+                for (let i = 0; i < thirdThird.length; i++) {
+                    if (betName === thirdThird[i]) {
+                        lockT3 = true;
+                    }
+                }
+                for (let i = 0; i < firstHalf.length; i++) {
+                    if (betName === firstHalf[i]) {
+                        lockH1 = true;
+                    }
+                }
+                for (let i = 0; i < secondHalf.length; i++) {
+                    if (betName === secondHalf[i]) {
+                        lockH2 = true;
+                    }
+                }
+                for (let i = 0; i < redRolls.length; i++) {
+                    if (betName === redRolls[i]) {
+                        lockR = true;
+                    }
+                }
+                for (let i = 0; i < blackRolls.length; i++) {
+                    if (betName === blackRolls[i]) {
+                        lockB = true;
+                    }
+                }
+                for (let i = 0; i < evenRolls.length; i++) {
+                    if (betName === evenRolls[i]) {
+                        lockE = true;
+                    }
+                }
+                for (let i = 0; i < oddRolls.length; i++) {
+                    if (betName === oddRolls[i]) {
+                        lockO = true;
+                    }
+                }
+            }
+        }
+
+        //Function to remove locks from bets
+        function removeLocks(betName) {
+            if (betName === "1stClm" || betName === "2ndClm" || betName === "3rdClm") {
+                lockT1 = false;
+                lockT2 = false;
+                lockT3 = false;
+                lockH1 = false;
+                lockH2 = false;
+                lockR = false;
+                lockB = false;
+                lockE = false;
+                lockO = false;
+            } else if (betName === "1Third" || betName === "2Third" || betName === "3Third") {
+                lockC1 = false;
+                lockC2 = false;
+                lockC3 = false;
+                lockH1 = false;
+                lockH2 = false;
+                lockR = false;
+                lockB = false;
+                lockE = false;
+                lockO = false;
+            } else if (betName === "1Half" || betName == "2Half") {
+                lockC1 = false;
+                lockC2 = false;
+                lockC3 = false;
+                lockT1 = false;
+                lockT2 = false;
+                lockT3 = false;
+                lockR = false;
+                lockB = false;
+                lockE = false;
+                lockO = false;
+            } else if (betName === "red" || betName === "black") {
+                lockC1 = false;
+                lockC2 = false;
+                lockC3 = false;
+                lockT1 = false;
+                lockT2 = false;
+                lockT3 = false;
+                lockH1 = false;
+                lockH2 = false;
+                lockE = false;
+                lockO = false;
+            } else if (betName === "even" || betName === "odd") {
+                lockC1 = false;
+                lockC2 = false;
+                lockC3 = false;
+                lockT1 = false;
+                lockT2 = false;
+                lockT3 = false;
+                lockH1 = false;
+                lockH2 = false;
+                lockR = false;
+                lockB = false;
+            } else {
+                for (let i = 0; i < firstClm.length; i++) {
+                    if (betName === firstClm[i]) {
+                        lockC1 = false;
+                    }
+                }
+                for (let i = 0; i < secondClm.length; i++) {
+                    if (betName === secondClm[i]) {
+                        lockC2 = false;
+                    }
+                }
+                for (let i = 0; i < thirdClm.length; i++) {
+                    if (betName === thirdClm[i]) {
+                        lockC3 = false;
+                    }
+                }
+                for (let i = 0; i < firstThird.length; i++) {
+                    if (betName === firstThird[i]) {
+                        lockT1 = false;
+                    }
+                }
+                for (let i = 0; i < secondThird.length; i++) {
+                    if (betName === secondThird[i]) {
+                        lockT2 = false;
+                    }
+                }
+                for (let i = 0; i < thirdThird.length; i++) {
+                    if (betName === thirdThird[i]) {
+                        lockT3 = false;
+                    }
+                }
+                for (let i = 0; i < firstHalf.length; i++) {
+                    if (betName === firstHalf[i]) {
+                        lockH1 = false;
+                    }
+                }
+                for (let i = 0; i < secondHalf.length; i++) {
+                    if (betName === secondHalf[i]) {
+                        lockH2 = false;
+                    }
+                }
+                for (let i = 0; i < redRolls.length; i++) {
+                    if (betName === redRolls[i]) {
+                        lockR = false;
+                    }
+                }
+                for (let i = 0; i < blackRolls.length; i++) {
+                    if (betName === blackRolls[i]) {
+                        lockB = false;
+                    }
+                }
+                for (let i = 0; i < evenRolls.length; i++) {
+                    if (betName === evenRolls[i]) {
+                        lockE = false;
+                    }
+                }
+                for (let i = 0; i < oddRolls.length; i++) {
+                    if (betName === oddRolls[i]) {
+                        lockO = false;
+                    }
+                }
+            }
+        }
+
+        //Function to check status of locks
+        function checkLocks(betName) {
+            if (betName === "1stClm") {
+                return lockC1;
+            } else if (betName === "2ndClm") {
+                return lockC2;
+            } else if (betName === "3rdClm") {
+                return lockC3;
+            } else if (betName === "1Third") {
+                return lockT1; 
+            } else if (betName === "2Third") {
+                return lockT2; 
+            } else if (betName === "3Third") {
+                return lockT3; 
+            } else if (betName === "1Half") {
+                return lockH1; 
+            } else if (betName === "2Half") {
+                return lockH2; 
+            } else if (betName === "red") {
+                return lockR; 
+            } else if (betName === "black") {
+                return lockB; 
+            } else if (betName === "even") {
+                return lockE; 
+            } else if (betName === "odd") {
+                return lockO; 
+            } else {
+                for (let i = 0; i < tableBet.length; i++) {
+                    if (tableBet[i] === "1stClm") {
+                        for (let j = 0; j < firstClm.length; j++) {
+                            if (firstClm[j] === betName) {
+                                return true;
+                            }
+                        }
+                    } else if (tableBet[i] === "2ndClm") {
+                        for (let j = 0; j < secondClm.length; j++) {
+                            if (secondClm[j] === betName) {
+                                return true;
+                            }
+                        }
+                    } else if (tableBet[i] === "3rdClm") {
+                        for (let j = 0; j < thirdClm.length; j++) {
+                            if (thirdClm[j] === betName) {
+                                return true;
+                            }
+                        }
+                    } else if (tableBet[i] === "1Third") {
+                        for (let j = 0; j < firstThird.length; j++) {
+                            if (firstThird[j] === betName) {
+                                return true;
+                            }
+                        }
+                    } else if (tableBet[i] === "2Third") {
+                        for (let j = 0; j < secondThird.length; j++) {
+                            if (secondThird[j] === betName) {
+                                return true;
+                            }
+                        }
+                    } else if (tableBet[i] === "3Third") {
+                        for (let j = 0; j < thirdThird.length; j++) {
+                            if (thirdThird[j] === betName) {
+                                return true;
+                            }
+                        }
+                    } else if (tableBet[i] === "1Half") {
+                        for (let j = 0; j < firstHalf.length; j++) {
+                            if (firstHalf[j] === betName) {
+                                return true;
+                            }
+                        }
+                    } else if (tableBet[i] === "2Half") {
+                        for (let j = 0; j < secondHalf.length; j++) {
+                            if (secondHalf[j] === betName) {
+                                return true;
+                            }
+                        }
+                    } else if (tableBet[i] === "red") {
+                        for (let j = 0; j < redRolls.length; j++) {
+                            if (redRolls[j] === betName) {
+                                return true;
+                            }
+                        }
+                    } else if (tableBet[i] === "black") {
+                        for (let j = 0; j < blackRolls.length; j++) {
+                            if (blackRolls[j] === betName) {
+                                return true;
+                            }
+                        }
+                    } else if (tableBet[i] === "even") {
+                        for (let j = 0; j < evenRolls.length; j++) {
+                            if (evenRolls[j] === betName) {
+                                return true;
+                            }
+                        }
+                    } else if (tableBet[i] === "odd") {
+                        for (let j = 0; j < oddRolls.length; j++) {
+                            if (oddRolls[j] === betName) {
+                                return true;
+                            }
+                        }
+                    } else {
+                        if (betName === tableBet[i]) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+        }
+
+        //Function to let player make bets
         function placeBet(betName) {
+            let inTable = false;
+            //Adding in the first bet, don't need to check anything
+            if (!tableBet.length > 0) {
+                tableBet.push(betName);
+                betDecider(betName);
+                placeLocks(betName);
+                console.log("Table Bets: ", tableBet);
+            } else {
+                //Checking the table to see if the bet pressed has already been added, if it is then this removes it
+                for (let i = 0; i < tableBet.length; i++) {
+                    if (betName === tableBet[i]) {
+                        inTable = true;
+                        tableBet.splice(i, 1);
+                        betDecider(betName);
+                        removeLocks(betName);
+                        console.log("New Table: ", tableBet);
+                    }
+                }
+                //Redoing the bet locks
+                for (let i = 0; i < tableBet.length; i++) {
+                    placeLocks(tableBet[i]);
+                }
+                console.log("Lock Status: ", checkLocks(betName));
+                //If not already in it then adding it
+                if (inTable===false && checkLocks(betName)===false) {
+                    tableBet.push(betName);
+                    betDecider(betName);
+                    placeLocks(betName);
+                    console.log("Table Bets: ", tableBet);
+                }
+            }
+        }
+
+        //Function to allow the player to place a bet
+        function OLDplaceBet(betName) {
             if (canPlaceBet === true) {
                 if (isbetPlaced === false) {
                     if (betName === "1stClm" || betName === "2ndClm" || betName === "3rdClm") {
@@ -708,18 +1108,21 @@
 
         //Placing a single bet
         function selectSingle(buttonID) {
-            if (singleBet === false) {
+            if (document.getElementById(buttonID).style.borderColor === "black") {
                 document.getElementById(buttonID).style.borderColor = "white";
-                singleBet = true;
-            } else {
+            } else if (document.getElementById(buttonID).style.borderColor === "white") {
                 document.getElementById(buttonID).style.borderColor = "black";
-                singleBet = false;
+            } else {
+                document.getElementById(buttonID).style.borderColor = "white"
             }
         }
 
         //Betting on a column
+        let colm1 = false;
+        let colm2 = false;
+        let colm3 = false;
         function selectColumn(column) {
-            if (column === "1stClm") {
+            if (column === "1stClm" && lockC1 === false) {
                 if (colm1 === false) {
                     for (let i = 0; i < firstClm.length; i++) {
                         document.getElementById(firstClm[i]).style.borderColor = "white";
@@ -731,7 +1134,7 @@
                     }
                     colm1 = false;
                 }
-            } else if (column === "2ndClm") {
+            } else if (column === "2ndClm" && lockC2 === false) {
                 if (colm2 === false) {
                     for (let i = 0; i < secondClm.length; i++) {
                         document.getElementById(secondClm[i]).style.borderColor = "white";
@@ -743,7 +1146,7 @@
                     }
                     colm2 = false;
                 }
-            } else if (column === "3rdClm") {
+            } else if (column === "3rdClm" && lockC3 === false) {
                 if (colm3 === false) {
                     for (let i = 0; i < thirdClm.length; i++) {
                         document.getElementById(thirdClm[i]).style.borderColor = "white";
@@ -759,8 +1162,11 @@
         }
 
         //Betting on a third
+        let third1 = false;
+        let third2 = false;
+        let third3 = false;
         function selectThird(third) {
-            if (third === "1Third") {
+            if (third === "1Third" && lockT1 === false) {
                 if (third1 === false) {
                     for (let i = 0; i < firstThird.length; i++) {
                         document.getElementById(firstThird[i]).style.borderColor = "white";
@@ -772,7 +1178,7 @@
                     }
                     third1 = false;
                 }
-            } else if (third === "2Third") {
+            } else if (third === "2Third" && lockT2 === false) {
                 if (third2 === false) {
                     for (let i = 0; i < secondThird.length; i++) {
                         document.getElementById(secondThird[i]).style.borderColor = "white";
@@ -784,7 +1190,7 @@
                     }
                     third2 = false;
                 }
-            } else if (third === "3Third") {
+            } else if (third === "3Third" && lockT3 === false) {
                 if (third3 === false) {
                     for (let i = 0; i < thirdThird.length; i++) {
                         document.getElementById(thirdThird[i]).style.borderColor = "white";
@@ -800,8 +1206,10 @@
         }
 
         //Betting on a half
+        let half1 = false;
+        let half2 = false;
         function selectHalf(half) {
-            if (half === "1Half") {
+            if (half === "1Half" && lockH1 === false) {
                 if (half1 === false) {
                     for (let i = 0; i < firstHalf.length; i++) {
                         document.getElementById(firstHalf[i]).style.borderColor = "white";
@@ -813,7 +1221,7 @@
                     }
                     half1 = false;
                 }
-            } else if (half === "2Half") {
+            } else if (half === "2Half" && lockH2 === false) {
                 if (half2 === false) {
                     for (let i = 0; i < secondHalf.length; i++) {
                         document.getElementById(secondHalf[i]).style.borderColor = "white";
@@ -829,8 +1237,10 @@
         }
 
         //Betting on a color
+        let redS = false;
+        let blackS = false;
         function selectColor(color) {
-            if (color === "red") {
+            if (color === "red" && lockR === false) {
                 if (redS === false) {
                     for (let i = 0; i < redRolls.length; i++) {
                         document.getElementById(redRolls[i]).style.borderColor = "white";
@@ -842,7 +1252,7 @@
                     }
                     redS = false;
                 }
-            } else if (color === "black") {
+            } else if (color === "black" && lockB === false) {
                 if (blackS === false) {
                     for (let i = 0; i < blackRolls.length; i++) {
                         document.getElementById(blackRolls[i]).style.borderColor = "white";
@@ -858,8 +1268,10 @@
         }
 
         //Betting on even or odd
+        let evenS = false;
+        let oddS = false;
         function selectParity(parity) {
-            if (parity === "even") {
+            if (parity === "even" && lockE === false) {
                 if (evenS === false) {
                     for (let i = 0; i < evenRolls.length; i++) {
                         document.getElementById(evenRolls[i]).style.borderColor = "white";
@@ -871,7 +1283,7 @@
                     }
                     evenS = false;
                 }
-            } else if (parity === "odd") {
+            } else if (parity === "odd" && lockO === false) {
                 if (oddS === false) {
                     for (let i = 0; i < oddRolls.length; i++) {
                         document.getElementById(oddRolls[i]).style.borderColor = "white";

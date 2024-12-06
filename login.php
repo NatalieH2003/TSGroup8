@@ -74,6 +74,7 @@ session_start();
 if(isset($_POST["login"])){
 	if(authenticate($_POST["username"], $_POST["password"]) == 1){
 		$_SESSION["username"]=$_POST["username"];
+		$_SESSION["loaded"]=0;
 		header("LOCATION:TSP.php");
 		return;
 	}
@@ -91,6 +92,16 @@ else if(isset($_POST["continue"])){
      header("LOCATION:TSP.php");
      return;
 }
+else if(isset($_POST["toLogin"])){
+    ?>
+	<script>
+	localStorage.removeItem("purchased");
+    localStorage.removeItem("inventory");
+    localStorage.removeItem("equippedEmoji");
+    document.cookie = "equip=\u{1F928}; SameSite=None; Secure";
+	</script>
+	<?php
+}
 
 
 if(isset($_POST["Logout"])){
@@ -98,6 +109,10 @@ if(isset($_POST["Logout"])){
 	?>
 	<script>
 	localStorage.setItem("shareCurrency", 500);
+	localStorage.removeItem("purchased");
+    localStorage.removeItem("inventory");
+    localStorage.removeItem("equippedEmoji");
+    document.cookie = "equip=\u{1F928}; SameSite=None; Secure";
 	</script>
 	<?php
 }

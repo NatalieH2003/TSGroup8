@@ -88,6 +88,15 @@
       }
     </style>
   </head>
+  <?php
+        session_start();
+        require "db.php";
+        if(isset($_SESSION["username"])){
+          if((!is_null($_COOKIE["itemGroup"])) && ($_COOKIE["itemGroup"] != -1)){
+              buyItem($_SESSION["username"], $_COOKIE["itemGroup"], $_COOKIE["itemID"]);
+          }
+        }
+        ?>
   <body>
     <h1>Shop</h1>
     <div class="balance" id="gBucksDisplay"></div>
@@ -133,25 +142,27 @@
       const desert = ["\u{1F42B}", "\u{1F418}", "\u{1F98E}", "\u{1F981}", "\u{1F98F}"];
       const mythical = ["\u{1F9A4}", "\u{1F996}", "\u{1F409}", "\u{1F995}", "\u{1F984}"];
       
-      displayItem("suburb", suburb, 50);
-      displayItem("farm", farm, 100);
-      displayItem("forest", forest, 200);
-      displayItem("ocean", ocean, 300);
-      displayItem("desert", desert, 400);
-      displayItem("mythical", mythical, 500);
+      displayItem("suburb", suburb, 50, 0);
+      displayItem("farm", farm, 100, 1);
+      displayItem("forest", forest, 200, 2);
+      displayItem("ocean", ocean, 300, 3);
+      displayItem("desert", desert, 400, 4);
+      displayItem("mythical", mythical, 500, 5);
 
       //Retrieve variables
       document.getElementById("gBucksDisplay").textContent = `GBucks: ${balance}`;
 
       //Iterate through array and display
-      function displayItem(sectionId, myArray, price){
+      function displayItem(sectionId, myArray, price, arrayNum){
         const section = document.getElementById(sectionId);
+        let count = 0;
 
         //Array for purchased emojis
 
         myArray.forEach((item) => {
           const emoji = document.createElement("div");  //Create emoji element
           emoji.classList.add("emoji");
+          emoji.id = count;
           emoji.innerHTML = item; //Display emoji
 
           //Check if emoji is in purchased array
@@ -165,16 +176,17 @@
           else{
             //Call buy function when emoji is clicked
             emoji.onclick = function(){
-              buy(emoji, item, price);
+              buy(emoji, item, price, arrayNum, emoji.id);
             };
           }
           
           section.appendChild(emoji); //Add emoji to section
+          count++;
         });
       }
 
       //Buy emoji and place in inventory
-      function buy(element, emoji, price) {
+      function buy(element, emoji, price, group, id) {
         const purchased = JSON.parse(localStorage.getItem("purchased")) || [];
 
         if (balance >= price) {
@@ -189,6 +201,9 @@
           localStorage.setItem("purchased", JSON.stringify(purchased));
           saveData();
           element.style.pointerEvents = "none";
+          document.cookie = "itemGroup="+ group +"; SameSite=None; Secure";
+          document.cookie = "itemID="+ id +"; SameSite=None; Secure";
+          location.href = "shop.php";
         } 
         else{
           alert("Not enough GBucks!");
@@ -197,12 +212,16 @@
 
       // Go back to Main Page
       function goToMainPage() {
+        document.cookie = "itemGroup="+ -1 +"; SameSite=None; Secure";
+        document.cookie = "itemID="+ -1 +"; SameSite=None; Secure";
         location.href = "TSP.php"; // Redirects to TSP.html
       }
 
       //Go to Inventory
       function goToInventory() {
-        location.href = "inventory.html"; 
+        document.cookie = "itemGroup="+ -1 +"; SameSite=None; Secure";
+        document.cookie = "itemID="+ -1 +"; SameSite=None; Secure";
+        location.href = "inventory.php"; 
       }
 
       function saveData() {
@@ -211,5 +230,6 @@
       }
 
     </script>
+    </div>
   </body>
 </html>

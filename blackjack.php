@@ -24,15 +24,15 @@
         border-radius: 10px;
         box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
       }
-      .buttons .back-button{
+      .buttons .back-button {
         margin-top: 40px;
       }
       .button-group {
         display: flex;
         flex-flow: row wrap;
-          position: absolute;
-          left: 50%;
-          transform: translate(-50%, 0%);
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%, 0%);
       }
       .buttons {
         margin-top: 20px;
@@ -73,17 +73,15 @@
     </style>
   </head>
   <body>
-      
-      <?php
-      session_start();
-      require "db.php";
-      if(isset($_SESSION["username"])){
-        if(isset($_POST["playAgain"])){
-            updateBalance($_SESSION["username"], $_COOKIE["newBal"]);
-        }
+    <?php
+    session_start();
+    require "db.php";
+    if (isset($_SESSION["username"])) {
+      if (isset($_POST["playAgain"])) {
+        updateBalance($_SESSION["username"], $_COOKIE["newBal"]);
       }
-      ?>
-      
+    }
+    ?>
     <h1>Blackjack Game</h1>
     <div class="game-container">
       <h2>Your Cards</h2>
@@ -103,11 +101,21 @@
         <div class="button-group">
           <button onclick="hit()">Hit</button>
           <button onclick="stand()">Stand</button>
-          <form method="post" action="blackjack.php"><button type="submit" id="play-again-btn" style="display: none;" value="playAgain" name="playAgain">Play Again</button></form>
-          <form method="post" action="betting.php"><button type="submit" id="reset-bet-btn" style="display: none;" onclick="resetBet()" value="changeBet" name="changeBet">Change Bet</button></form>
+          <form method="post" action="blackjack.php">
+            <button type="submit" id="play-again-btn" style="display: none;" value="playAgain" name="playAgain">Play Again</button>
+          </form>
+          <form method="post" action="betting.php">
+            <button type="submit" id="reset-bet-btn" style="display: none;" onclick="resetBet()" value="changeBet" name="changeBet">Change Bet</button>
+          </form>
         </div>
         <br>
-        <form method="post" action="TSP.php"><button type="submit" class="back-button" onclick="goToMainPage()" value="backMain" name="backMain">Back to Main Page</button></form>
+        <form method="post" action="TSP.php">
+          <button type="submit" class="back-button" onclick="goToMainPage()" value="backMain" name="backMain">Back to Main Page</button>
+        </form>
+        <!-- Rules Button -->
+        <form method="get" action="rules.html">
+          <button type="submit" style="margin-top: 20px;">Rules</button>
+        </form>
       </div>
     </div>
 
@@ -118,17 +126,15 @@
       let gameOver = false;
       let playerWins = 0;
       let dealerWins = 0;
-      
-      let balance = parseFloat(localStorage.getItem('shareCurrency'), 10);
-      let bet = parseInt(localStorage.getItem('shareBet'), 10);
-      updateCurrency();
-      
 
-      // Create and shuffle deck
+      let balance = parseFloat(localStorage.getItem("shareCurrency"), 10);
+      let bet = parseInt(localStorage.getItem("shareBet"), 10);
+      updateCurrency();
+
       function createDeck() {
         const suits = ["hearts", "clubs", "diamonds", "spades"];
         const values = [
-          "2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king", "ace"
+          "2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king", "ace",
         ];
         deck = [];
 
@@ -138,14 +144,12 @@
           }
         }
 
-        // Shuffle the deck
         for (let i = deck.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           [deck[i], deck[j]] = [deck[j], deck[i]];
         }
       }
 
-      // Start game
       function startGame() {
         createDeck();
         playerCards = [drawCard(), drawCard()];
@@ -155,15 +159,13 @@
         document.getElementById("play-again-btn").style.display = "none";
         document.getElementById("reset-bet-btn").style.display = "none";
         updateCards();
-        pullBlackjack(); // Check for Blackjack immediately after dealing cards
+        pullBlackjack();
       }
 
-      // Draw card
       function drawCard() {
         return deck.pop();
       }
 
-      // Calculate card value
       function calculateHand(cards) {
         let total = 0;
         let aceCount = 0;
@@ -184,7 +186,6 @@
         return total;
       }
 
-      // Hit action
       function hit() {
         if (!gameOver) {
           playerCards.push(drawCard());
@@ -207,7 +208,6 @@
         }
       }
 
-      // Stand action
       function stand() {
         if (!gameOver) {
           while (calculateHand(dealerCards) < 17) {
@@ -243,7 +243,6 @@
         }
       }
 
-      // Update cards display
       function updateCards(showDealerSecondCard = false) {
         document.getElementById("player-cards").innerHTML = playerCards
           .map(
@@ -263,29 +262,14 @@
           .join("");
       }
 
-      // Handle Blackjack
       function pullBlackjack() {
         const player = calculateHand(playerCards);
         const dealer = calculateHand(dealerCards);
 
-        // Player gets priority for blackjack win
         if (player === 21) {
           document.getElementById("result").textContent = "BlackJack! You Win!";
           playerWins++;
-          balance += (bet * 1.5);
-          saveData();
-          newBalance();
-          updateCurrency();
-          gameOver = true;
-          showPlayAgainButton(); // End game after player Blackjack win
-          return;
-        }
-
-        // If dealer has blackjack and player does not, dealer wins
-        if (dealer === 21) {
-          document.getElementById("result").textContent = "BlackJack! Dealer Wins!";
-          dealerWins++;
-          balance -= (bet * 1.5);
+          balance += bet * 1.5;
           saveData();
           newBalance();
           updateCurrency();
@@ -294,7 +278,18 @@
           return;
         }
 
-        // Tie if both have blackjack (added here for completeness)
+        if (dealer === 21) {
+          document.getElementById("result").textContent = "BlackJack! Dealer Wins!";
+          dealerWins++;
+          balance -= bet * 1.5;
+          saveData();
+          newBalance();
+          updateCurrency();
+          gameOver = true;
+          showPlayAgainButton();
+          return;
+        }
+
         if (player === 21 && dealer === 21) {
           document.getElementById("result").textContent = "BlackJack! It's a Tie!";
           gameOver = true;
@@ -303,50 +298,33 @@
         }
       }
 
-      // Show Play Again button
       function showPlayAgainButton() {
         document.getElementById("play-again-btn").style.display = "inline-block";
         document.getElementById("reset-bet-btn").style.display = "inline-block";
       }
 
-      // Update stats
       function updateStats() {
-        document.getElementById("player-stats").textContent = `Player Wins: ${playerWins} | Dealer Wins: ${dealerWins}`;
+        document.getElementById(
+          "player-stats"
+        ).textContent = `Player Wins: ${playerWins} | Dealer Wins: ${dealerWins}`;
       }
 
-      // Update Currency
       function updateCurrency() {
-        document.getElementById("gBucks-stats").textContent = `GBucks: ${balance} | Bet: ${bet}`;
+        document.getElementById(
+          "gBucks-stats"
+        ).textContent = `GBucks: ${balance} | Bet: ${bet}`;
       }
 
-      // Save Data
       function saveData() {
-        localStorage.setItem('shareBet', bet);
-        localStorage.setItem('shareCurrency', balance);
+        localStorage.setItem("shareBet", bet);
+        localStorage.setItem("shareCurrency", balance);
       }
 
-      // Reset game
-      function resetGame() {
-        startGame();
+      function newBalance() {
+        document.cookie = "newBal=" + Math.round(balance) + "; SameSite=None; Secure";
       }
 
-      // Reset bet
-      function resetBet() {
-        saveData();
-        location.href="betting.php";
-      }
-
-      // Go to main page
-      function goToMainPage() {
-        location.href = "TSP.php";
-      }
-  
-      // save balance value in a cookie to update the database
-      function newBalance(){
-        document.cookie = "newBal="+ Math.round(balance)+"; SameSite=None; Secure";
-      }
-
-      window.onload = function() {
+      window.onload = function () {
         startGame();
         updateCards();
       };

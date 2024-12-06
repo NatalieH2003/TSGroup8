@@ -250,23 +250,8 @@
         localStorage.setItem("tasks", lists.innerHTML);
         localStorage.setItem("shareCurrency", balance);
       }
-  
-  
-  
-  /*
-    <script>
-        const emojis = ["\u{1F422}", "\u{1F431}", "\u{1F436}", "\u{1F439}", "\u{1F42D}", "\u{1F404}", "\u{1F411}", "\u{1F413}", "\u{1F425}", "\u{1F416}", 
-            "\u{1F43F}", "\u{1F430}", "\u{1F43B}", "\u{1F43A}", "\u{1F98A}", "\u{1F98C}", "\u{1F419}", "\u{1F420}", "\u{1F421}", "\u{1F42C}", "\u{1F433}", 
-            "\u{1F42B}", "\u{1F418}", "\u{1F98E}", "\u{1F981}", "\u{1F98F}", "\u{1F9A4}", "\u{1F996}", "\u{1F409}", "\u{1F995}", "\u{1F984}"];
                           
-        let inventory = JSON.parse(localStorage.getItem("inventory")) || [];
-        let purchased = JSON.parse(localStorage.getItem("purchased")) || [];
-        inventory.push(emojis[<?php echo $index?>]);
-        purchased.push(emojis[<?php echo $index?>]);
-        localStorage.setItem("purchased", JSON.stringify(purchased));
-        localStorage.setItem("inventory",JSON.stringify(inventory));
-                          
-    </script>*/
+    </script>
     </script>
   </body>
 </html>

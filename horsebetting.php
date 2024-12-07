@@ -127,7 +127,7 @@
     </div>
     <div class="buttons">
       <form method="post" action="betting.php">
-        <button type="submit" class="back-button" value="backToBetting" name="backToBetting">Change Bet</button>
+        <button type="submit" class="back-button" value="changeBet" name="changeBet">Change Bet</button>
       </form>
       <form method="post" action="TSP.php">
         <button type="submit" class="back-button" value="backMain" name="backMain">Back to Main Page</button>
@@ -208,10 +208,13 @@
       // Update balance based on bet
       if (result === 'You win!') {
         balance += bet;
+        newBalance();
       } else {
         balance -= bet;
+        newBalance();
       }
       updateCurrencyDisplay();
+      saveData();
     }
 
       function updateCurrencyDisplay() {
@@ -228,6 +231,11 @@
     function disableButtons(disabled) {
       horseButtons.forEach(button => button.disabled = disabled);
       startRaceButton.disabled = disabled;
+    }
+
+    // save balance value in a cookie to update the database
+    function newBalance(){
+      document.cookie = "newBal="+ Math.round(balance)+"; SameSite=None; Secure";
     }
 
     // Load bars when the page loads

@@ -326,8 +326,8 @@
         </div>
 
     <script>
-        let balance = parseFloat(localStorage.getItem("shareCurrency")) || 0; 
-        let bet = parseInt(localStorage.getItem('shareBet')) || 0;
+        let balance = parseFloat(localStorage.getItem("shareCurrency")) || 500; 
+        let bet = parseInt(localStorage.getItem('shareBet')) || 1;
         updateCurrency();
 
         // Arrays that contain what type of bet each button belongs to, excluding the obvious single bet
@@ -366,7 +366,7 @@
         let value = 0;
         let result = "";
         let resultProperties = [""];
-        let winAmount = 0;
+        let winAmount = [];
         let tableBet = [];
         let tableResults = [];
         
@@ -413,7 +413,7 @@
             canPlaceBet = true;
             var out = "";
             for (let i = 0; i < tableBet.length; i++) {
-                out += "You bet on " + normalizeNames(tableBet[i]) + " and " + normalizeResults(tableResults[i]) + " " + winAmount + " GBucks!<br>"
+                out += "You bet on " + normalizeNames(tableBet[i]) + " and " + normalizeResults(tableResults[i]) + " " + winAmount[i] + " GBucks!<br>"
             }
             document.getElementById("noBet").innerHTML = out;
             document.getElementById("noBet").hidden = false;
@@ -732,19 +732,24 @@
 
         //Calculates the payout
         function payout() {
+            winAmount = [];
             for (let i = 0; i < tableResults.length; i++) {
                 if (tableResults[i] === "lose") {
-                    winAmount = bet;
-                    balance = balance - winAmount;
+                    profit = bet;
+                    winAmount.push(profit);
+                    balance = balance - profit;
                 } else if (tableResults[i] === "win35") {
-                    winAmount = bet*35;
-                    balance = balance + winAmount;
+                    profit = bet*35;
+                    winAmount.push(profit);
+                    balance = balance + profit;
                 } else if (tableResults[i] === "win1") {
-                    winAmount = bet;
-                    balance = balance + winAmount;
+                    profit = bet;
+                    winAmount.push(profit);
+                    balance = balance + profit;
                 } else if (tableResults[i] === "win2") {
-                    winAmount = bet*2;
-                    balance = balance + winAmount;
+                    profit = bet*2;
+                    winAmount.push(profit);
+                    balance = balance + profit;
                 }
             }
             updateCurrency();

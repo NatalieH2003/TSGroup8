@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -318,6 +318,10 @@
                     <button class="uibutton" id="play-again" style="display: none;" onclick="spin()">Play Again</button>
                     <form method="post" action="betting.php"><button type="submit" class="uibutton" id="change-bet" style="display: none;" onclick="changeBet()" value="changeBet" name="changeBet">Change Bet</button></form>
                     <form method="post" action="TSP.php"><button type="submit" class="back-button" id="go-main" onclick="goToMainPage()" value="backMain" name="backMain">Back to Main Page</button></form>
+		<form method="get" action="rules.html">
+    <button type="submit" class="back-button">Rules</button>
+</form>
+
                 </div><br><br><br>
             </div>
             <div class="results" id="currency-stats">
@@ -1408,6 +1412,9 @@
         //Directing to main page
         function goToMainPage() {
             location.href = "TSP.php";
+        }
+	  function goToRules() {
+            location.href = "rules.html";
         }
 
         // save balance value in a cookie to update the database

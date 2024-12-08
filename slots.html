@@ -165,6 +165,9 @@
       <button onclick="spin()">Spin</button>
       <form method="post" action="TSP.php"><button type="submit" onclick="goToMainPage()" value="backMain" name="backMain">Back to Main Page</button></form>
       <form method="post" action="betting.php"><button type="submit" onclick="changeBet()" value="changeBet" name="changeBet">Change Bet</button></form>
+	  <form method="get" action="rules.html">
+    <button type="submit" class="back-button">Rules</button>
+  </form>
       </div>
       <br>
     </div>
@@ -287,6 +290,9 @@
 
     function goToMainPage() {
       location.href = "TSP.php";
+    }
+    function goToRules() {
+      location.href = "rules.html";
     }
 
     // save balance value in a cookie to update the database

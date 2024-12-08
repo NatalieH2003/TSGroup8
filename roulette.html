@@ -25,6 +25,10 @@
         bottom: 30px;
         left: 100px;
     }
+    .textResults {
+        padding: 10px;
+        background-color: #282828;
+    }
     .roulettetable {
         position: relative;
         max-height: 400px;
@@ -300,13 +304,14 @@
                         <button class="bottombutton" onclick="placeBet(this.id)" id="odd"> Odd </button>
                         <button class="bottombutton" onclick="placeBet(this.id)" id="2Half"> 19-36 </button>
                     </div>
+                    <button class="uibutton" onclick="clearBets()"> Clear Bets </button>
                 </div>
                 <div class="RouletteWheel">
                     <img class="wheelIMG" id="spinWheel" src="RouletteAssets/RouletteWheel.png" width="400" height=auto>
                     <img class="ballIMG" id="spinBall" src="RouletteAssets/RouletteWheelBall.png" width="400" height=auto>
                 </div>
             </div>
-            <p id="noBet"></p>
+            <p class="textResults" id="noBet" hidden></p>
             <div class="buttons">
                 <div class="button-group">
                     <button class="uibutton" id="play-button" onclick="spin()">Play</button>
@@ -321,7 +326,7 @@
         </div>
 
     <script>
-        let balance = parseFloat(localStorage.getItem("shareCurrency")) || 100; 
+        let balance = parseFloat(localStorage.getItem("shareCurrency")) || 0; 
         let bet = parseInt(localStorage.getItem('shareBet')) || 0;
         updateCurrency();
 
@@ -338,18 +343,6 @@
         let thirdThird = ["25Btn", "26Btn", "27Btn", "28Btn", "29Btn", "30Btn", "31Btn", "32Btn", "33Btn", "34Btn", "35Btn", "36Btn"];
         let firstHalf = ["1Btn", "2Btn", "3Btn", "4Btn", "5Btn", "6Btn", "7Btn", "8Btn", "9Btn", "10Btn", "11Btn", "12Btn", "13Btn", "14Btn", "15Btn", "16Btn", "17Btn", "18Btn"];
         let secondHalf = ["19Btn", "20Btn", "21Btn", "22Btn", "23Btn", "24Btn", "25Btn", "26Btn", "27Btn", "28Btn", "29Btn", "30Btn", "31Btn", "32Btn", "33Btn", "34Btn", "35Btn", "36Btn"]
-        /*let dub1o2 = ["1Btn", "2Btn"];
-        let dub2o3 = ["2Btn", "3Btn"];
-        let dub4o5 = ["4Btn", "5Btn"];
-        let dub5o6 = ["5Btn", "6Btn"];
-        let dub7o8 = ["7Btn", "8Btn"];
-        let dub8o9 = ["8Btn", "9Btn"];
-        let dub10o11 = ["10Btn", "11Btn"];
-        let dub11o12 = ["11Btn", "12Btn"];
-        let dub13o14 = ["13Btn", "14Btn"];
-        let dub14o15 = ["14Btn", "15Btn"];
-        let dub16o17 = ["16Btn", "17Btn"];
-        let dub17o18 = ["17Btn", "18Btn"];*/
 
         let lockC1 = false;
         let lockC2 = false;
@@ -364,7 +357,6 @@
         let lockE = false;
         let lockO = false;
 
-        let isbetPlaced = false;
         let canPlaceBet = true;
         let betPlaced = "";
         let wheel = document.getElementById("spinWheel");
@@ -374,18 +366,20 @@
         let value = 0;
         let result = "";
         let resultProperties = [""];
-        let winLose = false;
         let winAmount = 0;
         let tableBet = [];
-        let unitTable = [];
+        let tableResults = [];
         
         //Spin function for the wheel
         function spin() {
+            document.getElementById("noBet").hidden = true;
             winLose = false;
             if (balance === 0) {
                 document.getElementById("noBet").textContent = "You do not have enough currency to play!";
-            } else if (isbetPlaced === false) {
+                document.getElementById("noBet").hidden = false;
+            } else if (tableBet.length <= 0) {
                 document.getElementById("noBet").textContent = "You did not place a bet on the table!";
+                document.getElementById("noBet").hidden = false;
             } else {
                 canPlaceBet = false;
                 document.getElementById("play-button").style.display = "none";
@@ -393,6 +387,7 @@
                 document.getElementById("change-bet").style.display = "none";
                 document.getElementById("go-main").style.display = "none";
                 document.getElementById("noBet").textContent = "Spinning...";
+                document.getElementById("noBet").hidden = false;
                 value = (Math.ceil(Math.random() * 38));
                 if (wheelvalue === 0) {
                     wheelvalue = 1800;
@@ -406,12 +401,143 @@
                 }
                 wheel.style.transform = "rotate("+wheelvalue+"deg)";
                 ball.style.transform = "rotate("+ballvalue+"deg)";
-                setTimeout(()=> {winOrLose();},6500);
+                setTimeout(()=> {determineWheelOutcome();},6500);
+                setTimeout(()=> {determineWinLose();},6500);
+                setTimeout(()=> {payout();},6500);
+                setTimeout(()=> {finalOutput();},6500);
             }
         }
 
-        //Function to determine if it you win or lose
-        function winOrLose () {
+        //Function to display text results and display new buttons
+        function finalOutput() {
+            canPlaceBet = true;
+            var out = "";
+            for (let i = 0; i < tableBet.length; i++) {
+                out += "You bet on " + normalizeNames(tableBet[i]) + " and " + normalizeResults(tableResults[i]) + " " + winAmount + " GBucks!<br>"
+            }
+            document.getElementById("noBet").innerHTML = out;
+            document.getElementById("noBet").hidden = false;
+            document.getElementById("play-again").style.display = "inline-block";
+            document.getElementById("change-bet").style.display = "inline-block";
+            document.getElementById("go-main").style.display = "inline-block";
+        }
+
+        //Changes from the ID used in the Table to proper readable names
+        function normalizeNames(betName) {
+            if (betName === "1stClm") {
+                return "the Top Row"
+            } else if (betName === "2ndClm") {
+                return "the Middle Row"
+            } else if (betName === "3rdClm") {
+                return "the Bottom Row"
+            } else if (betName === "1Third") {
+                return "the First Third (1-12)"
+            } else if (betName === "2Third") {
+                return "the Second Third (13-24)"
+            } else if (betName === "3Third") {
+                return "the Third Third (25-36)"
+            } else if (betName === "1Half") {
+                return "the First Half (1-18)"
+            } else if (betName === "2Half") {
+                return "the Second Half (18-36)"
+            } else if (betName === "red") {
+                return "Red"
+            } else if (betName === "black") {
+                return "Black"
+            } else if (betName === "even") {
+                return "Even"
+            } else if (betName === "odd") {
+                return "Odd"
+            } else if (betName === "0Btn") {
+                return "0"
+            } else if (betName === "00Btn") {
+                return "00"
+            } else if (betName === "1Btn") {
+                return "1"
+            } else if (betName === "2Btn") {
+                return "2"
+            } else if (betName === "3Btn") {
+                return "3"
+            } else if (betName === "4Btn") {
+                return "4"
+            } else if (betName === "5Btn") {
+                return "5"
+            } else if (betName === "6Btn") {
+                return "6"
+            } else if (betName === "7Btn") {
+                return "7"
+            } else if (betName === "8Btn") {
+                return "8"
+            } else if (betName === "9Btn") {
+                return "9"
+            } else if (betName === "10Btn") {
+                return "10"
+            } else if (betName === "11Btn") {
+                return "11"
+            } else if (betName === "12Btn") {
+                return "12"
+            } else if (betName === "13Btn") {
+                return "13"
+            } else if (betName === "14Btn") {
+                return "14"
+            } else if (betName === "15Btn") {
+                return "15"
+            } else if (betName === "16Btn") {
+                return "16"
+            } else if (betName === "17Btn") {
+                return "17"
+            } else if (betName === "18Btn") {
+                return "18"
+            } else if (betName === "19Btn") {
+                return "19"
+            } else if (betName === "20Btn") {
+                return "20"
+            } else if (betName === "21Btn") {
+                return "21"
+            } else if (betName === "22Btn") {
+                return "22"
+            } else if (betName === "23Btn") {
+                return "23"
+            } else if (betName === "24Btn") {
+                return "24"
+            } else if (betName === "25Btn") {
+                return "25"
+            } else if (betName === "26Btn") {
+                return "26"
+            } else if (betName === "27Btn") {
+                return "27"
+            } else if (betName === "28Btn") {
+                return "28"
+            } else if (betName === "29Btn") {
+                return "29"
+            } else if (betName === "30Btn") {
+                return "30"
+            } else if (betName === "31Btn") {
+                return "31"
+            } else if (betName === "32Btn") {
+                return "32"
+            } else if (betName === "33Btn") {
+                return "33"
+            } else if (betName === "34Btn") {
+                return "34"
+            } else if (betName === "35Btn") {
+                return "35"
+            } else if (betName === "36Btn") {
+                return "36"
+            }
+        }
+
+        //Changes from the win names to regualar ones
+        function normalizeResults(outcome) {
+            if (outcome === "win35" || outcome === "win1" || outcome === "win2") {
+                return "WON"
+            } else if (outcome === "lose") {
+                return "LOST"
+            }
+        }
+
+        //Function to determine where the ball landed, has all the switch cases
+        function determineWheelOutcome() {
             switch (value) {
                 case 0:
                     result = "0Btn";
@@ -419,75 +545,75 @@
                     break;
                 case 1:
                     result = "2Btn";
-                    resultProperties = ["Even", "Black"];
+                    resultProperties = ["Even", "Black", "FirstHalf", "FirstThird", "SecondColumn"];
                     break;
                 case 2:
                     result = "14Btn";
-                    resultProperties = ["Even", "Red"];
+                    resultProperties = ["Even", "Red", "FirstHalf", "SecondThird", "SecondColumn"];
                     break;
                 case 3:
                     result = "35Btn";
-                    resultProperties = ["Odd", "Black"];
+                    resultProperties = ["Odd", "Black", "SecondHalf", "ThirdThird", "SecondColumn"];
                     break;
                 case 4:
                     result = "23Btn";
-                    resultProperties = ["Odd", "Red"];
+                    resultProperties = ["Odd", "Red", "SecondHalf", "SecondThird", "SecondColumn"];
                     break;
                 case 5:
                     result = "4Btn";
-                    resultProperties = ["Even", "Black"];
+                    resultProperties = ["Even", "Black", "FirstHalf", "FirstThird", "ThirdColumn"];
                     break;
                 case 6:
                     result = "16Btn";
-                    resultProperties = ["Even", "Red"];
+                    resultProperties = ["Even", "Red", "FirstHalf", "SecondThird", "ThirdColumn"];
                     break;
                 case 7:
                     result = "33Btn";
-                    resultProperties = ["Odd", "Black"];
+                    resultProperties = ["Odd", "Black", "SecondHalf", "ThirdThird", "FirstColumn"];
                     break;
                 case 8:
                     result = "21Btn";
-                    resultProperties = ["Odd", "Red"];
+                    resultProperties = ["Odd", "Red", "SecondHalf", "SecondThird", "FirstColumn"];
                     break;
                 case 9:
                     result = "6Btn";
-                    resultProperties = ["Even", "Black"];
+                    resultProperties = ["Even", "Black", "FirstHalf", "FirstThird", "FirstColumn"];
                     break;
                 case 10:
                     result = "18Btn";
-                    resultProperties = ["Even", "Red"];
+                    resultProperties = ["Even", "Red", "FirstHalf", "SecondThird", "FirstColumn"];
                     break;
                 case 11:
                     result = "31Btn";
-                    resultProperties = ["Odd", "Black"];
+                    resultProperties = ["Odd", "Black", "SecondHalf", "ThirdThird", "ThirdColumn"];
                     break;
                 case 12:
                     result = "19Btn";
-                    resultProperties = ["Odd", "Red"];
+                    resultProperties = ["Odd", "Red", "SecondHalf", "SecondThird", "ThirdColumn"];
                     break;
                 case 13:
                     result = "8Btn";
-                    resultProperties = ["Even", "Black"];
+                    resultProperties = ["Even", "Black", "FirstHalf", "FirstThird", "SecondColumn"];
                     break;
                 case 14:
                     result = "12Btn";
-                    resultProperties = ["Even", "Red"];
+                    resultProperties = ["Even", "Red", "FirstHalf", "FirstThird", "FirstColumn"];
                     break;
                 case 15:
                     result = "29Btn";
-                    resultProperties = ["Odd", "Black"];
+                    resultProperties = ["Odd", "Black", "SecondHalf", "ThirdThird", "SecondColumn"];
                     break;
                 case 16:
                     result = "25Btn";
-                    resultProperties = ["Odd", "Red"];
+                    resultProperties = ["Odd", "Red", "SecondHalf", "ThirdThird", "ThirdColumn"];
                     break;
                 case 17:
                     result = "10Btn";
-                    resultProperties = ["Even", "Black"];
+                    resultProperties = ["Even", "Black", "FirstHalf", "FirstThird", "ThirdColumn"];
                     break;
                 case 18:
                     result = "27Btn";
-                    resultProperties = ["Odd", "Red"];
+                    resultProperties = ["Odd", "Red", "SecondHalf", "ThirdThird", "FirstColumn"];
                     break;
                 case 19:
                     result = "00Btn";
@@ -495,154 +621,135 @@
                     break;
                 case 20:
                     result = "1Btn";
-                    resultProperties = ["Odd", "Red"];
+                    resultProperties = ["Odd", "Red", "FirstHalf", "FirstThird", "ThirdColumn"];
                     break;
                 case 21:
                     result = "13Btn";
-                    resultProperties = ["Odd", "Black"];
+                    resultProperties = ["Odd", "Black", "FirstHalf", "SecondThird", "ThirdColumn"];
                     break;
                 case 22:
                     result = "36Btn";
-                    resultProperties = ["Even", "Red"];
+                    resultProperties = ["Even", "Red", "SecondHalf", "ThirdThird", "FirstColumn"];
                     break;
                 case 23:
                     result = "24Btn";
-                    resultProperties = ["Even", "Black"];
+                    resultProperties = ["Even", "Black", "SecondHalf", "SecondThird", "FirstColumn"];
                     break;
                 case 24:
                     result = "3Btn";
-                    resultProperties = ["Odd", "Red"];
+                    resultProperties = ["Odd", "Red", "FirstHalf", "FirstThird", "FirstColumn"];
                     break;
                 case 25:
                     result = "15Btn";
-                    resultProperties = ["Odd", "Black"];
+                    resultProperties = ["Odd", "Black", "FirstHalf", "SecondThird", "FirstColumn"];
                     break;
                 case 26:
                     result = "34Btn";
-                    resultProperties = ["Even", "Red"];
+                    resultProperties = ["Even", "Red", "SecondHalf", "ThirdThird", "ThirdColumn"];
                     break;
                 case 27:
                     result = "22Btn";
-                    resultProperties = ["Even", "Black"];
+                    resultProperties = ["Even", "Black", "SecondHalf", "SecondThird", "ThirdColumn"];
                     break;
                 case 28:
                     result = "5Btn";
-                    resultProperties = ["Odd", "Red"];
+                    resultProperties = ["Odd", "Red", "FirstHalf", "FirstThird", "SecondColumn"];
                     break;
                 case 29:
                     result = "17Btn";
-                    resultProperties = ["Odd", "Black"];
+                    resultProperties = ["Odd", "Black", "FirstHalf", "SecondThird", "SecondColumn"];
                     break;
                 case 30:
                     result = "32Btn";
-                    resultProperties = ["Even", "Red"];
+                    resultProperties = ["Even", "Red", "SecondHalf", "ThirdThird", "SecondColumn"];
                     break;
                 case 31:
                     result = "20Btn";
-                    resultProperties = ["Even", "Black"];
+                    resultProperties = ["Even", "Black", "SecondHalf", "SecondThird", "SecondColumn"];
                     break;
                 case 32:
                     result = "7Btn";
-                    resultProperties = ["Odd", "Red"];
+                    resultProperties = ["Odd", "Red", "FirstHalf", "FirstThird", "ThirdColumn"];
                     break;
                 case 33:
                     result = "11Btn";
-                    resultProperties = ["Odd", "Black"];
+                    resultProperties = ["Odd", "Black", "FirstHalf", "FirstThird", "SecondColumn"];
                     break;
                 case 34:
                     result = "30Btn";
-                    resultProperties = ["Even", "Red"];
+                    resultProperties = ["Even", "Red", "SecondHalf", "ThirdThird", "FirstColumn"];
                     break;
                 case 35:
                     result = "26Btn";
-                    resultProperties = ["Even", "Black"];
+                    resultProperties = ["Even", "Black", "SecondHalf", "ThirdThird", "SecondColumn"];
                     break;
                 case 36:
                     result = "9Btn";
-                    resultProperties = ["Odd", "Red"];
+                    resultProperties = ["Odd", "Red", "FirstHalf", "FirstThird", "FirstColumn"];
                     break;
                 case 37:
                     result = "28Btn";
-                    resultProperties = ["Even", "Black"];
+                    resultProperties = ["Even", "Black", "SecondHalf", "ThirdThird", "ThirdColumn"];
                     break;
             }
-            if (betPlaced === "1stClm") {
-                for (let i = 0; i < firstClm.length; i++) {
-                    if (result === firstClm[i]) {
-                        winLose = true;
-                    }
-                }
-            } else if (betPlaced === "2ndClm") {
-                for (let i = 0; i < secondClm.length; i++) {
-                    if (result === secondClm[i]) {
-                        winLose = true;
-                    }
-                }
-            } else if (betPlaced === "3rdClm") {
-                for (let i = 0; i < thirdClm.length; i++) {
-                    if (result === thirdClm[i]) {
-                        winLose = true;
-                    }
-                }
-            } else if (betPlaced === "1Third") {
-                for (let i = 0; i < firstThird.length; i++) {
-                    if (result === firstThird[i]) {
-                        winLose = true;
-                    }
-                }
-            } else if (betPlaced === "2Third") {
-                for (let i = 0; i < secondThird.length; i++) {
-                    if (result === secondThird[i]) {
-                        winLose = true;
-                    }
-                }
-            } else if (betPlaced === "3Third") {
-                for (let i = 0; i < thirdThird.length; i++) {
-                    if (result === thirdThird[i]) {
-                        winLose = true;
-                    }
-                }
-            } else if (betPlaced === "1Half") {
-                for (let i = 0; i < firstHalf.length; i++) {
-                    if (result === firstHalf[i]) {
-                        winLose = true;
-                    }
-                }
-            } else if (betPlaced === "2Half") {
-                for (let i = 0; i < secondHalf.length; i++) {
-                    if (result === secondHalf[i]) {
-                        winLose = true;
-                    }
-                }
-            } else if (betPlaced === "even") {
-                if (resultProperties[0] === "Even") {
-                    winLose = true;
-                }
-            } else if (betPlaced === "odd") {
-                if (resultProperties[0] === "Odd") {
-                    winLose = true;
-                }
-            } else if (betPlaced === "red") {
-                if (resultProperties[1] === "Red") {
-                    winLose = true;
-                }
-            } else if (betPlaced === "black") {
-                if (resultProperties[1] === "Black") {
-                    winLose = true;
+        }
+
+        //Function to fill out the win results array
+        function determineWinLose() {
+            tableResults = [];
+            for (let i = 0; i < tableBet.length; i++) {
+                if (tableBet[i] === result) {
+                    tableResults.push("win35");
+                } else if (resultProperties[0] === "Even" && tableBet[i] === "even") {
+                    tableResults.push("win1");
+                } else if (resultProperties[0] === "Odd" && tableBet[i] === "odd") {
+                    tableResults.push("win1");
+                } else if (resultProperties[1] === "Red" && tableBet[i] === "red") {
+                    tableResults.push("win1");
+                } else if (resultProperties[1] === "Black" && tableBet[i] === "black") {
+                    tableResults.push("win1");
+                } else if (resultProperties[2] === "FirstHalf" && tableBet[i] === "1Half") {
+                    tableResults.push("win1");
+                } else if (resultProperties[2] === "SecondHalf" && tableBet[i] === "2Half") {
+                    tableResults.push("win1");
+                } else if (resultProperties[3] === "FirstThird" && tableBet[i] === "1Third") {
+                    tableResults.push("win2");
+                } else if (resultProperties[3] === "SecondThird" && tableBet[i] === "2Third") {
+                    tableResults.push("win2");
+                } else if (resultProperties[3] === "ThirdThird" && tableBet[i] === "3Third") {
+                    tableResults.push("win2");
+                } else if (resultProperties[4] === "FirstColumn" && tableBet[i] === "1stClm") {
+                    tableResults.push("win2");
+                } else if (resultProperties[4] === "SecondColumn" && tableBet[i] === "2ndClm") {
+                    tableResults.push("win2");
+                } else if (resultProperties[4] === "ThirdColumn" && tableBet[i] === "3rdClm") {
+                    tableResults.push("win2");
+                } else {
+                    tableResults.push("lose");
                 }
             }
-            returnResult();
+        }
+
+        //Calculates the payout
+        function payout() {
+            for (let i = 0; i < tableResults.length; i++) {
+                if (tableResults[i] === "lose") {
+                    winAmount = bet;
+                    balance = balance - winAmount;
+                } else if (tableResults[i] === "win35") {
+                    winAmount = bet*35;
+                    balance = balance + winAmount;
+                } else if (tableResults[i] === "win1") {
+                    winAmount = bet;
+                    balance = balance + winAmount;
+                } else if (tableResults[i] === "win2") {
+                    winAmount = bet*2;
+                    balance = balance + winAmount;
+                }
+            }
             updateCurrency();
+            newBalance();
             saveData();
-            if (winLose === true) {
-                document.getElementById("noBet").textContent = `YOU WON: ${winAmount} GBucks`;
-            } else {
-                document.getElementById("noBet").textContent = `YOU LOST: ${winAmount} GBucks`;
-            }
-            canPlaceBet = true;
-            document.getElementById("play-again").style.display = "inline-block";
-            document.getElementById("change-bet").style.display = "inline-block";
-            document.getElementById("go-main").style.display = "inline-block";
         }
 
         //Function to check which bet is being placed
@@ -1010,110 +1117,55 @@
             }
         }
 
+        //Function to clear all the bets placed
+        function clearBets() {
+            document.getElementById("noBet").hidden = true;
+            for (let i = tableBet.length-1 ; i >= 0; i--) {
+                placeBet(tableBet[i]);
+            }
+        }
+
         //Function to let player make bets
         function placeBet(betName) {
-            let inTable = false;
-            //Adding in the first bet, don't need to check anything
-            if (!tableBet.length > 0) {
-                tableBet.push(betName);
-                betDecider(betName);
-                placeLocks(betName);
-                console.log("Table Bets: ", tableBet);
-            } else {
-                //Checking the table to see if the bet pressed has already been added, if it is then this removes it
-                for (let i = 0; i < tableBet.length; i++) {
-                    if (betName === tableBet[i]) {
-                        inTable = true;
-                        tableBet.splice(i, 1);
-                        betDecider(betName);
-                        removeLocks(betName);
-                        console.log("New Table: ", tableBet);
-                    }
-                }
-                //Redoing the bet locks
-                for (let i = 0; i < tableBet.length; i++) {
-                    placeLocks(tableBet[i]);
-                }
-                console.log("Lock Status: ", checkLocks(betName));
-                //If not already in it then adding it
-                if (inTable===false && checkLocks(betName)===false) {
+            if (canPlaceBet === true) {
+                let inTable = false;
+                //Adding in the first bet, don't need to check anything
+                if (!tableBet.length > 0) {
                     tableBet.push(betName);
                     betDecider(betName);
                     placeLocks(betName);
-                    console.log("Table Bets: ", tableBet);
-                }
-            }
-        }
-
-        //Function to allow the player to place a bet
-        function OLDplaceBet(betName) {
-            if (canPlaceBet === true) {
-                if (isbetPlaced === false) {
-                    if (betName === "1stClm" || betName === "2ndClm" || betName === "3rdClm") {
-                        selectColumn(betName);
-                    } else if (betName === "1Third" || betName === "2Third" || betName === "3Third") {
-                        selectThird(betName);
-                    } else if (betName === "1Half" || betName == "2Half") {
-                        selectHalf(betName);
-                    } else if (betName === "red" || betName === "black") {
-                        selectColor(betName);
-                    } else if (betName === "even" || betName === "odd") {
-                        selectParity(betName);
-                    } else {
-                        selectSingle(betName);
-                    }
-                    isbetPlaced = true;
-                    betPlaced = betName;
-                } else if (isbetPlaced === true && betName === betPlaced) {
-                    if (betName === "1stClm" || betName === "2ndClm" || betName === "3rdClm") {
-                        selectColumn(betName);
-                    } else if (betName === "1Third" || betName === "2Third" || betName === "3Third") {
-                        selectThird(betName);
-                    } else if (betName === "1Half" || betName == "2Half") {
-                        selectHalf(betName);
-                    } else if (betName === "red" || betName === "black") {
-                        selectColor(betName);
-                    } else if (betName === "even" || betName === "odd") {
-                        selectParity(betName);
-                    } else {
-                        selectSingle(betName);
-                    }
-                    isbetPlaced = false;
-                }
-            }
-        }
-
-        //Determines the amount returned based on win, and default lose cost
-        function returnResult() {
-            if (winLose === true) {
-                if (betPlaced === "1stClm" || betPlaced === "2ndClm" || betPlaced === "3rdClm" || betPlaced === "1Third" || betPlaced === "2Third" || betPlaced === "3Third") {
-                    winAmount = bet*2;
-                    balance = balance + winAmount;
-                    newBalance();
-                } else if (betPlaced === "red" || betPlaced === "black" || betPlaced === "even" || betPlaced === "odd" || betPlaced === "1Half" || betPlaced === "2Half") {
-                    winAmount = bet;
-                    balance = balance + winAmount;
-                    newBalance();
                 } else {
-                    winAmount = bet*35
-                    balance = balance + winAmount;
-                    newBalance();
+                    //Checking the table to see if the bet pressed has already been added, if it is then this removes it
+                    for (let i = 0; i < tableBet.length; i++) {
+                        if (betName === tableBet[i]) {
+                            inTable = true;
+                            tableBet.splice(i, 1);
+                            betDecider(betName);
+                            removeLocks(betName);
+                        }
+                    }
+                    //Redoing the bet locks
+                    for (let i = 0; i < tableBet.length; i++) {
+                        placeLocks(tableBet[i]);
+                    }
+                    //If not already in it then adding it
+                    if (inTable===false && checkLocks(betName)===false) {
+                        tableBet.push(betName);
+                        betDecider(betName);
+                        placeLocks(betName);
+                    }
                 }
-            } else {
-                winAmount = bet;
-                balance = balance - winAmount;
-                newBalance();
             }
         }
 
         //Placing a single bet
         function selectSingle(buttonID) {
             if (document.getElementById(buttonID).style.borderColor === "black") {
-                document.getElementById(buttonID).style.borderColor = "white";
-            } else if (document.getElementById(buttonID).style.borderColor === "white") {
+                document.getElementById(buttonID).style.borderColor = "yellow";
+            } else if (document.getElementById(buttonID).style.borderColor === "yellow") {
                 document.getElementById(buttonID).style.borderColor = "black";
             } else {
-                document.getElementById(buttonID).style.borderColor = "white"
+                document.getElementById(buttonID).style.borderColor = "yellow"
             }
         }
 
@@ -1159,6 +1211,13 @@
                     colm3 = false;
                 }
             }
+            if (document.getElementById(column).style.borderColor === "black") {
+                document.getElementById(column).style.borderColor = "yellow";
+            } else if (document.getElementById(column).style.borderColor === "yellow") {
+                document.getElementById(column).style.borderColor = "black";
+            } else {
+                document.getElementById(column).style.borderColor = "yellow"
+            }
         }
 
         //Betting on a third
@@ -1203,6 +1262,13 @@
                     third3 = false;
                 }
             }
+            if (document.getElementById(third).style.borderColor === "black") {
+                document.getElementById(third).style.borderColor = "yellow";
+            } else if (document.getElementById(third).style.borderColor === "yellow") {
+                document.getElementById(third).style.borderColor = "black";
+            } else {
+                document.getElementById(third).style.borderColor = "yellow"
+            }
         }
 
         //Betting on a half
@@ -1233,6 +1299,13 @@
                     }
                     half2 = false;
                 }
+            }
+            if (document.getElementById(half).style.borderColor === "black") {
+                document.getElementById(half).style.borderColor = "yellow";
+            } else if (document.getElementById(half).style.borderColor === "yellow") {
+                document.getElementById(half).style.borderColor = "black";
+            } else {
+                document.getElementById(half).style.borderColor = "yellow"
             }
         }
 
@@ -1265,6 +1338,13 @@
                     blackS = false;
                 }
             }
+            if (document.getElementById(color).style.borderColor === "black") {
+                document.getElementById(color).style.borderColor = "yellow";
+            } else if (document.getElementById(color).style.borderColor === "yellow") {
+                document.getElementById(color).style.borderColor = "black";
+            } else {
+                document.getElementById(color).style.borderColor = "yellow"
+            }
         }
 
         //Betting on even or odd
@@ -1295,6 +1375,13 @@
                     }
                     oddS = false;
                 }
+            }
+            if (document.getElementById(parity).style.borderColor === "black") {
+                document.getElementById(parity).style.borderColor = "yellow";
+            } else if (document.getElementById(parity).style.borderColor === "yellow") {
+                document.getElementById(parity).style.borderColor = "black";
+            } else {
+                document.getElementById(parity).style.borderColor = "yellow"
             }
         }
 

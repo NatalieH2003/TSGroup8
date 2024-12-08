@@ -5,102 +5,137 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gamble Smart - Productivity and Games</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background-color: #333;
-      color: white;
-      text-align: center;
-      padding: 1rem;
-    }
-    h1 {
-      margin: 0;
-    }
-    h2 {
-      font-size: 36px;
-      margin: 10px;
-    }
-    nav {
-      margin-top: 10px;
-      text-align: center;
-    }
-    nav a {
-      margin: 0 15px;
-      text-decoration: none;
-      color: #333;
-    }
-    section {
-      max-width: 1200px;
-      margin: 20px auto;
-      padding: 20px;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    .app-info {
-      display: flex;
-      justify-content: space-around;
-    }
-    .app-info div {
-      width: 30%;
-      padding: 10px;
-    }
-    footer {
-      text-align: center;
-      padding: 20px;
-      background-color: #333;
-      color: white;
-    }
-    .logout-btn {
-      display: inline-block;
-      padding: 5px 10px;
-      background-color: #28a745;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-    }
-    .game-btn {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #28a745;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      margin: 10px 5px;
-    }
-    .game-btn:hover, .logout-btn:hover {
-      background-color: #218838;
-    }
-    .gbucks-container {
-      text-align: center;
-      margin-top: 20px;
-    }
-    .gbucks-total {
-      font-size: 48px;
-      font-weight: bold;
-      color: #28a745;
-      background-color: #f0f0f0;
-      padding: 20px;
-      border-radius: 10px;
-      display: inline-block;
-      width: 100%;
-      max-width: 300px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    .row {
-      display: flex;
-      justify-content: center;
-      flex-direction: row;
-      text-align: center;
-      align-items: center;
-    }
-    #displayEmoji {
-      font-size: 40px;
-    }
+   body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  border: 1px solid black; /* Black border for consistency */
+}
+
+h1 {
+  margin: 0;
+}
+
+h2 {
+  font-size: 36px;
+  margin: 10px;
+}
+
+nav {
+  margin-top: 10px;
+  text-align: center;
+  border: 1px solid black; /* Black border for consistency */
+  padding: 10px;
+  border-radius: 8px;
+  background-color: white;
+}
+
+nav a {
+  margin: 0 15px;
+  text-decoration: none;
+  color: #333;
+}
+
+/* General section style with black border */
+section {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid black; /* Black border for consistency */
+}
+
+/* Specific styling for app-info boxes */
+.app-info {
+  display: flex;
+  justify-content: space-around;
+}
+
+.app-info div {
+  width: 30%;
+  padding: 10px;
+  border: 1px solid black; /* Black border for consistency */
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Rules and Games sections */
+#rules-container, #games-container {
+  border: 1px solid black; /* Black border for consistency */
+  padding: 20px;
+  margin: 20px auto;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* GBucks total display */
+.gbucks-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.gbucks-total {
+  font-size: 48px;
+  font-weight: bold;
+  color: #28a745;
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-radius: 10px;
+  display: inline-block;
+  width: 100%;
+  max-width: 300px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid black; /* Black border for consistency */
+}
+
+/* Buttons */
+.logout-btn, .game-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  margin: 10px 5px;
+}
+
+.logout-btn:hover, .game-btn:hover {
+  background-color: #218838;
+}
+
+/* Row display for header elements */
+.row {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  text-align: center;
+  align-items: center;
+}
+
+/* Emoji display */
+#displayEmoji {
+  font-size: 40px;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  background-color: #333;
+  color: white;
+  border: 1px solid black; /* Black border for consistency */
+}
   </style>
 </head>
 <body>

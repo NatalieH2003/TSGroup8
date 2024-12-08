@@ -105,6 +105,7 @@
             <div class="button-group">
             <button id="play-hand-btn" onclick="playHand()">Play Hand</button>
             <button onclick="foldHand()">Fold</button>
+	    <button onclick="goToRulesPage()">Rules</button>
             <form method="post" action="poker.php"><button type="submit" id="play-again-btn" style="display: none;" value="playAgain" name="playAgain" onclick="playAgain()">Play Again</button></form>
             <form method="post" action="TSP.php"><button type="submit" onclick="goToMainPage()" value="backMain" name="backMain">Back to Main Page</button></form>
             <form method="post" action="betting.php"><button type="submit" onclick="goToBettingPage()" value="changeBet" name="changeBet">Go to Betting Page</button></form>
@@ -355,6 +356,10 @@
             document.getElementById('gbucks-stats').textContent = `GBucks: ${balance.toFixed(2)} | Bet: ${bet}`;
             document.getElementById('player-stats').textContent = `Wins: ${wins} | Losses: ${losses}`;
         }
+	function goToRulesPage() {
+    window.location.href = "rules.html"; // Replace with the actual path to your rules.html file
+}
+
 
         function saveData() {
             localStorage.setItem('gbucksBalance', balance.toFixed(2));
